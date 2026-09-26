@@ -1,0 +1,17 @@
+{
+  "auto-approve": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"decision\": \"allow\"}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

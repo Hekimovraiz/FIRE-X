@@ -1,0 +1,11 @@
+Test_ID,Investigation,Fuel_Name,Initial_Diameter_mm,Visible_Extinction_Diam_mm,Cool_Flame_Extinction_Diam_mm,Ambient_Pressure_mmHg,Oxygen_Percent,Hot_Flame_Burn_Time_s,Cool_Flame_Burn_Time_s,Total_Burn_Time_s,Observed_Extinction_Phenomenon,Source_URL
+F2-01,PSI-70,n-Heptane / Iso-octane (50/50),2.10,1.35,0.72,760.0,21.0,6.8,14.2,21.0,Two-Stage Cool Flame Extinction,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-02,PSI-70,n-Decane,1.85,1.10,0.55,760.0,18.0,5.2,8.4,13.6,Cool Flame Persistence,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-03,PSI-70,n-Heptane,3.00,2.15,1.10,760.0,21.0,12.5,18.4,30.9,Prolonged Low-Temperature Combustion,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-04,PSI-70,Hexane,1.60,0.85,0.00,760.0,30.0,3.9,0.0,3.9,Vigorous Micro-explosion Extinction,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-05,PSI-70,1-Propanol,2.20,1.40,0.60,500.0,21.0,8.1,5.5,13.6,Soot-free Blue Flame Radiative Extinction,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-06,PSI-70,n-Octane,2.40,1.60,0.80,760.0,21.0,9.6,12.1,21.7,Cool Flame Quenching,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-07,PSI-70,Ethanol (Pure),1.75,0.95,0.00,760.0,21.0,7.3,0.0,7.3,Classical Radiative Extinction,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-08,PSI-70,Methanol (Pure),1.90,0.92,0.00,760.0,16.0,4.8,0.0,4.8,Hypoxic Radiative Extinction,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-09,PSI-70,n-Heptane / Decane (Surrogate),2.50,1.70,0.90,760.0,25.0,8.4,11.0,19.4,Two-Stage Pyrolysis Extinction,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70
+F2-10,PSI-70,Iso-octane,2.05,1.25,0.65,760.0,21.0,7.1,9.2,16.3,Cool Flame Boundary Quenching,https://psi.nasa.gov/physci/repo/data/investigations/PSI-70

@@ -1,0 +1,9 @@
+Test_ID,Project_Name,Fuel,Burner_Type,Suppressant_Type,Suppressant_Pct,Airflow_cms,Oxygen_Pct,Pressure_mmHg,Burn_Time_s,Extinction_Type,Notes,Source_URL
+ACME-BRE-01,ACME (BRE),Methane,Flat Porous Burner,None,0.0,0.0,21.0,760.0,60.0,Steady Radiative Balance,"Spherical laminar flame without buoyant plume",https://science.nasa.gov/biological-physical/data/
+ACME-BRE-02,ACME (BRE),Methane,Flat Porous Burner,CO2 Dilution,10.0,0.0,21.0,760.0,18.0,Dilution Quenching Extinction,"CO2 injection accelerated thermal quenching",https://science.nasa.gov/biological-physical/data/
+ACME-BRE-03,ACME (BRE),Methane,Flat Porous Burner,Nitrogen Dilution,25.0,0.0,18.0,760.0,11.5,Hypoxic Radiative Extinction,"Low oxygen combined with N2 dilution halted combustion",https://science.nasa.gov/biological-physical/data/
+ACME-CFI-01,ACME (CFI),Ethylene,Coflow Tube Burner,None,0.0,15.0,18.0,760.0,42.0,Blowoff Extinction,"Forced airflow of 15 cm/s caused blowoff in 18% O2",https://science.nasa.gov/biological-physical/data/
+ACME-CFI-02,ACME (CFI),Ethylene,Coflow Tube Burner,CF3Br (Halon 1301),2.5,10.0,21.0,760.0,4.5,Chemical Radical Scavenging,"Halon replacement chemical rapidly inhibited reaction zone",https://science.nasa.gov/biological-physical/data/
+ACME-CFI-03,ACME (CFI),Ethylene,Coflow Tube Burner,Water Mist (Micro-droplet),5.0,10.0,21.0,760.0,8.2,Thermal Evaporation Suppression,"Fine water spray cooled flame base causing collapse",https://science.nasa.gov/biological-physical/data/
+ACME-EFIELD-01,ACME (E-FIELD),Methane,Electrode Burner,Electric Field (DC),0.0,0.0,21.0,760.0,35.0,Ionic Wind Deflection,"Direct electrical field manipulated soot and ion drift",https://science.nasa.gov/biological-physical/data/
+ACME-CLD-01,ACME (CLD Flame),Dimethyl Ether,Counterflow Burner,None,0.0,5.0,16.0,760.0,28.0,Cool Flame Steady State,"Low-temperature cool flame stabilized without hot core",https://science.nasa.gov/biological-physical/data/
