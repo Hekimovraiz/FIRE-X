@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="images/Fire-X.jpeg" alt="NASA FIRE-X" width="250"/>
+<img src="images/watermarked_img_16270841013327045052.jpg" alt="NASA FIRE-X" width="500"/>
 
 # FIRE-X
 ### *AI-Powered Fire Safety Insights from Microgravity Combustion Data*
