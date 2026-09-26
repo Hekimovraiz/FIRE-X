@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Microgravity AI Insights Engine</title>
+    <style>
+        body { background-color: #0b1120; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 40px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { display: flex; align-items: center; gap: 10px; color: #60a5fa; font-size: 28px; }
+        p.subtitle { color: #94a3b8; font-size: 15px; margin-top: -10px; margin-bottom: 30px; }
+        .search-box { display: flex; gap: 12px; margin-bottom: 30px; }
+        input[type="text"] { flex: 1; padding: 14px 18px; border-radius: 8px; border: 1px solid #1e293b; background-color: #020617; color: #fff; font-size: 16px; outline: none; }
+        input[type="text"]:focus { border-color: #3b82f6; }
+        button.btn-search { padding: 14px 24px; border-radius: 8px; border: none; background-color: #22c55e; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button.btn-search:hover { background-color: #16a34a; }
+        
+        .report-card { background-color: #0f172a; border: 1px solid #1e3a8a; border-radius: 12px; padding: 24px; margin-bottom: 30px; }
+        .report-title { color: #f59e0b; font-size: 18px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        
+        /* Did you mean düyməsinin böyük və qabarıq stili */
+        .did-you-mean-box { 
+            background: linear-gradient(135deg, #1e293b, #0f172a); 
+            border: 2px solid #3b82f6; 
+            border-radius: 10px; 
+            padding: 16px 22px; 
+            margin: 18px 0; 
+            font-size: 19px; 
+            font-weight: 600;
+            color: #f1f5f9; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+        .did-you-mean-btn { 
+            background-color: #2563eb; 
+            color: #ffffff; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-size: 19px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-decoration: underline; 
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .did-you-mean-btn:hover { 
+            background-color: #1d4ed8; 
+            transform: translateY(-2px) scale(1.04); 
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.5);
+        }
+        
+        .data-section { margin-top: 20px; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .data-table th, .data-table td { border: 1px solid #1e293b; padding: 10px; text-align: left; font-size: 14px; }
+        .data-table th { background-color: #1e293b; color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 NASA Microgravity AI Insights Engine</h1>
+        <p class="subtitle">Search across ingested NASA PSI datasets with Robust LLM Reasoning.</p>
+
+        <div class="search-box">
+            <input type="text" id="queryInput" placeholder="Enter keyword (e.g. PSI-98, Ethanol)..." onkeydown="if(event.key==='Enter') runQuery()">
+            <button class="btn-search" onclick="runQuery()">Run Live AI Query</button>
+        </div>
+
+        <div id="resultContainer" style="display: none;">
+            <div class="report-card">
+                <div class="report-title">✨ NASA AI Dynamic Microgravity RAG Report for [<span id="queryLabel"></span>]:</div>
+                <div id="reportSummary" style="color: #cbd5e1; font-size: 15px; margin-bottom: 10px;"></div>
+
+                <!-- Did you mean bölməsi -->
+                <div id="didYouMeanContainer" style="display: none;" class="did-you-mean-box">
+                    <span>💡 Did you mean:</span>
+                    <button class="did-you-mean-btn" id="didYouMeanBtn" onclick="triggerSuggestedSearch()"></button>
+                </div>
+
+                <ul style="list-style: none; padding: 0; margin-top: 20px; color: #e2e8f0; line-height: 1.8;">
+                    <li>• <b>Thermal Profile:</b> <span id="thermalProfile">N/A</span></li>
+                    <li>• <b>Extinction Dynamics:</b> <span id="extinctionDynamics">N/A</span></li>
+                    <li>• <b>Spacecraft Fire Safety Recommendation:</b> <span id="recommendation">N/A</span></li>
+                </ul>
+            </div>
+
+            <div class="data-section">
+                <h3>Retrieved NASA Data Rows (<span id="rowCount">0</span>):</h3>
+                <div id="tableContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSuggestion = "";
+
+        async function runQuery(customQuery = null) {
+            const input = document.getElementById("queryInput");
+            const query = customQuery || input.value.trim();
+            if (!query) return;
+
+            if (customQuery) {
+                input.value = customQuery;
+            }
+
+            document.getElementById("queryLabel").innerText = query.toUpperCase();
+            document.getElementById("resultContainer").style.display = "block";
+            document.getElementById("reportSummary").innerText = "Analyzing dataset and generating AI response...";
+            document.getElementById("didYouMeanContainer").style.display = "none";
+
+            try {
+                const response = await fetch("/api/ask-ai", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: query })
+                });
+                const data = await response.json();
+
+                document.getElementById("reportSummary").innerText = data.report_summary || "No summary available.";
+                document.getElementById("thermalProfile").innerText = data.thermal || "N/A";
+                document.getElementById("extinctionDynamics").innerText = data.extinction || "N/A";
+                document.getElementById("recommendation").innerText = data.recommendation || "N/A";
+
+                if (data.did_you_mean) {
+                    currentSuggestion = data.did_you_mean;
+                    document.getElementById("didYouMeanBtn").innerText = data.did_you_mean;
+                    document.getElementById("didYouMeanContainer").style.display = "flex";
+                }
+
+                const rowCount = data.rows ? data.rows.length : 0;
+                document.getElementById("rowCount").innerText = rowCount;
+                
+                const tableContainer = document.getElementById("tableContainer");
+                if (rowCount > 0) {
+                    let html = '<table class="data-table"><thead><tr>';
+                    const keys = Object.keys(data.rows[0]);
+                    keys.forEach(k => html += `<th>${k}</th>`);
+                    html += '</tr></thead><tbody>';
+                    data.rows.forEach(r => {
+                        html += '<tr>';
+                        keys.forEach(k => html += `<td>${r[k]}</td>`);
+                        html += '</tr>';
+                    });
+                    html += '</tbody></table>';
+                    tableContainer.innerHTML = html;
+                } else {
+                    tableContainer.innerHTML = '<p style="color: #64748b;">No matching records found for this query.</p>';
+                }
+
+            } catch (err) {
+                document.getElementById("reportSummary").innerText = "Error connecting to AI service: " + err;
+            }
+        }
+
+        function triggerSuggestedSearch() {
+            if (currentSuggestion) {
+                runQuery(currentSuggestion);
+            }
+        }
+    </script>
+</body>
+</html>

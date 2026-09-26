@@ -1,0 +1,4 @@
+test_number,experiment_id,fuel_material,pressure_mmhg,oxygen_pct,burn_time_s,extinction_outcome
+1,FLEX-001,PMMA,760,0.21,45.5,Self-extinguished
+2,FLEX-002,Delrin,500,0.30,32.0,Extinguished via flow
+3,FLEX-003,Ethanol,760,0.18,60.2,Burned out
