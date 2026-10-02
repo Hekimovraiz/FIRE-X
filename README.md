@@ -61,7 +61,7 @@ Navigate to `http://localhost:8000` to launch the interactive dashboard.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/FIRE-X.git
+git clone https://github.com/Hekimovraiz/FIRE-X.git
 cd FIRE-X
 
 # 2. Instantiate isolated virtual environment
