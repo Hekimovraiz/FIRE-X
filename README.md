@@ -198,22 +198,31 @@ curl -X POST "http://localhost:8000/api/chat-assistant"   -H "Content-Type: appl
 
 ---
 
-## 🛰️ Data Governance & Provenance
+## 🛰️ NASA Open Datasets Catalog & Provenance
 
-Every record in the FIRE-X database originates strictly from official NASA spaceflight datasets:
+Every record in the FIRE-X database originates directly from official NASA Physical Sciences Informatics (PSI), JAXA Kibo, and NASA-STD-6001 flight repositories. All 16 primary datasets are stored in [`Nasa_data/`](Nasa_data/) and canonicalized into [`data/processed/canonical_experiments.csv`](data/processed/canonical_experiments.csv):
 
-| Flight Investigation | NASA Source | Tests | Mission Focus & Flight Platform |
-|:---|:---|:---|:---|
-| **FLEX** | NASA PSI-69 | 48 | Spherically symmetric droplet extinction (ISS CIR) |
-| **FLEX-2** | NASA PSI-70 | 48 | Two-stage combustion & cool flame transitions (ISS CIR) |
-| **BASS-I** | NASA PSI-25 | 22 | Solid material combustion under microgravity ventilation (ISS) |
-| **BASS-II** | NASA PSI-25 | 22 | PMMA, cotton, and acrylic extinction boundaries (ISS) |
-| **SAFFIRE-I** | NASA PSI-98 | 12 | Large-scale ($1\text{ m}$) solid flammability aboard Cygnus OA-6 |
-| **SAFFIRE-II–VI** | NASA PSI-98 | 60 | Exploration atmospheres ($34\%\,O_2, 56.5\text{ kPa}$) post-ISS departure |
-| **SOFIE** | NASA PSI-84 | 84 | Solid fuel ignition and extinction limits (ISS CIR) |
-| **ACME (CIR)** | NASA PSI-112 | 58 | Advanced combustion via microgravity experiments (ISS) |
-| **SLICE** | NASA PSI-63 | 63 | Jet diffusion flame structure and liftoff limits (ISS) |
-| **NASA-STD-6001** | NASA STD | 67 | Standard test data for upward flame propagation |
+| Flight & Ground Investigation | Primary Data File | NASA Source | Tests | Mission Focus & Flight Platform |
+|:---|:---|:---|:---:|:---|
+| **FLEX-1** | [`PSI-69_Experimental table_FLEX.csv`](Nasa_data/PSI-69_Experimental%20table_FLEX.csv) | NASA PSI-69 | 274 | Spherically symmetric droplet extinction & burn rates (ISS CIR) |
+| **BASS-II** | [`PSI-25_Experimental table_BASS-II.csv`](Nasa_data/PSI-25_Experimental%20table_BASS-II.csv) | NASA PSI-25 | 129 | Solid material combustion under forced micro-convective airflow (ISS MSG) |
+| **GRC Zero-G Drop Tower** | [`NASA_GRC_Drop_Tower_Quenching.csv`](Nasa_data/NASA_GRC_Drop_Tower_Quenching.csv) | GRC ZGF | 95 | Freefall droplet and laminar gas jet radiative quenching ($10^{-5}\,g$) |
+| **JAXA FLARE** | [`JAXA_FLARE_Kibo_Flight_Data.csv`](Nasa_data/JAXA_FLARE_Kibo_Flight_Data.csv) | JAXA / PSI | 80 | Reduced-gravity flammability: Lunar ($0.16\,g$) & Martian ($0.38\,g$) limits |
+| **NASA MGM Smoldering** | [`NASA_MGM_Smoldering_Combustion.csv`](Nasa_data/NASA_MGM_Smoldering_Combustion.csv) | NASA PSI | 65 | Porous polymer foam smoldering, toxic CO yields, flaming transition |
+| **ACME Extended (BRE/CFI/E-FIELD)** | [`ACME_Extended_Research_Data.csv`](Nasa_data/ACME_Extended_Research_Data.csv) | NASA CIR | 60 | Porous burner emulator, $+5\,\text{kV}$ electrostatic field quenching, coflow |
+| **NASA-STD-6001 Extended** | [`NASA_STD_6001_Extended_Materials.csv`](Nasa_data/NASA_STD_6001_Extended_Materials.csv) | NASA WSTF | 45 | Aerospace materials (PEEK, Torlon, Beta Cloth, ETFE) flammability |
+| **NASA SAME Aerosol** | [`NASA_SAME_Aerosol_Detector_Data.csv`](Nasa_data/NASA_SAME_Aerosol_Detector_Data.csv) | NASA GRC | 50 | Spacecraft smoke detector kinetics & sub-micron aerosol morphology |
+| **SAFFIRE I–VI** | [`SAFFIRE_II_to_VI_Flight_Data.csv`](Nasa_data/SAFFIRE_II_to_VI_Flight_Data.csv) | NASA PSI-98 | 19 | Exploration atmospheres ($34\%\,O_2, 56.5\,\text{kPa}$), Cygnus spacecraft burns |
+| **NASA-STD-6001 Standard** | [`NASA_STD_6001_Materials.csv`](Nasa_data/NASA_STD_6001_Materials.csv) | NASA WSTF | 14 | Upward flame propagation certification tests across oxygen fractions |
+| **SOFIE** | [`SOFIE_Flight_Data.csv`](Nasa_data/SOFIE_Flight_Data.csv) | NASA PSI-84 | 12 | Solid fuel ignition and extinction boundary mapping (ISS CIR) |
+| **FLEX-2 Cool Flames** | [`FLEX2_Cool_Flame_Droplet_Data.csv`](Nasa_data/FLEX2_Cool_Flame_Droplet_Data.csv) | NASA PSI-70 | 10 | Low-temperature cool flames, second-stage burn, invisible extinction |
+| **BASS-I** | [`BASS1_Initial_ISS_Data.csv`](Nasa_data/BASS1_Initial_ISS_Data.csv) | NASA PSI-25 | 8 | Solid rod and flat slab baseline combustion in ventilation ducts |
+| **SLICE** | [`SLICE_Extinguishment_Data.csv`](Nasa_data/SLICE_Extinguishment_Data.csv) | NASA PSI | 8 | Inert gas ($CO_2, N_2$) jet flame suppression and liftoff dynamics |
+| **ACME (CIR)** | [`ACME_CIR_Extinction_Data.csv`](Nasa_data/ACME_CIR_Extinction_Data.csv) | NASA PSI-112 | 8 | Diffusion flame structure, soot inception, and oxygen quenching |
+| **NTRS Historical** | NTRS Archive | NASA NTRS | 2 | Historical Apollo & Shuttle combustion telemetry citations |
+| **CANONICAL MASTER DATASET** | [`canonical_experiments.csv`](data/processed/canonical_experiments.csv) | **Unified Master** | **879** | **Complete 26-parameter physical telemetry master database** |
+
+👉 **Full dataset catalog documentation and telemetry schemas are detailed in [`Nasa_data/README.md`](Nasa_data/README.md)**.
 
 ---
 
