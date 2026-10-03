@@ -677,36 +677,20 @@ const animateCounter = (el, target, suffix, decimals) => {
   requestAnimationFrame(step);
 };
 
-// Pre-fill with 0 so never blank
-counters.forEach(c => {
-  const el = document.getElementById(c.id);
-  if (el) el.textContent = c.decimals ? (0).toFixed(c.decimals) + c.suffix : '0' + (c.suffix || '');
-});
-
-let statsAnimated = false;
+// Run counters immediately after DOM ready — no IntersectionObserver needed
 function runStatsAnimation() {
-  if (statsAnimated) return;
-  statsAnimated = true;
   counters.forEach(c => {
     const el = document.getElementById(c.id);
     if (el) animateCounter(el, c.target, c.suffix || '', c.decimals || 0);
   });
 }
 
-// Trigger when stats-band scrolls into view
-const statsObs = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      runStatsAnimation();
-      statsObs.disconnect();
-    }
-  });
-}, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
-const statsEl = document.querySelector('.stats-band');
-if (statsEl) statsObs.observe(statsEl);
-
-// Fallback: always run after 1.5 seconds regardless of scroll position
-setTimeout(runStatsAnimation, 1500);
+// Fire immediately on DOMContentLoaded (or right now if already loaded)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', runStatsAnimation);
+} else {
+  runStatsAnimation();
+}
 
 // Three.js particle system — microgravity fire particles
 (function() {
