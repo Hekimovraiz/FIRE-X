@@ -477,13 +477,65 @@ body {
 
 <script src="/static/js/nav.js"></script>
 <script>
-let currentLang = 'en';
+let currentLang = localStorage.getItem('firex_lang') || 'en';
 let messageHistory = [];
 
 function toggleLanguage() {
   currentLang = (currentLang === 'en') ? 'az' : 'en';
-  document.getElementById('lang-btn-ai').textContent = currentLang.toUpperCase();
+  localStorage.setItem('firex_lang', currentLang);
+  window.location.reload();
 }
+
+function initAiLanguage() {
+  const langBtn = document.getElementById('lang-btn-ai');
+  if (langBtn) langBtn.textContent = currentLang.toUpperCase();
+
+  if (currentLang === 'az') {
+    // Translate chips
+    const chips = document.querySelectorAll('.prompt-chip-btn');
+    const azChips = [
+      { text: 'FLEX-2 Soyuq Alov (Cool Flame) Kinetikası →', prompt: 'NASA FLEX-2 təcrübəsində müşahidə olunan soyuq alov (cool flame) fizikasını izah edin.' },
+      { text: 'Artemis 34% O₂ Yanğın Riski →', prompt: 'Artemis Ay Yaşayış Modulunun atmosferi (34% O2, 56.5 kPa) nəyə görə BKS-dən daha təhlükəlidir?' },
+      { text: 'Məcburi Hava Axını və Sönmə Hədləri →', prompt: 'Mikroyerçəkimdə hava axınının sürəti radiativ sönmə ilə konvektiv üfürməyə necə təsir edir?' },
+      { text: 'SAFFIRE Kosmik Gəmi Yanğınları →', prompt: 'SAFFIRE təcrübələri Cygnus kosmik gəmisində böyük miqyaslı alov yayılması haqqında nəyi aşkar etdi?' },
+      { text: 'NASA-STD-6001 Söndürmə Qaydaları →', prompt: 'NASA-STD-6001 standartı üzrə hipoqsik sığınacaqlar üçün hansı yanğın söndürmə protokolları tövsiyə olunur?' }
+    ];
+
+    chips.forEach((chip, i) => {
+      if (azChips[i]) {
+        chip.textContent = azChips[i].text;
+        chip.setAttribute('onclick', `sendPrompt('${azChips[i].prompt}')`);
+      }
+    });
+
+    // Translate placeholder
+    const inputEl = document.getElementById('user-input');
+    if (inputEl) inputEl.setAttribute('placeholder', 'Mikroyerçəkimdə yanma, alov dinamikası və ya eksperiment ID-ləri haqqında soruşun...');
+
+    // Translate welcome message bubble
+    const welcomeBubble = document.querySelector('.message-row.assistant .msg-bubble');
+    if (welcomeBubble) {
+      welcomeBubble.innerHTML = `
+        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
+          FIRE-X Elmi Tədqiqat Köməkçisi Onlayndır
+        </div>
+        NASA Mikroyerçəkim Yanma İntellekt Konsoluna xoş gəlmisiniz. <strong>OpenAI GPT-6-luna</strong> ilə təchiz olunub və Beynəlxalq Kosmik Stansiya ilə Cygnus orbital sınaqlarından <strong>879 yoxlanılmış uçuş eksperimentinə</strong> əsaslanır.
+        <br><br>
+        Damcı sönməsi (FLEX), bərk yanacaqların alovlanması (BASS/SOFIE), kosmik gəmi yanğınlarının yayılması (SAFFIRE) və ya planetar yaşayış modullarının atmosfer təhlükəsizliyi (Artemis / BKS) haqqında ətraflı suallar verə bilərsiniz.
+        <div class="msg-meta-bar">
+          <span>NASA FİZİKİ ELMLƏR İNFORMATİKASI // GROUND TRUTH</span>
+          <span>SİSTEM HAZIRDIR</span>
+        </div>
+      `;
+    }
+
+    // Translate typing indicator
+    const typingSpan = document.querySelector('#typing-indicator span');
+    if (typingSpan) typingSpan.textContent = 'OpenAI gpt-6-luna və NASA PSI Telemetriyası sorğulanır...';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initAiLanguage);
 
 function handleKeyDown(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
@@ -535,12 +587,12 @@ async function sendMessage() {
       appendMessage('assistant', data.response, data.provider);
       messageHistory.push({ role: 'assistant', content: data.response });
     } else {
-      appendMessage('assistant', 'Telemetry link timeout. Please repeat the transmission.');
+      appendMessage('assistant', currentLang === 'az' ? 'Telemetriya rabitəsində xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.' : 'Telemetry link timeout. Please repeat the transmission.');
     }
   } catch (err) {
     console.error('Chat error:', err);
     typingEl.style.display = 'none';
-    appendMessage('assistant', 'Network anomaly detected communicating with telemetry proxy.');
+    appendMessage('assistant', currentLang === 'az' ? 'Telemetriya proksi serveri ilə əlaqədə şəbəkə anomaliyası aşkar edildi.' : 'Network anomaly detected communicating with telemetry proxy.');
   }
 
   scrollChatToBottom();
