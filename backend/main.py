@@ -141,6 +141,13 @@ def serve_page(filename: str):
         return FileResponse(index, media_type='text/html')
     return JSONResponse({'error': 'Page not found'}, status_code=404)
 
+@app.get('/favicon.ico')
+def favicon():
+    favicon_path = os.path.join(IMAGES_DIR, 'Fire-X.jpeg')
+    if os.path.exists(favicon_path):
+        return FileResponse(favicon_path, media_type='image/jpeg')
+    return JSONResponse({'error': 'Favicon not found'}, status_code=404)
+
 @app.get('/')
 def home(): return serve_page('index.html')
 
