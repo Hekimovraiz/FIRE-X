@@ -161,16 +161,20 @@ def query_experiments(
         params.extend([q_wildcard, q_wildcard, q_wildcard, q_wildcard])
 
     if family and family.lower() != "all":
-        conditions.append("dataset_family = ?")
-        params.append(family)
+        if family in ('BASS-I', 'BASS-II', 'FLEX', 'FLEX-2'):
+            conditions.append("dataset_family = ?")
+            params.append(family)
+        else:
+            conditions.append("(dataset_family = ? OR dataset_family LIKE ?)")
+            params.extend([family, f"{family}%"])
 
     if fuel and fuel.lower() != "all":
-        conditions.append("fuel_material = ?")
-        params.append(fuel)
+        conditions.append("(fuel_material = ? OR fuel_material LIKE ?)")
+        params.extend([fuel, f"%{fuel}%"])
 
     if outcome and outcome.lower() != "all":
-        conditions.append("extinction_outcome = ?")
-        params.append(outcome)
+        conditions.append("(extinction_outcome = ? OR extinction_outcome LIKE ?)")
+        params.extend([outcome, f"%{outcome}%"])
 
     if min_o2 is not None:
         conditions.append("oxygen_pct >= ?")
