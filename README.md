@@ -7,7 +7,7 @@
 
 **Microgravity combustion intelligence meets autonomous OpenAI reasoning & 3D/4D telemetry. Instant insights derived from 879 verified NASA orbital flight experiments.**
 
-[🌐 Multi-Page Platform](#-multi-page-platform-architecture) · [⚡ Quick Start](#-quick-start) · [🔬 3D Holo-Lab](#-3d4d-combustion-holo-lab) · [📖 API Reference](#-api-endpoints) · [🛰️ Data Sources](#-data-governance--provenance) · [☁️ Free Deployment](#-free-cloud--self-hosting-deployment)
+[🌐 Multi-Page Platform](https://fire-x.onrender.com/) · [⚡ Quick Start](#-quick-start) · [🔬 3D Holo-Lab](#-3d4d-combustion-holo-lab) · [📖 API Reference](#-api-endpoints) · [🛰️ Data Sources](#-data-governance--provenance) · [☁️ Free Deployment](#-free-cloud--self-hosting-deployment)
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.12-blue?style=flat-square&logo=python" alt="Python"/>
