@@ -38,8 +38,15 @@ client_requests: Dict[str, List[float]] = {}
 
 
 def check_rate_limit(client_id: str) -> bool:
-    """Check if the client has exceeded rate limits."""
+    """Check if the client has exceeded rate limits, with periodic cleanup."""
     now = time.time()
+
+    # Periodic cleanup: if dictionary has grown beyond 500 IPs, purge expired entries
+    if len(client_requests) > 500:
+        expired_ips = [ip for ip, timestamps in client_requests.items() if not timestamps or (now - timestamps[-1] >= RATE_LIMIT_WINDOW)]
+        for ip in expired_ips:
+            client_requests.pop(ip, None)
+
     if client_id not in client_requests:
         client_requests[client_id] = []
     

@@ -101,15 +101,27 @@ def get_scenario_metrics(scenario_id: str, custom_o2: Optional[float] = Query(No
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+def get_client_ip(request: Request) -> str:
+    """Extract real client IP considering reverse proxies (Render, Cloudflare, etc.)."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    real_ip = request.headers.get("x-real-ip")
+    if real_ip:
+        return real_ip.strip()
+    if request.client and request.client.host:
+        return request.client.host
+    return "anonymous"
+
 @app.post('/api/chat-assistant')
 def chat_with_assistant(req: ChatRequest, request: Request):
-    client_ip = request.client.host if request.client else 'anonymous'
+    client_ip = get_client_ip(request)
     messages_payload = [{'role': m.role, 'content': m.content} for m in req.messages]
     return query_ai_assistant(messages=messages_payload, language=req.language, page_context=req.page_context, client_id=client_ip)
 
 @app.post('/api/ask-ai')
 def ask_ai_single_prompt(req: AskAIRequest, request: Request):
-    client_ip = request.client.host if request.client else 'anonymous'
+    client_ip = get_client_ip(request)
     return query_ai_assistant(messages=[{'role': 'user', 'content': req.prompt}], language=req.language, page_context=req.page_context, client_id=client_ip)
 
 

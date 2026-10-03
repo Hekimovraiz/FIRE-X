@@ -441,6 +441,45 @@
         }
 
         // Platform modules
+        
+        // Mission Environments cards
+        const envCards = document.querySelectorAll('.env-card');
+        if (envCards.length >= 3) {
+          envCards[0].querySelector('.env-label').textContent = 'Standart';
+          envCards[0].querySelector('.env-name').textContent = 'BKS Atmosferi';
+          envCards[0].querySelectorAll('.env-param-label')[0].textContent = 'Oksigen';
+          const b1 = envCards[0].querySelector('.badge');
+          if (b1) b1.textContent = 'NOMİNAL RİSK';
+
+          envCards[1].querySelector('.env-label').textContent = 'Artemis Proqramı';
+          envCards[1].querySelector('.env-name').textContent = 'Ay Yaşayış Modulu';
+          envCards[1].querySelectorAll('.env-param-label')[0].textContent = 'Oksigen';
+          const b2 = envCards[1].querySelector('.badge');
+          if (b2) b2.textContent = 'YÜKSƏK TƏHLÜKƏ';
+
+          envCards[2].querySelector('.env-label').textContent = 'Fövqəladə Protokol';
+          envCards[2].querySelector('.env-name').textContent = 'Hipoqsik Sığınacaq';
+          envCards[2].querySelectorAll('.env-param-label')[0].textContent = 'Oksigen';
+          const b3 = envCards[2].querySelector('.badge');
+          if (b3) b3.textContent = 'BOĞULMUŞ';
+        }
+
+        // Platform Navigation Cards
+        const navCards = document.querySelectorAll('.nav-card');
+        if (navCards.length >= 4) {
+          navCards[0].querySelector('.nav-card-title').textContent = 'Analitika Mərkəzi';
+          navCards[0].querySelector('.nav-card-desc').textContent = 'İnteraktiv 3D qrafiklər — sönmə paylanması, hava axını korrelyasiyası, yanacaq bölgüsü və nəticə analizi.';
+
+          navCards[1].querySelector('.nav-card-title').textContent = 'Məlumat Kəşfiyyatı';
+          navCards[1].querySelector('.nav-card-desc').textContent = 'Bütün 879 NASA uçuş eksperimentini tam telemetriya baxışı ilə araşdırın, filtrləyin və müqayisə edin.';
+
+          navCards[2].querySelector('.nav-card-title').textContent = 'Missiya Simulyatoru';
+          navCards[2].querySelector('.nav-card-desc').textContent = 'BKS, Artemis Ay Modulu və fərdi kosmik kabin atmosferlərində yanğın təhlükəsi indeksini simulyasiya edin.';
+
+          navCards[3].querySelector('.nav-card-title').textContent = 'AI Tədqiqat Köməkçisi';
+          navCards[3].querySelector('.nav-card-desc').textContent = 'GPT-6-luna modelinə kontekstə uyğun elmi cavablar almaq üçün xüsusi NASA yanma sualları verin.';
+        }
+
         const modSection = document.querySelectorAll('.section')[3];
         if (modSection) {
           const eye = modSection.querySelector('.section-eyebrow');
@@ -490,7 +529,19 @@
           statBoxes[3].querySelector('.hud-stat-sub').textContent = TRANSLATIONS_AZ.analytics.stat4Sub;
         }
 
-        // Holo toolbar
+        // Holo toolbar title & subtitle
+        const holoHeaderTitle = document.querySelector('.holo-toolbar > div > div:first-child');
+        if (holoHeaderTitle) {
+          const svg = holoHeaderTitle.querySelector('svg');
+          holoHeaderTitle.innerHTML = '';
+          if (svg) holoHeaderTitle.appendChild(svg);
+          holoHeaderTitle.appendChild(document.createTextNode(' ' + (TRANSLATIONS_AZ.analytics.holoTitle || 'İnteraktiv 3D/4D Yanma Holo-Laboratoriyası')));
+        }
+        const holoHeaderSub = document.querySelector('.holo-toolbar > div > div:last-child');
+        if (holoHeaderSub) {
+          holoHeaderSub.textContent = TRANSLATIONS_AZ.analytics.holoSub || 'WebGL 3D Telemetriya Simulyasiya Mühərriki // Fırlatmaq üçün çəkin, yaxınlaşdırmaq üçün fırladın';
+        }
+
         const tabScatter = document.getElementById('tab-3d-scatter');
         if (tabScatter) {
           const svg = tabScatter.querySelector('svg');
@@ -514,6 +565,16 @@
           if (svg) tabAirflow.appendChild(svg);
           tabAirflow.appendChild(document.createTextNode(' ' + TRANSLATIONS_AZ.analytics.tabAirflow));
         }
+
+        // HUD overlay title & actions
+        const hudTitleSpan = document.querySelector('.hud-overlay-title span:first-child');
+        if (hudTitleSpan) hudTitleSpan.textContent = TRANSLATIONS_AZ.analytics.hudTitle || 'SEÇİLMİŞ EKSPERİMENT';
+        const hudActiveSpan = document.querySelector('.hud-overlay-title span:last-child');
+        if (hudActiveSpan) hudActiveSpan.textContent = TRANSLATIONS_AZ.analytics.hudActive || 'AKTİV';
+        const hudInspectBtn = document.querySelector('.hud-telemetry-overlay .ask-ai-chip:first-child');
+        if (hudInspectBtn) hudInspectBtn.textContent = TRANSLATIONS_AZ.analytics.hudInspect || 'Bazada İncələ →';
+        const hudAskAiBtn = document.querySelector('.hud-telemetry-overlay .ask-ai-chip:last-child');
+        if (hudAskAiBtn) hudAskAiBtn.textContent = TRANSLATIONS_AZ.analytics.hudAskAi || 'AI-dan Soruş';
 
         // HUD readout keys
         const hudKeys = document.querySelectorAll('.hud-telemetry-overlay .hud-key');
@@ -760,6 +821,16 @@
           metricCards[5].querySelector('.metric-card-sub').textContent = TRANSLATIONS_AZ.simulator.metPurgeSub;
         }
 
+        // Habitat and custom headers
+        const habitatHeader = document.querySelector('.sim-controls-panel > div:first-child');
+        if (habitatHeader) habitatHeader.textContent = '1. Kosmik Gəmi Mühitini Seçin';
+
+        const customHeader = document.querySelector('#custom-sliders-box > div:first-child');
+        if (customHeader) customHeader.textContent = 'Xüsusi Atmosfer Parametrlərini Tənzimləyin';
+
+        const fhiScoreLbl = document.querySelector('.fhi-score-label');
+        if (fhiScoreLbl) fhiScoreLbl.textContent = 'FHI XALI / 10.0';
+
         // Advisory Header
         const advHeader = document.querySelector('.advisory-header');
         if (advHeader) {
@@ -892,6 +963,21 @@
 
         const sec2Tit = document.querySelector('.about-section .two-col > div:last-child .section-title-xl');
         if (sec2Tit) sec2Tit.innerHTML = TRANSLATIONS_AZ.about.sec2Title;
+
+        // Additional About cards
+        const sec2Cards = document.querySelectorAll('.about-section .two-col > div:last-child > div');
+        if (sec2Cards.length >= 3) {
+          const techHead = sec2Cards[1].querySelector('div:first-child');
+          if (techHead) techHead.textContent = 'Texnologiya Arxitekturası';
+          const chalHead = sec2Cards[2].querySelector('div:first-child');
+          if (chalHead) chalHead.textContent = 'NASA Beynəlxalq Çağırışı';
+        }
+        const srcThs = document.querySelectorAll('.sources-table th');
+        if (srcThs.length >= 3) {
+          srcThs[0].textContent = 'Verilənlər Bazası';
+          srcThs[1].textContent = 'PSI Kodu';
+          srcThs[2].textContent = 'Yazılar Sayı';
+        }
       }
     }
   }

@@ -681,7 +681,7 @@ body {
   </div>
 </footer>
 
-<script src="/static/js/nav.js?v=5.1"></script>
+<script src="/static/js/nav.js?v=5.2"></script>
 <script>
 let currentPage = 1;
 let pageSize = 50;
@@ -731,6 +731,11 @@ function renderTable(experiments) {
     return;
   }
 
+  const isAz = (localStorage.getItem('firex_lang') === 'az');
+  const inspectLabel = isAz ? 'İncələ' : 'Inspect';
+  const addCompareLabel = isAz ? '+ Müqayisə' : '+ Compare';
+  const addedCompareLabel = isAz ? '✓ Əlavə edildi' : '✓ Added';
+
   tbody.innerHTML = experiments.map(exp => {
     const isCmp = selectedForCompare.has(exp.experiment_id);
     const outcomeBadge = getBadgeHtml(exp.extinction_outcome);
@@ -746,9 +751,9 @@ function renderTable(experiments) {
         <td>${outcomeBadge}</td>
         <td>
           <div class="action-btn-group">
-            <button class="table-action-btn" onclick="inspectExperiment('${exp.experiment_id}')">Inspect</button>
+            <button class="table-action-btn" onclick="inspectExperiment('${exp.experiment_id}')">${inspectLabel}</button>
             <button class="table-action-btn ${isCmp ? 'active-cmp' : ''}" onclick="toggleCompare('${exp.experiment_id}', this)">
-              ${isCmp ? '✓ Added' : '+ Compare'}
+              ${isCmp ? addedCompareLabel : addCompareLabel}
             </button>
           </div>
         </td>
@@ -758,12 +763,13 @@ function renderTable(experiments) {
 }
 
 function getBadgeHtml(outcome) {
+  const isAz = (localStorage.getItem('firex_lang') === 'az');
   const o = (outcome || '').toLowerCase();
-  if (o.includes('rad')) return `<span class="outcome-badge badge-rad">Radiative</span>`;
-  if (o.includes('blow') || o.includes('flow')) return `<span class="outcome-badge badge-blow">Blowoff</span>`;
-  if (o.includes('deplet') || o.includes('burnout')) return `<span class="outcome-badge badge-dep">Depleted</span>`;
-  if (o.includes('sustain')) return `<span class="outcome-badge badge-sus">Sustained</span>`;
-  return `<span class="outcome-badge badge-rad">${outcome || 'Extinguished'}</span>`;
+  if (o.includes('rad')) return `<span class="outcome-badge badge-rad">${isAz ? 'Radiativ Sönmə' : 'Radiative'}</span>`;
+  if (o.includes('blow') || o.includes('flow')) return `<span class="outcome-badge badge-blow">${isAz ? 'Üfürmə' : 'Blowoff'}</span>`;
+  if (o.includes('deplet') || o.includes('burnout')) return `<span class="outcome-badge badge-dep">${isAz ? 'Tükəndi' : 'Depleted'}</span>`;
+  if (o.includes('sustain')) return `<span class="outcome-badge badge-sus">${isAz ? 'Davamlı' : 'Sustained'}</span>`;
+  return `<span class="outcome-badge badge-rad">${outcome || (isAz ? 'Söndü' : 'Extinguished')}</span>`;
 }
 
 function handleSearchInput() {
@@ -828,9 +834,10 @@ function changeLimit(val) {
 }
 
 function updatePaginationUI() {
+  const isAz = (localStorage.getItem('firex_lang') === 'az');
   document.getElementById('btn-prev-page').disabled = (currentPage <= 1);
   document.getElementById('btn-next-page').disabled = (currentPage >= totalPages);
-  document.getElementById('page-indicator').textContent = `PAGE ${currentPage} OF ${totalPages || 1}`;
+  document.getElementById('page-indicator').textContent = isAz ? `SƏHİFƏ ${currentPage} / ${totalPages || 1}` : `PAGE ${currentPage} OF ${totalPages || 1}`;
 }
 
 // INSPECTOR
@@ -844,17 +851,18 @@ async function inspectExperiment(id) {
     const json = await res.json();
     const exp = json.data || json;
 
+    const isAz = (localStorage.getItem('firex_lang') === 'az');
     const fields = [
-      ['Investigation', exp.dataset_family],
-      ['Fuel / Material', exp.fuel_material],
-      ['Oxygen Fraction', (exp.oxygen_pct != null ? exp.oxygen_pct.toFixed(1) + '%' : '—')],
-      ['Pressure', (exp.pressure_kpa != null ? exp.pressure_kpa.toFixed(1) + ' kPa' : '—')],
-      ['Extinction Diam (de)', (exp.extinction_diameter_mm != null ? exp.extinction_diameter_mm.toFixed(3) + ' mm' : '—')],
-      ['Burn Duration', (exp.burn_time_s != null ? exp.burn_time_s.toFixed(1) + ' s' : '—')],
-      ['Airflow Velocity', (exp.airflow_velocity_cms != null ? exp.airflow_velocity_cms.toFixed(2) + ' cm/s' : '—')],
-      ['Flame Temperature', (exp.flame_temp_k != null ? exp.flame_temp_k.toFixed(0) + ' K' : '—')],
-      ['Extinction Outcome', exp.extinction_outcome || '—'],
-      ['Source Archive', exp.source_name || 'NASA PSI']
+      [isAz ? 'Uçuş Tədqiqatı' : 'Investigation', exp.dataset_family],
+      [isAz ? 'Yanacaq / Material' : 'Fuel / Material', exp.fuel_material],
+      [isAz ? 'Oksigen Mol Payı' : 'Oxygen Fraction', (exp.oxygen_pct != null ? exp.oxygen_pct.toFixed(1) + '%' : '—')],
+      [isAz ? 'Kamera Təzyiqi' : 'Pressure', (exp.pressure_kpa != null ? exp.pressure_kpa.toFixed(1) + ' kPa' : '—')],
+      [isAz ? 'Sönmə Diametri (de)' : 'Extinction Diam (de)', (exp.extinction_diameter_mm != null ? exp.extinction_diameter_mm.toFixed(3) + ' mm' : '—')],
+      [isAz ? 'Yanma Müddəti' : 'Burn Duration', (exp.burn_time_s != null ? exp.burn_time_s.toFixed(1) + ' s' : '—')],
+      [isAz ? 'Hava Axınının Sürəti' : 'Airflow Velocity', (exp.airflow_velocity_cms != null ? exp.airflow_velocity_cms.toFixed(2) + ' cm/s' : '—')],
+      [isAz ? 'Alov Temperaturu' : 'Flame Temperature', (exp.flame_temp_k != null ? exp.flame_temp_k.toFixed(0) + ' K' : '—')],
+      [isAz ? 'Sönmə Nəticəsi' : 'Extinction Outcome', exp.extinction_outcome || '—'],
+      [isAz ? 'Məlumat Mənbəyi' : 'Source Archive', exp.source_name || 'NASA PSI']
     ];
 
     document.getElementById('insp-grid').innerHTML = fields.map(([k, v]) => `
