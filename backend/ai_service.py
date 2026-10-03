@@ -7,6 +7,7 @@ strict server-side security, rate-limiting, and graceful scientific RAG fallback
 import os
 import time
 import logging
+import re
 from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
 
@@ -49,23 +50,19 @@ def check_rate_limit(client_id: str) -> bool:
 
     if client_id not in client_requests:
         client_requests[client_id] = []
-    
+        
     # Filter timestamps within current window
     client_requests[client_id] = [t for t in client_requests[client_id] if now - t < RATE_LIMIT_WINDOW]
     
     if len(client_requests[client_id]) >= MAX_REQUESTS_PER_WINDOW:
         return False
-    
+        
     client_requests[client_id].append(now)
     return True
 
 
-
-# Topic verification filter: ensure queries stay strictly on space, combustion, and NASA mission safety
-import re
-
 INAPPROPRIATE_PATTERN = re.compile(
-    r'(?i)(?:sik[a-zəıöüçşğ]*|amcıq[a-zəıöüçşğ]*|amcığ[a-zəıöüçşğ]*|amı|göt[a-zəıöüçşğ]*|seks[a-zəıöüçşğ]*|sex[a-zəıöüçşğ]*|porno[a-zəıöüçşğ]*|qancıq[a-zəıöüçşğ]*|peysər[a-zəıöüçşğ]*|bitch[a-z]*|fuck[a-z]*|cock[a-z]*|dick[a-z]*|pussy[a-z]*|vagina[a-z]*|masturb[a-z]*|penis[a-z]*|prezervativ[a-zəıöüçşğ]*|intim[a-zəıöüçşğ]*)'
+    r'(?i)\b(?:sik[a-zəıöüçşğ]*|amcıq[a-zəıöüçşğ]*|amcığ[a-zəıöüçşğ]*|amı|göt[a-zəıöüçşğ]*|seks[a-zəıöüçşğ]*|sex[a-zəıöüçşğ]*|porno[a-zəıöüçşğ]*|qancıq[a-zəıöüçşğ]*|peysər[a-zəıöüçşğ]*|bitch[a-z]*|fuck[a-z]*|cock[a-z]*|dick[a-z]*|pussy[a-z]*|vagina[a-z]*|masturb[a-z]*|penis[a-z]*|prezervativ[a-zəıöüçşğ]*|intim[a-zəıöüçşğ]*)\b'
 )
 
 FIREX_DOMAIN_KEYWORDS = [
@@ -96,18 +93,15 @@ def is_topic_relevant(text: str) -> bool:
     """Return False if query is completely off-topic or inappropriate to save token budget."""
     if not text:
         return False
-    # 1. Inappropriate / vulgar / adult check
     if INAPPROPRIATE_PATTERN.search(text):
         return False
         
     t = text.lower().strip()
     
-    # 2. Domain keywords check
     for kw in FIREX_DOMAIN_KEYWORDS:
         if kw in t:
             return True
             
-    # 3. Simple greetings / identity queries
     words = t.split()
     if len(words) <= 5:
         for g in GREETINGS:
@@ -137,6 +131,7 @@ Guidelines:
 - Maintain a professional, scientific, precise, yet accessible tone.
 - Do NOT use childish emojis or excessive jargon without explanation.
 - Use metric/scientific units (mm, s, kPa, % O2, cm/s, K).
+- STRICT MATERIAL MATCHING: When a query specifies a particular substance (e.g., 'ethanol'), restrict analysis strictly to that material and do not confuse it with chemically similar species (e.g., 'methanol').
 - Cite specific experiment families (e.g. FLEX-1 droplet extinction, SAFFIRE large-scale spacecraft burns) when relevant.
 - Always answer in English when requested in English.
 """
@@ -156,6 +151,7 @@ Qaydalar:
 - Peşəkar, elmi və aydın dildə cavab verin.
 - Uşaqcasına emojilərdən istifadə etməyin.
 - Metrik və elmi vahidlərdən istifadə edin (mm, s, kPa, % O2, cm/s, K).
+- MATERİAL DƏQİQLİYİ: İstifadəçi müəyyən bir material (məsələn, 'ethanol') soruşduqda, yalnız həmin materiala aid dataları təhlil edin. Adı bənzər olan digər maddələri ('methanol' və s.) qətiyyən qarışdırmayın.
 - Cavabınızı mütləq Azərbaycan dilində təqdim edin.
 """
 
@@ -179,14 +175,12 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
     msg = user_message.lower()
     is_az = language.lower().startswith("az")
 
-    # Contextual knowledge
     has_flex = "flex" in msg or "droplet" in msg or "damcı" in msg
     has_bass = "bass" in msg or "solid" in msg or "bərk" in msg
     has_saffire = "saffire" in msg or "spacecraft" in msg or "gəmi" in msg
     has_artemis = "artemis" in msg or "lunar" in msg or "ay" in msg or "34%" in msg
     has_iss = "iss" in msg or "bks" in msg or "21%" in msg
     has_extinction = "extinct" in msg or "sönmə" in msg or "diameter" in msg or "diametr" in msg or "limit" in msg
-    has_flame = "flame" in msg or "alov" in msg or "temp" in msg or "temperatur" in msg
 
     if is_az:
         if has_artemis:
@@ -202,7 +196,7 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
             return (
                 "**FLEX (Flame Extinction Experiment) Missiyası:**\n\n"
                 "FLEX-1 və FLEX-2 eksperimentləri Beynəlxalq Kosmik Stansiyada (BKS) Yanma İnteqrasiya Rəfində (CIR) həyata keçirilmişdir.\n"
-                "- **Əsas Məqsəd:** Mikromaqnit şəraitində maye yanacaq damcılarının (n-heptan, metanol, dekan) sferik yanma və sönmə limitlərini tədqiq etmək.\n"
+                "- **Əsas Məqsəd:** Mikromaqnit şəraitində maye yanacaq damcılarının (n-heptan, metanol, dekan, etanol) sferik yanma və sönmə limitlərini tədqiq etmək.\n"
                 "- **Əsas Elmi Kəşf:** Yüksək temperatur alovu söndükdən sonra aşağı temperaturda davam edən **'Soyuq Alov' (Cool Flame)** rejiminin mikroqravitasiyada mövcudluğu sübut edilmişdir.\n"
                 "- **Kritik Göstərici:** Sönmə diametri ($d_e$) oksigen konsentrasiyası və inert qaz ($CO_2/He$) nisbətindən asılı olaraq dəyişir."
             )
@@ -232,7 +226,7 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
             return (
                 "**FIRE-X Elmi Tədqiqat Mərkəzi:**\n\n"
                 "Platformamız 16 NASA uçuş ailəsi üzrə **879 yoxlanılmış mikroqravitasiya yanma eksperimentini** əhatə edir.\n"
-                "- **Tədqiqatçı Bölməsi:** Yanacaq növü (PMMA, n-Heptan, Pambıq), oksigen faizi ($15\\%-50\\%$) və təzyiq parametrlərinə görə eksperimentləri filtrasiya edin.\n"
+                "- **Tədqiqatçı Bölməsi:** Yanacaq növü (PMMA, n-Heptan, Pambıq, Etanol), oksigen faizi ($15\\%-50\\%$) və təzyiq parametrlərinə görə eksperimentləri filtrasiya edin.\n"
                 "- **Simulyator:** Artemis Ay Modulu (34% O₂), BKS (21% O₂) və Dərin Kosmos mühitlərində yanğın təhlükəsini hesablayın.\n"
                 "- **Müqayisə:** 2-4 eksperiment seçərək yanma müddəti və sönmə diametrlərini müqayisə edin.\n\n"
                 "*Qeyd: Sistem real OpenAI API inteqrasiyasına tam hazırdır (`OPENAI_API_KEY` aktiv edildikdə avtomatik canlı GPT modeli işə düşür).*"
@@ -250,7 +244,7 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
             return (
                 "**FLEX (Flame Extinction Experiment) Mission Insight:**\n\n"
                 "FLEX-1 and FLEX-2 were conducted aboard the International Space Station within the Combustion Integrated Rack (CIR).\n"
-                "- **Objective:** Investigate spherical liquid droplet burning (n-heptane, methanol, decane) and radiative/convective extinction limits in pure microgravity ($0 \\pm 10^{-4} g$).\n"
+                "- **Objective:** Investigate spherical liquid droplet burning (n-heptane, methanol, decane, ethanol) and radiative/convective extinction limits in pure microgravity ($0 \\pm 10^{-4} g$).\n"
                 "- **Key Discovery:** Confirmed the quasi-steady existence of low-temperature **'Cool Flame'** burning regimes sustained by non-luminous peroxide kinetics after apparent hot flame quenching.\n"
                 "- **Critical Extinction Diameter ($d_e$):** Quantifies the exact droplet dimension at which chemical kinetics fail to overcome radiative losses."
             )
@@ -280,7 +274,7 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
             return (
                 "**FIRE-X Scientific Research Assistant:**\n\n"
                 "The platform indexes **879 verified microgravity experiments** across 16 NASA flight investigations.\n"
-                "- **Explorer:** Filter by fuel material (PMMA, n-Heptane, Cotton), oxygen fraction ($15\\%-50\\%$), and pressure regimes.\n"
+                "- **Explorer:** Filter by fuel material (PMMA, n-Heptane, Cotton, Ethanol), oxygen fraction ($15\\%-50\\%$), and pressure regimes.\n"
                 "- **Scenario Simulator:** Model fire risks under Artemis Lunar Habitat (34% O₂), ISS (21% O₂), and Deep Space Hypoxic Haven conditions.\n"
                 "- **Benchmark Tool:** Select 2–4 experiments for side-by-side metric and extinction parameter comparisons.\n\n"
                 "*Note: The system is fully wired for production OpenAI API execution (`OPENAI_API_KEY` in `.env` activates real-time GPT synthesis).*"
@@ -322,7 +316,7 @@ def query_ai_assistant(
     if len(latest_user_message) > 4000:
         latest_user_message = latest_user_message[:4000]
 
-    # 2.5 Topic Relevance & Guardrail Check (Avoid wasting tokens on unrelated/inappropriate queries)
+    # 2.5 Topic Relevance & Guardrail Check
     if not is_topic_relevant(latest_user_message):
         logger.info(f"Query rejected by topic guardrail: '{latest_user_message[:60]}...'")
         is_az = language.lower().startswith("az")
@@ -345,12 +339,11 @@ def query_ai_assistant(
     # 3. System Prompt Construction
     system_prompt = build_system_prompt(language=language, page_context=page_context)
 
-    # 4. Attempt Real OpenAI Responses API Call if Client is Configured
+    # 4. Attempt Standard OpenAI ChatCompletions API Call
     if openai_client:
         try:
-            # Build conversation history prefix for context continuity (last 6 turns)
             conversation_history = ""
-            history_turns = messages[-7:-1]  # all prior turns except the current
+            history_turns = messages[-7:-1]
             if history_turns:
                 conversation_history = "--- Conversation History ---\n"
                 for m in history_turns:
@@ -358,25 +351,27 @@ def query_ai_assistant(
                     conversation_history += f"{role_label}: {m.get('content', '')}\n"
                 conversation_history += "--- End of History ---\n\n"
 
-            # Final input = history context + current user message
             full_input = conversation_history + latest_user_message
 
-            logger.info(f"Dispatching query to OpenAI Responses API ({OPENAI_MODEL})...")
-            response = openai_client.responses.create(
+            logger.info(f"Dispatching query to OpenAI API ({OPENAI_MODEL})...")
+            
+            response = openai_client.chat.completions.create(
                 model=OPENAI_MODEL,
-                instructions=system_prompt,
-                input=full_input,
-                store=True,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": full_input}
+                ],
+                temperature=0.1
             )
-            response_text = response.output_text
+            response_text = response.choices[0].message.content
             return {
                 "success": True,
                 "response": response_text,
-                "provider": f"OpenAI gpt-6-luna",
+                "provider": "OpenAI",
                 "model": OPENAI_MODEL
             }
         except Exception as e:
-            logger.warning(f"OpenAI Responses API error: {e}. Falling back to scientific RAG engine.")
+            logger.warning(f"OpenAI API error: {e}. Falling back to scientific RAG engine.")
 
     # 5. High-Precision Scientific RAG Fallback
     fallback_response = generate_scientific_fallback(
