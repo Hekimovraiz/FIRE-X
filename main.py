@@ -20,9 +20,13 @@ async def fire_ai_chat(request: QueryRequest):
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": "Sən NASA FIRE-X layihəsi üçün köməkçi elmi süni intellektsən. Mikroyerçekimi, yanğın təhlükəsizliyi və kosmik tədqiqatlar üzrə cavablar ver."},
+                {
+                    "role": "system", 
+                    "content": "Sən NASA FIRE-X layihəsi üçün köməkçi elmi süni intellektsən. Mikroyerçekimi, yanğın təhlükəsizliyi və kosmik tədqiqatlar üzrə cavablar ver. ÇOX VACİB QAYDA: Əgər istifadəçi müəyyən bir materialı (məsələn, 'ethanol') axtarırsa, yalnız və yalnız o material haqqında məlumat ver. Oxşar adlı materialları (məsələn, 'methanol') qətiyyən ona aid etmə və cavaba daxil etmə. Dəqiq uyğunluğa (exact match) ciddi riayət et."
+                },
                 {"role": "user", "content": request.prompt}
-            ]
+            ],
+            temperature=0.1 # Süni intellektin dəqiqliyini artırır, oxşar sözləri qarışdırmasının qarşısını alır
         )
         ai_reply = response.choices[0].message.content
         return {"status": "success", "response": ai_reply}
