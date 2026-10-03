@@ -63,7 +63,7 @@ def build_system_prompt(language: str = "en", page_context: Optional[Dict[str, A
 You are an expert aerospace combustion scientist and mission safety specialist.
 
 Your mission:
-1. Help users understand the FIRE-X platform, its 484 NASA microgravity combustion experiments across 16 flight families (FLEX-1, FLEX-2, BASS-I, BASS-II, SAFFIRE I-VI, SOFIE, ACME/CIR, SLICE, NASA-STD-6001, NTRS).
+1. Help users understand the FIRE-X platform, its 879 NASA microgravity combustion experiments across 24 flight families (FLEX-1, FLEX-2, BASS-I, BASS-II, SAFFIRE I-VI, SOFIE, ACME/CIR, SLICE, NASA-STD-6001, NTRS).
 2. Explain microgravity combustion physics (absence of buoyant convection, spherical droplet flames, Stefan diffusion, cool flames, radiative vs convective extinction, flammability limits).
 3. Explain planetary mission fire safety hazards (ISS 21% O2 at 101.3 kPa vs Artemis Lunar Habitat 34% O2 at 56.5 kPa / 8.2 psia vs Hypoxic Haven 15% O2).
 4. Interpret charts, data filters, experiment parameters, and mission scenario simulations on the website.
@@ -82,7 +82,7 @@ Guidelines:
 Siz aerokosmik yanma fizikası və kosmik missiyaların təhlükəsizliyi üzrə mütəxəssissiniz.
 
 Sizin missiyanız:
-1. İstifadəçilərə FIRE-X platformasını, 16 uçuş ailəsi üzrə 484 real NASA mikroqravitasiya yanma eksperimentini (FLEX-1, FLEX-2, BASS-I, BASS-II, SAFFIRE I-VI, SOFIE, ACME/CIR, SLICE, NASA-STD-6001, NTRS) izah etmək.
+1. İstifadəçilərə FIRE-X platformasını, 24 uçuş və tədqiqat ailəsi üzrə 879 real NASA mikroqravitasiya yanma eksperimentini (FLEX-1, FLEX-2, BASS-I, BASS-II, SAFFIRE I-VI, SOFIE, ACME/CIR, SLICE, NASA-STD-6001, NTRS) izah etmək.
 2. Mikroqravitasiyada yanma fizikasını (təbii konveksiyanın olmaması, sferik alov damcıları, Stefan diffuziyası, soyuq alovlar (cool flames), radiativ və konvektiv sönmə limitləri) elmi və aydın şəkildə izah etmək.
 3. Kosmik missiya mühitlərindəki yanğın risklərini izah etmək (BKS 21% O2 / 101.3 kPa vs Artemis Ay Yaşayış Modulu 34% O2 / 56.5 kPa / 8.2 psia vs Hipoqsik Sığınacaq 15% O2).
 4. Vebsaytdakı qrafikləri, eksperiment parametrlərini və missiya simulyasiyalarını təhlil etmək.
@@ -111,7 +111,7 @@ Qaydalar:
 def generate_scientific_fallback(user_message: str, language: str = "en", page_context: Optional[Dict[str, Any]] = None, stats_summary: Optional[Dict[str, Any]] = None) -> str:
     """
     High-precision deterministic scientific synthesis generator when OpenAI API Key is pending.
-    Provides mathematically accurate answers based on the 484 NASA experiment dataset.
+    Provides mathematically accurate answers based on the 879 NASA experiment dataset.
     """
     msg = user_message.lower()
     is_az = language.lower().startswith("az")
@@ -163,12 +163,12 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
                 "Mikroqravitasiyada alov iki əsas mexanizmlə sönür:\n"
                 "1. **Radiativ Sönmə (Radiative Extinction):** Hava axını çox zəif olduqda ($< 1-2\\text{ cm/s}$), alovdan yayılan şüalanma istiliyi alov zonasını soyudur və reaksiya dayanır.\n"
                 "2. **Konvektiv Üfürülmə (Blowoff Extinction):** Yüksək hava axınında istilik reaksiya zonasından sürətlə daşınır.\n"
-                "- Verilənlər bazamızdakı 484 eksperimentin analizi göstərir ki, $O_2 < 14.5\\%$ səviyyəsində əksər bərk və maye yanacaqlar avtomatik sönmə rejiminə keçir."
+                "- Verilənlər bazamızdakı 879 eksperimentin analizi göstərir ki, $O_2 < 14.5\\%$ səviyyəsində əksər bərk və maye yanacaqlar avtomatik sönmə rejiminə keçir."
             )
         else:
             return (
                 "**FIRE-X Elmi Tədqiqat Mərkəzi:**\n\n"
-                "Platformamız 16 NASA uçuş ailəsi üzrə **484 yoxlanılmış mikroqravitasiya yanma eksperimentini** əhatə edir.\n"
+                "Platformamız 16 NASA uçuş ailəsi üzrə **879 yoxlanılmış mikroqravitasiya yanma eksperimentini** əhatə edir.\n"
                 "- **Tədqiqatçı Bölməsi:** Yanacaq növü (PMMA, n-Heptan, Pambıq), oksigen faizi ($15\\%-50\\%$) və təzyiq parametrlərinə görə eksperimentləri filtrasiya edin.\n"
                 "- **Simulyator:** Artemis Ay Modulu (34% O₂), BKS (21% O₂) və Dərin Kosmos mühitlərində yanğın təhlükəsini hesablayın.\n"
                 "- **Müqayisə:** 2-4 eksperiment seçərək yanma müddəti və sönmə diametrlərini müqayisə edin.\n\n"
@@ -211,12 +211,12 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
                 "Combustion quenching in microgravity is governed by two primary regimes:\n"
                 "1. **Radiative Quenching:** Occurs at near-zero or low airflow ($< 2\\text{ cm/s}$), where radiant heat loss from soot and gases exceeds the heat generation rate.\n"
                 "2. **Convective Blowoff:** Occurs at elevated flow velocities when residence time becomes shorter than chemical reaction time.\n"
-                "- Across our 484 canonical NASA experiments, materials exhibit a sharp flammability cutoff below $14.5\\%~O_2$ in quiescent microgravity."
+                "- Across our 879 canonical NASA experiments, materials exhibit a sharp flammability cutoff below $14.5\\%~O_2$ in quiescent microgravity."
             )
         else:
             return (
                 "**FIRE-X Scientific Research Assistant:**\n\n"
-                "The platform indexes **484 verified microgravity experiments** across 16 NASA flight investigations.\n"
+                "The platform indexes **879 verified microgravity experiments** across 16 NASA flight investigations.\n"
                 "- **Explorer:** Filter by fuel material (PMMA, n-Heptane, Cotton), oxygen fraction ($15\\%-50\\%$), and pressure regimes.\n"
                 "- **Scenario Simulator:** Model fire risks under Artemis Lunar Habitat (34% O₂), ISS (21% O₂), and Deep Space Hypoxic Haven conditions.\n"
                 "- **Benchmark Tool:** Select 2–4 experiments for side-by-side metric and extinction parameter comparisons.\n\n"

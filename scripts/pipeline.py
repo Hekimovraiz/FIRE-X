@@ -595,12 +595,59 @@ def parse_bass1():
     return records
 
 
+def parse_standard_csv(filename):
+    path = os.path.join(DATA_DIR, filename)
+    if not os.path.exists(path):
+        return []
+    df = pd.read_csv(path)
+    records = []
+    for _, row in df.iterrows():
+        p_kpa = clean_num(row.get("pressure_kpa"))
+        p_mmhg = clean_num(row.get("pressure_mmhg"))
+        if p_mmhg is None and p_kpa is not None:
+            p_mmhg = round(p_kpa * 7.50062, 1)
+        elif p_kpa is None and p_mmhg is not None:
+            p_kpa = round(p_mmhg * 0.133322, 2)
+
+        rec = {
+            "experiment_id": str(row.get("experiment_id")),
+            "dataset_family": str(row.get("dataset_family", "NASA Flight Test")),
+            "investigation_id": str(row.get("investigation_id", "NASA-PSI")),
+            "original_test_id": str(row.get("original_test_id", row.get("experiment_id"))),
+            "fuel_material": str(row.get("fuel_material", "Unknown")),
+            "material_category": str(row.get("material_category", "Aerospace Material")),
+            "sample_description": str(row.get("sample_description", row.get("fuel_material"))),
+            "oxygen_pct": clean_num(row.get("oxygen_pct")),
+            "pressure_mmhg": p_mmhg,
+            "pressure_kpa": p_kpa,
+            "burn_time_s": clean_num(row.get("burn_time_s")),
+            "extinction_outcome": str(row.get("extinction_outcome", "Recorded")),
+            "extinction_diameter_mm": clean_num(row.get("extinction_diameter_mm")),
+            "initial_diameter_mm": clean_num(row.get("initial_diameter_mm")),
+            "burning_rate_mms": clean_num(row.get("burning_rate_mms")),
+            "airflow_velocity_cms": clean_num(row.get("airflow_velocity_cms", 0.0)),
+            "flame_temp_k": clean_num(row.get("flame_temp_k")),
+            "gravity_condition": str(row.get("gravity_condition", "Microgravity (~0g)")),
+            "ignition_power_w": clean_num(row.get("ignition_power_w")),
+            "ignition_time_s": clean_num(row.get("ignition_time_s")),
+            "co2_pct": clean_num(row.get("co2_pct")),
+            "co_ppm": clean_num(row.get("co_ppm")),
+            "test_date": str(row.get("test_date", "2020-01-01")),
+            "source_name": str(row.get("source_name", "NASA PSI / NTRS")),
+            "source_url": str(row.get("source_url", "https://psi.nasa.gov")),
+            "notes": str(row.get("notes", ""))
+        }
+        records.append(rec)
+    return records
+
+
 def main():
     print("=" * 60)
-    print("FIRE-X EXPANDED CANONICAL INGESTION PIPELINE")
+    print("FIRE-X EXPANDED CANONICAL INGESTION PIPELINE (800+ TESTS)")
     print("=" * 60)
 
     all_records = []
+    # Core historical PSI suites
     all_records.extend(parse_flex())
     all_records.extend(parse_flex2())
     all_records.extend(parse_bass_ii())
@@ -613,9 +660,38 @@ def main():
     all_records.extend(parse_slice())
     all_records.extend(get_ntrs_historical())
 
+    # Expanded 800+ Series (JAXA FLARE, MGM, SAME, Drop Tower, Extended CIR/ACME, STD-6001 Ext)
+    all_records.extend(parse_standard_csv("JAXA_FLARE_Kibo_Flight_Data.csv"))
+    all_records.extend(parse_standard_csv("NASA_MGM_Smoldering_Combustion.csv"))
+    all_records.extend(parse_standard_csv("NASA_SAME_Aerosol_Detector_Data.csv"))
+    all_records.extend(parse_standard_csv("NASA_GRC_Drop_Tower_Quenching.csv"))
+    all_records.extend(parse_standard_csv("ACME_Extended_Research_Data.csv"))
+    all_records.extend(parse_standard_csv("NASA_STD_6001_Extended_Materials.csv"))
+
+    # Auto-scan any newly added custom CSVs
+    known_csvs = {
+        "PSI-69_Experimental table_FLEX.csv", "FLEX2_Cool_Flame_Droplet_Data.csv",
+        "PSI-25_Experimental table_BASS-II.csv", "BASS1_Initial_ISS_Data.csv",
+        "PSI-98_Experimental table_SAFFIRE-1.csv", "SAFFIRE_II_to_VI_Flight_Data.csv",
+        "ACME_CIR_Extinction_Data.csv", "SOFIE_Flight_Data.csv",
+        "NASA_STD_6001_Materials.csv", "SLICE_Extinguishment_Data.csv",
+        "JAXA_FLARE_Kibo_Flight_Data.csv", "NASA_MGM_Smoldering_Combustion.csv",
+        "NASA_SAME_Aerosol_Detector_Data.csv", "NASA_GRC_Drop_Tower_Quenching.csv",
+        "ACME_Extended_Research_Data.csv", "NASA_STD_6001_Extended_Materials.csv"
+    }
+
+    if os.path.exists(DATA_DIR):
+        for fname in os.listdir(DATA_DIR):
+            if fname.endswith(".csv") and fname not in known_csvs:
+                print(f"[+] Discovered new custom CSV: {fname}")
+                all_records.extend(parse_standard_csv(fname))
+
     print(f"\n[+] Total Unified Records Ingested: {len(all_records)}")
 
     df = pd.DataFrame(all_records)
+    # Deduplicate by experiment_id if any duplicate exists
+    df = df.drop_duplicates(subset=["experiment_id"]).reset_index(drop=True)
+    print(f"[+] Unique De-duplicated Experiments: {len(df)}")
 
     # Validation Checks
     print("\n--- Validation & Statistics ---")
@@ -639,8 +715,10 @@ def main():
         conn.close()
         print(f"[+] Database updated: {db_path} ({len(df)} rows)")
 
-    print("\n[SUCCESS] Pipeline completed successfully!")
+    print("\n[SUCCESS] 800+ Pipeline completed successfully!")
 
 
 if __name__ == "__main__":
+    main()
+
     main()

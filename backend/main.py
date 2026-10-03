@@ -56,7 +56,7 @@ class AskAIRequest(BaseModel):
 # API Routes
 @app.get('/api/health')
 def health_check():
-    return {'status': 'healthy', 'service': 'FIRE-X Space Science API', 'version': '2.1.0', 'canonical_records': 484}
+    return {'status': 'healthy', 'service': 'FIRE-X Space Science API', 'version': '2.1.0', 'canonical_records': 879}
 
 @app.get('/api/stats')
 def get_platform_stats():

@@ -492,33 +492,43 @@ body {
 
       <!-- FAMILY SELECT -->
       <div class="filter-group">
-        <label class="filter-label">Flight Family (16 Total)</label>
+        <label class="filter-label">Flight & Research Family (24 Total)</label>
         <select class="custom-select" id="filter-family" onchange="applyFilters()">
           <option value="">All Flight Investigations</option>
-          <option value="FLEX">FLEX (Droplet Extinction)</option>
-          <option value="FLEX-2">FLEX-2 (Cool Flame Dynamics)</option>
-          <option value="BASS">BASS (Solid Material Flammability)</option>
-          <option value="BASS-II">BASS-II (Convective Suppression)</option>
-          <option value="SAFFIRE">SAFFIRE (Cygnus Spacecraft Fires)</option>
-          <option value="SOFIE">SOFIE (Solid Fuel Ignition)</option>
-          <option value="ACME">ACME (CIR Microgravity Burn)</option>
-          <option value="SLICE">SLICE (Structure &amp; Liftoff)</option>
+          <option value="FLEX">FLEX (Droplet Extinction - 274)</option>
+          <option value="BASS-II">BASS-II (Convective Suppression - 129)</option>
+          <option value="GRC Drop Tower">GRC Drop Tower (Zero-G Freefall - 95)</option>
+          <option value="FLARE">FLARE (JAXA / Kibo Reduced-g - 80)</option>
+          <option value="MGM">MGM (Smoldering Combustion - 65)</option>
+          <option value="NASA-STD-6001">NASA-STD-6001 (Flight Certification - 59)</option>
+          <option value="SAME">SAME (Smoke & Aerosol Precursor - 50)</option>
+          <option value="ACME">ACME (CIR Microgravity Burn - 68)</option>
+          <option value="SAFFIRE">SAFFIRE (Cygnus Spacecraft Fires - 19)</option>
+          <option value="SOFIE">SOFIE (Solid Fuel Ignition - 12)</option>
+          <option value="FLEX-2">FLEX-2 (Cool Flame Dynamics - 10)</option>
+          <option value="SLICE">SLICE (Structure & Liftoff - 8)</option>
+          <option value="BASS-I">BASS-I (Initial BASS Program - 8)</option>
         </select>
       </div>
 
       <!-- FUEL MATERIAL SELECT -->
       <div class="filter-group">
-        <label class="filter-label">Fuel / Material</label>
+        <label class="filter-label">Fuel / Material (106 Types)</label>
         <select class="custom-select" id="filter-fuel" onchange="applyFilters()">
           <option value="">All Materials &amp; Fuels</option>
-          <option value="n-Heptane">n-Heptane</option>
-          <option value="n-Decane">n-Decane</option>
-          <option value="Methanol">Methanol</option>
+          <option value="Heptane">n-Heptane / n-Octane</option>
+          <option value="Decane">n-Decane</option>
+          <option value="Methanol">Methanol / Ethanol</option>
           <option value="PMMA">PMMA (Cast Acrylic)</option>
-          <option value="Cotton">Cotton Fabric</option>
+          <option value="Nomex">Nomex Fabric (Aramid)</option>
+          <option value="Polyurethane">Polyurethane Foam (Smoldering)</option>
+          <option value="Kapton">Kapton / Polyimide Wire</option>
+          <option value="PEEK">PEEK (High-Temp Aerospace)</option>
+          <option value="Cotton">Cotton Fabric / Precursor</option>
           <option value="Delrin">Delrin (Polyacetal)</option>
-          <option value="Polyethylene">Polyethylene</option>
-          <option value="Silicone">Silicone Composite</option>
+          <option value="Polyethylene">Polyethylene (LDPE)</option>
+          <option value="Silicone">Silicone Rubber / Cable</option>
+          <option value="Beta Cloth">Beta Cloth (Thermal Protection)</option>
         </select>
       </div>
 
@@ -527,10 +537,14 @@ body {
         <label class="filter-label">Extinction Outcome</label>
         <select class="custom-select" id="filter-outcome" onchange="applyFilters()">
           <option value="">All Extinction Outcomes</option>
-          <option value="Radiative">Radiative Quenching</option>
+          <option value="Radiative">Radiative Quenching / Extinction</option>
           <option value="Blowoff">Convective Blowoff</option>
-          <option value="Depletion">Fuel Depletion (Burnout)</option>
-          <option value="Sustained">Sustained Combustion</option>
+          <option value="Smolder">Smolder (Sustained / Quenched)</option>
+          <option value="Flaming">Transition to Flaming</option>
+          <option value="Detector">Smoke Detector Alarm Triggered</option>
+          <option value="Pass">NASA-STD-6001 Pass</option>
+          <option value="Fail">NASA-STD-6001 Fail</option>
+          <option value="Sustained">Sustained Flame</option>
         </select>
       </div>
 
@@ -555,7 +569,7 @@ body {
     <section class="table-console">
       <div class="table-toolbar">
         <div class="results-counter">
-          SHOWING <span id="count-displayed">0</span> OF <span id="count-total">484</span> FLIGHT EXPERIMENTS
+          SHOWING <span id="count-displayed">0</span> OF <span id="count-total">879</span> FLIGHT EXPERIMENTS
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.4);">PAGE SIZE:</span>
@@ -683,8 +697,8 @@ async function fetchExperiments() {
 
     renderTable(data.experiments || []);
     document.getElementById('count-displayed').textContent = data.experiments ? data.experiments.length : 0;
-    document.getElementById('count-total').textContent = data.total || 484;
-    totalPages = data.total_pages || Math.ceil((data.total || 484) / pageSize);
+    document.getElementById('count-total').textContent = data.total || 879;
+    totalPages = data.total_pages || Math.ceil((data.total || 879) / pageSize);
     updatePaginationUI();
   } catch (e) {
     console.error('Fetch error:', e);

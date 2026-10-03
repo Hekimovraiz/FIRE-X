@@ -5,7 +5,7 @@
 # NASA FIRE-X
 ### *AI-Powered Fire Safety Insights from Microgravity Combustion Data*
 
-**Microgravity combustion intelligence meets autonomous OpenAI reasoning & 3D/4D telemetry. Instant insights derived from 484 verified NASA orbital flight experiments.**
+**Microgravity combustion intelligence meets autonomous OpenAI reasoning & 3D/4D telemetry. Instant insights derived from 879 verified NASA orbital flight experiments.**
 
 [🌐 Multi-Page Platform](#-multi-page-platform-architecture) · [⚡ Quick Start](#-quick-start) · [🔬 3D Holo-Lab](#-3d4d-combustion-holo-lab) · [📖 API Reference](#-api-endpoints) · [🛰️ Data Sources](#-data-governance--provenance) · [☁️ Free Deployment](#-free-cloud--self-hosting-deployment)
 
@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi" alt="FastAPI"/>
   <img src="https://img.shields.io/badge/AI%20Engine-OpenAI%20GPT--6--luna-412991?style=flat-square&logo=openai" alt="AI Engine"/>
   <img src="https://img.shields.io/badge/Visualization-Three.js%20WebGL%20%2B%20Chart.js-black?style=flat-square&logo=three.js" alt="Three.js"/>
-  <img src="https://img.shields.io/badge/NASA%20PSI%20Experiments-484%20Verified-E03C31?style=flat-square&logo=nasa" alt="NASA Experiments"/>
+  <img src="https://img.shields.io/badge/NASA%20PSI%20Experiments-879%20Verified-E03C31?style=flat-square&logo=nasa" alt="NASA Experiments"/>
   <img src="https://img.shields.io/badge/Flight%20Families-16-FF6B35?style=flat-square" alt="Flight Families"/>
   <img src="https://img.shields.io/badge/NASA%20Space%20Apps-2026-00F5FF?style=flat-square" alt="NASA Space Apps"/>
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/>
@@ -31,7 +31,7 @@
 
 On Earth, gravity drives natural buoyant convection—hot gases rise and draw in fresh oxygen. In low-Earth orbit ($10^{-4}\,g$), buoyancy is absent. Flames become spherical, burn at lower temperatures, and exhibit stealth low-temperature **cool flames** that survive undetected by standard spacecraft fire sensors.
 
-**FIRE-X** unifies **484 canonical NASA flight experiments** across 16 orbital investigations aboard the International Space Station (ISS) and Cygnus spacecraft into a multi-page, high-performance platform. Combining a deterministic SQLite data layer with **OpenAI Responses API (`gpt-6-luna`)** and **Three.js WebGL 3D/4D visualizers**, FIRE-X delivers real-time fire safety insights, habitat risk simulations, and automated compliance advisories.
+**FIRE-X** unifies **879 canonical NASA flight experiments** across 16 orbital investigations aboard the International Space Station (ISS) and Cygnus spacecraft into a multi-page, high-performance platform. Combining a deterministic SQLite data layer with **OpenAI Responses API (`gpt-6-luna`)** and **Three.js WebGL 3D/4D visualizers**, FIRE-X delivers real-time fire safety insights, habitat risk simulations, and automated compliance advisories.
 
 ```bash
 # Clone & launch locally in seconds
@@ -50,9 +50,9 @@ FIRE-X is built as a complete **multi-page aerospace application** (not a single
 
 | Mission Module | Route | Technologies | Purpose & Capabilities |
 |:---|:---|:---|:---|
-| 🏠 **Mission Control (Home)** | `/` | Three.js WebGL, CSS Grid | Photorealistic ISS Cupola hero viewport, interactive microgravity fire particle field, live UTC mission clock, and 484 animated KPI counters. |
+| 🏠 **Mission Control (Home)** | `/` | Three.js WebGL, CSS Grid | Photorealistic ISS Cupola hero viewport, interactive microgravity fire particle field, live UTC mission clock, and 879 animated KPI counters. |
 | 🔬 **3D/4D Analytics Hub** | `/analytics` | Three.js OrbitControls, Chart.js 4 | Interactive **4D Telemetry Scatter Cube**, **3D Spherical Droplet Flame**, and **4 Core Scientific Telemetry Modules**. |
-| 🗄️ **Orbital Data Explorer** | `/explorer` | Vanilla JS, REST API | Filter 484 experiments across 16 families, materials, outcomes, and $O_2\%$ sliders. Includes slide-out **Holo-Inspector Drawer** and **Comparison Dock**. |
+| 🗄️ **Orbital Data Explorer** | `/explorer` | Vanilla JS, REST API | Filter 879 experiments across 16 families, materials, outcomes, and $O_2\%$ sliders. Includes slide-out **Holo-Inspector Drawer** and **Comparison Dock**. |
 | 🪐 **Planetary Simulator** | `/simulator` | Three.js WebGL Sphere, FHI Engine | Fire Hazard Index (FHI 1.0–10.0) calculations across ISS Standard, Artemis Lunar ($34\%\,O_2$), Hypoxic Haven ($15\%\,O_2$), and Custom Sweeps. |
 | 🤖 **AI Research Assistant** | `/ai` | OpenAI Responses API (`gpt-6-luna`) | Dedicated conversational research console with NASA combustion prompt chips, bilingual EN/AZ support, equation formatting, and telemetry links. |
 | 📚 **About & Provenance** | `/about` | Semantic HTML5, NASA PSI Index | Full dataset provenance, 16 flight investigation citations, NASA Glenn Research Center combustion laws, and technical architecture. |
@@ -64,7 +64,7 @@ FIRE-X is built as a complete **multi-page aerospace application** (not a single
 The **Analytics Hub** (`/analytics`) features a WebGL 3D/4D interactive laboratory designed to meet modern aerospace simulation standards:
 
 1. **4D Telemetry Scatter Cube:**
-   - Plots all 484 experiments simultaneously in a 3D coordinate bounding cage:
+   - Plots all 879 experiments simultaneously in a 3D coordinate bounding cage:
      - **X-Axis:** Oxygen Concentration ($14\% - 50\%$)
      - **Y-Axis:** Extinction Diameter $d_e$ ($0.1 - 3.5\text{ mm}$)
      - **Z-Axis:** Forced Airflow Velocity ($0 - 25\text{ cm/s}$)
@@ -95,7 +95,7 @@ FIRE-X provides in-depth empirical correlation analysis derived directly from NA
   - **Peak Flammability Corridor ($V \approx 4 - 8\text{ cm/s}$):** Maximum burning duration and flame spread rate.
 
 ### 3. Fuel Flammability Matrix & Material Hierarchy
-- Comprehensive distribution across 484 flight experiments:
+- Comprehensive distribution across 879 flight experiments:
   - **Alkanes & Liquid Droplets:** n-Heptane, n-Decane (FLEX-1/2, SLICE)
   - **Thermoplastics:** Polymethyl methacrylate / PMMA, Delrin (BASS-I/II)
   - **Fabrics & Spacecraft Textiles:** Cotton, Nomex, SIBAL (BASS, SAFFIRE)
@@ -286,8 +286,8 @@ FIRE-X/
 ├── Nasa_data/                 # Raw NASA PSI / NTRS flight CSV archives
 ├── data/
 │   └── processed/
-│       └── canonical_experiments.csv  # 484-row normalized canonical dataset
-├── fire_safety.db             # SQLite production database (484 canonical records)
+│       └── canonical_experiments.csv  # 879-row normalized canonical dataset
+├── fire_safety.db             # SQLite production database (879 canonical records)
 ├── scripts/
 │   └── pipeline.py            # Data normalization & canonical ingestion script
 ├── .env.example               # Safe environment variable configuration template

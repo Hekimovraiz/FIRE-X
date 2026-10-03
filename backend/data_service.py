@@ -1,7 +1,7 @@
 """
 FIRE-X Data Service Module
 Handles SQLite queries, aggregations, experiment filtering, multi-experiment comparisons,
-and mission scenario simulations across 484 canonical NASA microgravity combustion records.
+and mission scenario simulations across 879 canonical NASA microgravity combustion records.
 """
 
 import sqlite3
@@ -148,7 +148,7 @@ def query_experiments(
     sort_by: str = "experiment_id",
     sort_dir: str = "ASC"
 ) -> Dict[str, Any]:
-    """Multi-parameter filtering & search across all 484 experiments."""
+    """Multi-parameter filtering & search across all 879 experiments."""
     conn = get_db_connection()
     cursor = conn.cursor()
 
