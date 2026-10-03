@@ -31,7 +31,6 @@
       ai: 'AI Köməkçi',
       about: 'Sənədləşmə & Haqqında',
       copyright: '© 2026 NASA FIRE-X · NASA Space Apps Challenge üçün hazırlanıb',
-      githubBtn: 'GitHub Repozitoriyası',
       dataCount: 'Məlumat: NASA Physical Science Informatics (PSI) · 879 kanonik eksperiment'
     },
 
