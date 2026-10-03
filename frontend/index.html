@@ -336,19 +336,19 @@
 <div class="stats-band">
   <div class="stats-grid">
     <div class="stat-item">
-      <div class="stat-num text-gradient" id="stat-exp">0</div>
+      <div class="stat-num text-gradient" id="stat-exp">879</div>
       <div class="stat-label">Canonical Experiments</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" style="color:#FF6B35" id="stat-fam">0</div>
+      <div class="stat-num" style="color:#FF6B35" id="stat-fam">24</div>
       <div class="stat-label">Flight Families</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" style="color:#9B59B6" id="stat-scen">0</div>
+      <div class="stat-num" style="color:#9B59B6" id="stat-scen">3</div>
       <div class="stat-label">Mission Scenarios</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num" style="color:#00E676" id="stat-int">0</div>
+      <div class="stat-num" style="color:#00E676" id="stat-int">99.8%</div>
       <div class="stat-label">Data Integrity</div>
     </div>
   </div>
@@ -649,23 +649,26 @@
 
 <script src="/static/js/nav.js?v=5.0"></script>
 <script>
-// UTC Clock
-setInterval(() => {
+// UTC Clock - run immediately, then every second
+function updateClock() {
   const now = new Date();
   const utc = now.toISOString().replace('T',' ').substring(0,19) + ' UTC';
   const el = document.getElementById('hero-clock-val');
   if (el) el.textContent = utc;
-}, 1000);
+}
+updateClock();
+setInterval(updateClock, 1000);
 
-// Counter animation
+// Counter animation with database dynamic fetch
 const counters = [
-  { id: 'stat-exp', target: 879, suffix: '' },
-  { id: 'stat-fam', target: 24, suffix: '' },
-  { id: 'stat-scen', target: 3, suffix: '' },
+  { id: 'stat-exp', target: 879, suffix: '', decimals: 0 },
+  { id: 'stat-fam', target: 24, suffix: '', decimals: 0 },
+  { id: 'stat-scen', target: 3, suffix: '', decimals: 0 },
   { id: 'stat-int', target: 99.8, suffix: '%', decimals: 1 }
 ];
+
 const animateCounter = (el, target, suffix, decimals) => {
-  const duration = 2000;
+  const duration = 1600;
   const start = performance.now();
   const step = (now) => {
     const progress = Math.min((now - start) / duration, 1);
@@ -677,20 +680,26 @@ const animateCounter = (el, target, suffix, decimals) => {
   requestAnimationFrame(step);
 };
 
-// Run counters immediately after DOM ready — no IntersectionObserver needed
 function runStatsAnimation() {
   counters.forEach(c => {
     const el = document.getElementById(c.id);
-    if (el) animateCounter(el, c.target, c.suffix || '', c.decimals || 0);
+    if (el) animateCounter(el, c.target, c.suffix, c.decimals);
   });
 }
 
-// Fire immediately on DOMContentLoaded (or right now if already loaded)
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', runStatsAnimation);
-} else {
-  runStatsAnimation();
-}
+// Fetch live database stats
+fetch('/api/stats')
+  .then(res => res.json())
+  .then(json => {
+    if (json.success && json.data) {
+      if (json.data.total_experiments) counters[0].target = json.data.total_experiments;
+      if (json.data.total_families) counters[1].target = json.data.total_families;
+    }
+  })
+  .catch(() => {})
+  .finally(() => {
+    runStatsAnimation();
+  });
 
 // Three.js particle system — microgravity fire particles
 (function() {
@@ -703,6 +712,7 @@ if (document.readyState === 'loading') {
 })();
 
 function initParticles(canvas) {
+  if (typeof THREE === 'undefined') return;
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(canvas.parentElement.clientWidth, canvas.parentElement.clientHeight);
@@ -712,7 +722,6 @@ function initParticles(canvas) {
   const camera = new THREE.PerspectiveCamera(75, canvas.parentElement.clientWidth / canvas.parentElement.clientHeight, 0.1, 1000);
   camera.position.z = 5;
 
-  // Create particles
   const N = 1200;
   const positions = new Float32Array(N * 3);
   const colors = new Float32Array(N * 3);
@@ -723,7 +732,6 @@ function initParticles(canvas) {
     positions[i*3] = (Math.random() - 0.5) * 14;
     positions[i*3+1] = (Math.random() - 0.5) * 10;
     positions[i*3+2] = (Math.random() - 0.5) * 6;
-    // Color: cyan to orange spectrum
     const t = Math.random();
     if (t < 0.5) { colors[i*3]=0; colors[i*3+1]=t*1.96+0.02; colors[i*3+2]=1; }
     else { colors[i*3]=1; colors[i*3+1]=(1-t)*0.8+0.1; colors[i*3+2]=0; }
@@ -770,30 +778,6 @@ function initParticles(canvas) {
     camera.updateProjectionMatrix();
   });
 }
-
-// Families Carousel Navigation
-function famScroll(dir) {
-  const el = document.getElementById('families-scroll');
-  if (!el) return;
-  const cardWidth = 260; // card width (240) + gap (20)
-  el.scrollBy({ left: dir * cardWidth * 2, behavior: 'smooth' });
-  setTimeout(updateCarouselBtns, 350);
-}
-function updateCarouselBtns() {
-  const el = document.getElementById('families-scroll');
-  const prev = document.getElementById('fam-prev');
-  const next = document.getElementById('fam-next');
-  if (!el || !prev || !next) return;
-  prev.disabled = el.scrollLeft <= 4;
-  next.disabled = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4;
-}
-document.addEventListener('DOMContentLoaded', () => {
-  const el = document.getElementById('families-scroll');
-  if (el) {
-    el.addEventListener('scroll', updateCarouselBtns);
-    updateCarouselBtns();
-  }
-});
-
+</script>
 </body>
 </html>
