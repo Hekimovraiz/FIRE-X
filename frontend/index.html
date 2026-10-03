@@ -659,10 +659,10 @@ setInterval(() => {
 
 // Counter animation
 const counters = [
-  { id: 'stat-exp', target: 879, suffix: '', prefix: '' },
-  { id: 'stat-fam', target: 24, suffix: '', prefix: '' },
-  { id: 'stat-scen', target: 3, suffix: '', prefix: '' },
-  { id: 'stat-int', target: 99.8, suffix: '%', prefix: '', decimals: 1 }
+  { id: 'stat-exp', target: 879, suffix: '' },
+  { id: 'stat-fam', target: 24, suffix: '' },
+  { id: 'stat-scen', target: 3, suffix: '' },
+  { id: 'stat-int', target: 99.8, suffix: '%', decimals: 1 }
 ];
 const animateCounter = (el, target, suffix, decimals) => {
   const duration = 2000;
@@ -676,19 +676,37 @@ const animateCounter = (el, target, suffix, decimals) => {
   };
   requestAnimationFrame(step);
 };
+
+// Pre-fill with 0 so never blank
+counters.forEach(c => {
+  const el = document.getElementById(c.id);
+  if (el) el.textContent = c.decimals ? (0).toFixed(c.decimals) + c.suffix : '0' + (c.suffix || '');
+});
+
+let statsAnimated = false;
+function runStatsAnimation() {
+  if (statsAnimated) return;
+  statsAnimated = true;
+  counters.forEach(c => {
+    const el = document.getElementById(c.id);
+    if (el) animateCounter(el, c.target, c.suffix || '', c.decimals || 0);
+  });
+}
+
+// Trigger when stats-band scrolls into view
 const statsObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      counters.forEach(c => {
-        const el = document.getElementById(c.id);
-        if (el) animateCounter(el, c.target, c.suffix || '', c.decimals || 0);
-      });
+      runStatsAnimation();
       statsObs.disconnect();
     }
   });
-}, { threshold: 0.3 });
+}, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
 const statsEl = document.querySelector('.stats-band');
 if (statsEl) statsObs.observe(statsEl);
+
+// Fallback: always run after 1.5 seconds regardless of scroll position
+setTimeout(runStatsAnimation, 1500);
 
 // Three.js particle system — microgravity fire particles
 (function() {
