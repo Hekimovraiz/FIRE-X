@@ -157,15 +157,32 @@
 .feature-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
 .feature-desc { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
 
-/* FAMILIES CAROUSEL */
+/* FAMILIES SCROLL */
 .families-carousel-wrapper { position: relative; }
 .families-scroll {
   display: flex; gap: 20px;
-  overflow-x: auto; padding: 8px 4px 16px;
+  overflow-x: auto; padding: 8px 4px 20px;
   scroll-behavior: smooth;
-  scrollbar-width: none; /* Hide scrollbar Firefox */
+  /* Custom scrollbar */
+  scrollbar-width: auto;
+  scrollbar-color: rgba(0,245,255,0.5) rgba(255,255,255,0.04);
 }
-.families-scroll::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+/* Chrome/Safari custom scrollbar */
+.families-scroll::-webkit-scrollbar { height: 6px; border-radius: 3px; }
+.families-scroll::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+  margin: 0 8px;
+}
+.families-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #00F5FF, #2979FF, #9B59B6);
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(0,245,255,0.4);
+}
+.families-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #33F7FF, #4A8AFF, #AF6EDA);
+  box-shadow: 0 0 14px rgba(0,245,255,0.7);
+}
 .family-card {
   flex: 0 0 240px; background: var(--bg-surface-2);
   border: 1px solid rgba(255,255,255,0.07);
@@ -182,26 +199,6 @@
 .family-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
 .family-count { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-bottom: 12px; }
 .family-desc { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
-/* Arrow nav buttons */
-.carousel-btn {
-  position: absolute; top: 50%; transform: translateY(-60%);
-  width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(7,13,26,0.92); border: 1px solid rgba(0,245,255,0.35);
-  color: #00F5FF; cursor: pointer; z-index: 10;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.25s; box-shadow: 0 0 20px rgba(0,245,255,0.15);
-}
-.carousel-btn:hover { background: rgba(0,245,255,0.15); border-color: #00F5FF; box-shadow: 0 0 30px rgba(0,245,255,0.4); }
-.carousel-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
-.carousel-btn-prev { left: -22px; }
-.carousel-btn-next { right: -22px; }
-/* Fade edges */
-.families-carousel-wrapper::before,
-.families-carousel-wrapper::after {
-  content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 5; pointer-events: none;
-}
-.families-carousel-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-surface-1), transparent); }
-.families-carousel-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg-surface-1), transparent); }
 
 /* MISSION ENV */
 .env-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
@@ -400,11 +397,8 @@
           </div>
         </div>
       </div>
-      </div><!-- end families-scroll -->
-      <button class="carousel-btn carousel-btn-next" id="fam-next" aria-label="Next" onclick="famScroll(1)">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
-      </button>
-    </div><!-- end families-carousel-wrapper -->
+      </div>
+    </div>
   </div>
 </section>
 
@@ -421,9 +415,6 @@
       <a href="/explorer" class="btn btn-ghost btn-sm">View All Data →</a>
     </div>
     <div class="families-carousel-wrapper">
-      <button class="carousel-btn carousel-btn-prev" id="fam-prev" aria-label="Previous" onclick="famScroll(-1)">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>
-      </button>
       <div class="families-scroll" id="families-scroll">
       <div class="family-card" style="--card-accent:#00F5FF">
         <div class="family-name">FLEX</div>
