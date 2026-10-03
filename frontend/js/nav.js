@@ -23,7 +23,6 @@
     // === COMMON FOOTER ===
     footer: {
       desc: 'Mikroyerçəkim Yanma Datalarından Süni İntellektlə Yanğın Təhlükəsizliyi İntellekti. NASA Space Apps Challenge 2026.',
-      devCredit: 'Tərtibatçı: <strong>Raiz Həkimov</strong> · <span style="color:rgba(255,255,255,0.55);">Developed & Engineered by Raiz Həkimov</span>',
       colPlatform: 'Platforma',
       colData: 'Məlumat Mənbələri',
       analytics: 'Analitika Mərkəzi',
