@@ -417,8 +417,8 @@ body {
       <li><a href="/about" class="nav-link">About</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="nav-lang-btn" id="lang-btn-ai" onclick="toggleLanguage()">EN</button>
-      <button class="btn btn-ghost btn-sm" onclick="clearChat()">Clear Session</button>
+      <button class="nav-lang-btn" id="nav-lang-btn">EN</button>
+      <button class="btn btn-ghost btn-sm" id="btn-clear-chat" onclick="clearChat()">Clear Session</button>
     </div>
   </div>
 </nav>
@@ -441,21 +441,21 @@ body {
 
     <div class="sidebar-divider"></div>
 
-    <div class="sidebar-heading">RECOMMENDED SCIENTIFIC INQUIRIES</div>
-    <div class="prompt-chips-grid">
-      <button class="prompt-chip-btn" onclick="sendPrompt('Explain the physics of cool-flame droplet combustion observed in NASA FLEX-2.')">
+    <div class="sidebar-heading" id="ai-sidebar-heading">RECOMMENDED SCIENTIFIC INQUIRIES</div>
+    <div class="prompt-chips-grid" id="ai-prompt-chips">
+      <button class="prompt-chip-btn" data-en-text="Explain FLEX-2 Cool Flame Kinetics →" data-en-prompt="Explain the physics of cool-flame droplet combustion observed in NASA FLEX-2." data-az-text="FLEX-2 Soyuq Alov (Cool Flame) Kinetikası →" data-az-prompt="NASA FLEX-2 təcrübəsində müşahidə olunan soyuq alov (cool flame) fizikasını izah edin." onclick="sendPrompt('Explain the physics of cool-flame droplet combustion observed in NASA FLEX-2.')">
         Explain FLEX-2 Cool Flame Kinetics →
       </button>
-      <button class="prompt-chip-btn" onclick="sendPrompt('Why is the Artemis Lunar Habitat atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?')">
+      <button class="prompt-chip-btn" data-en-text="Artemis 34% O₂ Combustion Risk →" data-en-prompt="Why is the Artemis Lunar Habitat atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?" data-az-text="Artemis 34% O₂ Yanğın Riski →" data-az-prompt="Artemis Ay Yaşayış Modulunun atmosferi (34% O2, 56.5 kPa) nəyə görə BKS-dən daha təhlükəlidir?" onclick="sendPrompt('Why is the Artemis Lunar Habitat atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?')">
         Artemis 34% O₂ Combustion Risk →
       </button>
-      <button class="prompt-chip-btn" onclick="sendPrompt('How does forced airflow velocity influence radiative quenching vs convective blowoff in microgravity?')">
+      <button class="prompt-chip-btn" data-en-text="Forced Airflow Quenching Limits →" data-en-prompt="How does forced airflow velocity influence radiative quenching vs convective blowoff in microgravity?" data-az-text="Məcburi Hava Axını və Sönmə Hədləri →" data-az-prompt="Mikroyerçəkimdə hava axınının sürəti radiativ sönmə ilə konvektiv üfürməyə necə təsir edir?" onclick="sendPrompt('How does forced airflow velocity influence radiative quenching vs convective blowoff in microgravity?')">
         Forced Airflow Quenching Limits →
       </button>
-      <button class="prompt-chip-btn" onclick="sendPrompt('What did the SAFFIRE experiments reveal about large-scale flame spread aboard Cygnus spacecraft?')">
+      <button class="prompt-chip-btn" data-en-text="SAFFIRE Large-Scale Spacecraft Fires →" data-en-prompt="What did the SAFFIRE experiments reveal about large-scale flame spread aboard Cygnus spacecraft?" data-az-text="SAFFIRE Kosmik Gəmi Yanğınları →" data-az-prompt="SAFFIRE təcrübələri Cygnus kosmik gəmisində böyük miqyaslı alov yayılması haqqında nəyi aşkar etdi?" onclick="sendPrompt('What did the SAFFIRE experiments reveal about large-scale flame spread aboard Cygnus spacecraft?')">
         SAFFIRE Large-Scale Spacecraft Fires →
       </button>
-      <button class="prompt-chip-btn" onclick="sendPrompt('What are the recommended fire suppression protocols under NASA-STD-6001 for hypoxic havens?')">
+      <button class="prompt-chip-btn" data-en-text="NASA-STD-6001 Extinguishment Specs →" data-en-prompt="What are the recommended fire suppression protocols under NASA-STD-6001 for hypoxic havens?" data-az-text="NASA-STD-6001 Söndürmə Qaydaları →" data-az-prompt="NASA-STD-6001 standartı üzrə hipoqsik sığınacaqlar üçün hansı yanğın söndürmə protokolları tövsiyə olunur?" onclick="sendPrompt('What are the recommended fire suppression protocols under NASA-STD-6001 for hypoxic havens?')">
         NASA-STD-6001 Extinguishment Specs →
       </button>
     </div>
@@ -510,14 +510,14 @@ body {
     <div class="ai-input-dock">
       <div class="input-container">
         <input type="text" class="chat-input" id="user-input" placeholder="Ask about microgravity combustion, flame dynamics, or experiment IDs..." onkeydown="handleKeyDown(event)">
-        <button class="send-action-btn" onclick="sendMessage()">
-          Send Query
+        <button class="send-action-btn" id="btn-send-query" onclick="sendMessage()">
+          <span id="send-btn-text">Send Query</span>
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9"/></svg>
         </button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:rgba(255,255,255,0.35);">
-        <span>CONFIDENTIAL FLIGHT DATA ANALYZED THROUGH SECURE BACKEND PROXY</span>
-        <span>PRESS ENTER TO SEND</span>
+        <span id="ai-security-note">CONFIDENTIAL FLIGHT DATA ANALYZED THROUGH SECURE BACKEND PROXY</span>
+        <span id="ai-enter-note">PRESS ENTER TO SEND</span>
       </div>
     </div>
   </section>
@@ -527,67 +527,80 @@ body {
 
 
 
-<script src="/static/js/nav.js?v=5.0"></script>
+<script src="/static/js/nav.js?v=5.1"></script>
 <script>
 let currentLang = localStorage.getItem('firex_lang') || 'en';
 let messageHistory = [];
 
-function toggleLanguage() {
-  currentLang = (currentLang === 'en') ? 'az' : 'en';
-  localStorage.setItem('firex_lang', currentLang);
-  window.location.reload();
-}
+function syncAiPageLanguage(lang) {
+  currentLang = lang;
+  const isAz = (lang === 'az');
 
-function initAiLanguage() {
-  const langBtn = document.getElementById('lang-btn-ai');
-  if (langBtn) langBtn.textContent = currentLang.toUpperCase();
+  // Update prompt chips
+  document.querySelectorAll('.prompt-chip-btn').forEach(btn => {
+    const text = isAz ? btn.getAttribute('data-az-text') : btn.getAttribute('data-en-text');
+    const prompt = isAz ? btn.getAttribute('data-az-prompt') : btn.getAttribute('data-en-prompt');
+    if (text) btn.textContent = text;
+    if (prompt) btn.setAttribute('onclick', `sendPrompt('${prompt.replace(/'/g, "\\'")}')`);
+  });
 
-  if (currentLang === 'az') {
-    // Translate chips
-    const chips = document.querySelectorAll('.prompt-chip-btn');
-    const azChips = [
-      { text: 'FLEX-2 Soyuq Alov (Cool Flame) Kinetikası →', prompt: 'NASA FLEX-2 təcrübəsində müşahidə olunan soyuq alov (cool flame) fizikasını izah edin.' },
-      { text: 'Artemis 34% O₂ Yanğın Riski →', prompt: 'Artemis Ay Yaşayış Modulunun atmosferi (34% O2, 56.5 kPa) nəyə görə BKS-dən daha təhlükəlidir?' },
-      { text: 'Məcburi Hava Axını və Sönmə Hədləri →', prompt: 'Mikroyerçəkimdə hava axınının sürəti radiativ sönmə ilə konvektiv üfürməyə necə təsir edir?' },
-      { text: 'SAFFIRE Kosmik Gəmi Yanğınları →', prompt: 'SAFFIRE təcrübələri Cygnus kosmik gəmisində böyük miqyaslı alov yayılması haqqında nəyi aşkar etdi?' },
-      { text: 'NASA-STD-6001 Söndürmə Qaydaları →', prompt: 'NASA-STD-6001 standartı üzrə hipoqsik sığınacaqlar üçün hansı yanğın söndürmə protokolları tövsiyə olunur?' }
-    ];
-
-    chips.forEach((chip, i) => {
-      if (azChips[i]) {
-        chip.textContent = azChips[i].text;
-        chip.setAttribute('onclick', `sendPrompt('${azChips[i].prompt}')`);
-      }
-    });
-
-    // Translate placeholder
-    const inputEl = document.getElementById('user-input');
-    if (inputEl) inputEl.setAttribute('placeholder', 'Mikroyerçəkimdə yanma, alov dinamikası və ya eksperiment ID-ləri haqqında soruşun...');
-
-    // Translate welcome message bubble
-    const welcomeBubble = document.querySelector('.message-row.assistant .msg-bubble');
-    if (welcomeBubble) {
-      welcomeBubble.innerHTML = `
-        <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
-          FIRE-X Elmi Tədqiqat Köməkçisi Onlayndır
-        </div>
-        NASA Mikroyerçəkim Yanma İntellekt Konsoluna xoş gəlmisiniz. <strong>OpenAI GPT-6-luna</strong> ilə təchiz olunub və Beynəlxalq Kosmik Stansiya ilə Cygnus orbital sınaqlarından <strong>879 yoxlanılmış uçuş eksperimentinə</strong> əsaslanır.
-        <br><br>
-        Damcı sönməsi (FLEX), bərk yanacaqların alovlanması (BASS/SOFIE), kosmik gəmi yanğınlarının yayılması (SAFFIRE) və ya planetar yaşayış modullarının atmosfer təhlükəsizliyi (Artemis / BKS) haqqında ətraflı suallar verə bilərsiniz.
-        <div class="msg-meta-bar">
-          <span>NASA FİZİKİ ELMLƏR İNFORMATİKASI // GROUND TRUTH</span>
-          <span>SİSTEM HAZIRDIR</span>
-        </div>
-      `;
-    }
-
-    // Translate typing indicator
-    const typingSpan = document.querySelector('#typing-indicator span');
-    if (typingSpan) typingSpan.textContent = 'OpenAI gpt-6-luna və NASA PSI Telemetriyası sorğulanır...';
+  // Update input placeholder
+  const inputEl = document.getElementById('user-input');
+  if (inputEl) {
+    inputEl.setAttribute('placeholder', isAz ? 'Mikroyerçəkimdə yanma, alov dinamikası və ya eksperiment ID-ləri haqqında soruşun...' : 'Ask about microgravity combustion, flame dynamics, or experiment IDs...');
   }
+
+  // Update Welcome Bubble
+  const welcomeBubble = document.querySelector('.message-row.assistant .msg-bubble');
+  if (welcomeBubble && messageHistory.length === 0) {
+    welcomeBubble.innerHTML = isAz ? `
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
+        FIRE-X Elmi Tədqiqat Köməkçisi Onlayndır
+      </div>
+      NASA Mikroyerçəkim Yanma İntellekt Konsoluna xoş gəlmisiniz. <strong>OpenAI GPT-6-luna</strong> ilə təchiz olunub və Beynəlxalq Kosmik Stansiya ilə Cygnus orbital sınaqlarından <strong>879 yoxlanılmış uçuş eksperimentinə</strong> əsaslanır.
+      <br><br>
+      Damcı sönməsi (FLEX), bərk yanacaqların alovlanması (BASS/SOFIE), kosmik gəmi yanğınlarının yayılması (SAFFIRE) və ya planetar yaşayış modullarının atmosfer təhlükəsizliyi (Artemis / BKS) haqqında ətraflı suallar verə bilərsiniz.
+      <div class="msg-meta-bar">
+        <span>NASA FİZİKİ ELMLƏR İNFORMATİKASI // GROUND TRUTH</span>
+        <span>SİSTEM HAZIRDIR</span>
+      </div>
+    ` : `
+      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
+        FIRE-X Scientific Research Assistant Online
+      </div>
+      Welcome to the NASA Microgravity Combustion Intelligence Console. Powered by <strong>OpenAI GPT-6-luna</strong> and grounded in <strong>879 verified flight experiments</strong> from the International Space Station and Cygnus orbital campaigns.
+      <br><br>
+      You can ask detailed questions regarding droplet extinction (FLEX), solid fuel flammability (BASS/SOFIE), spacecraft fire propagation (SAFFIRE), or planetary habitat atmospheric safety (Artemis / ISS).
+      <div class="msg-meta-bar">
+        <span>NASA PHYSICAL SCIENCE INFORMATICS // GROUND TRUTH</span>
+        <span>SYSTEM READY</span>
+      </div>
+    `;
+  }
+
+  // Update heading & buttons
+  const headEl = document.getElementById('ai-sidebar-heading');
+  if (headEl) headEl.textContent = isAz ? 'TÖVSİYƏ OLUNAN ELMİ SUALLAR' : 'RECOMMENDED SCIENTIFIC INQUIRIES';
+
+  const sendText = document.getElementById('send-btn-text');
+  if (sendText) sendText.textContent = isAz ? 'Sorğunu Göndər' : 'Send Query';
+
+  const clearBtn = document.getElementById('btn-clear-chat');
+  if (clearBtn) clearBtn.textContent = isAz ? 'Sessiyanı Təmizlə' : 'Clear Session';
+
+  const secNote = document.getElementById('ai-security-note');
+  if (secNote) secNote.textContent = isAz ? 'MƏXFİ UÇUŞ DATALARI TƏHLÜKƏSİZ SERVER VASİTƏSİLƏ TƏHLİL OLUNUR' : 'CONFIDENTIAL FLIGHT DATA ANALYZED THROUGH SECURE BACKEND PROXY';
+
+  const enterNote = document.getElementById('ai-enter-note');
+  if (enterNote) enterNote.textContent = isAz ? 'GÖNDƏRMƏK ÜÇÜN ENTER BASIN' : 'PRESS ENTER TO SEND';
+
+  const typingSpan = document.querySelector('#typing-indicator span');
+  if (typingSpan) typingSpan.textContent = isAz ? 'OpenAI gpt-6-luna və NASA PSI Telemetriyası sorğulanır...' : 'Querying OpenAI gpt-6-luna & NASA PSI Telemetry...';
 }
 
-document.addEventListener('DOMContentLoaded', initAiLanguage);
+document.addEventListener('DOMContentLoaded', () => {
+  syncAiPageLanguage(currentLang);
+});
 
 function handleKeyDown(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
@@ -724,7 +737,10 @@ function clearChat() {
   const container = document.getElementById('chat-messages');
   container.innerHTML = `
     <div class="message-row assistant">
-      <div class="msg-avatar ai">AI</div>
+      <div class="ai-avatar-wrap">
+        <img src="/images/Fire-X.jpeg" alt="FIRE-X AI" class="ai-avatar-img">
+        <span class="ai-avatar-label">FIRE-X AI</span>
+      </div>
       <div class="msg-bubble">
         Session memory cleared. Telemetry channel ready for new queries.
       </div>

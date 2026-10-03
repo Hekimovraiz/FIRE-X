@@ -53,6 +53,62 @@ def check_rate_limit(client_id: str) -> bool:
     return True
 
 
+
+# Topic verification filter: ensure queries stay strictly on space, combustion, and NASA mission safety
+import re
+
+INAPPROPRIATE_PATTERN = re.compile(
+    r'(?i)(?:sik[a-zəıöüçşğ]*|amcıq[a-zəıöüçşğ]*|amcığ[a-zəıöüçşğ]*|amı|göt[a-zəıöüçşğ]*|seks[a-zəıöüçşğ]*|sex[a-zəıöüçşğ]*|porno[a-zəıöüçşğ]*|qancıq[a-zəıöüçşğ]*|peysər[a-zəıöüçşğ]*|bitch[a-z]*|fuck[a-z]*|cock[a-z]*|dick[a-z]*|pussy[a-z]*|vagina[a-z]*|masturb[a-z]*|penis[a-z]*|prezervativ[a-zəıöüçşğ]*|intim[a-zəıöüçşğ]*)'
+)
+
+FIREX_DOMAIN_KEYWORDS = [
+    # Combustion & Fire
+    "fire", "yanğın", "alov", "flame", "combust", "yanma", "extinct", "sönmə",
+    "ignition", "alovlan", "quench", "smoke", "tüstü", "burn", "smolder", "közər",
+    # Physics & Atmospheres
+    "microgravity", "mikroyerçəkim", "mikroqravitasiya", "gravity", "qravitasiya",
+    "oxygen", "oksigen", "o2", "pressure", "təzyiq", "kpa", "psia", "buoyancy",
+    "diffus", "diffuz", "stefan", "cool flame", "soyuq alov", "droplet", "damcı",
+    "radiative", "radiativ", "convective", "konvektiv", "blowoff",
+    # Missions & Experiments
+    "fire-x", "firex", "nasa", "flex", "bass", "saffire", "sofie", "acme", "slice",
+    "mgm", "flare", "same", "6001", "cir", "declic", "artemis", "cygnus", "iss",
+    "bks", "lunar", "ay modulu", "haven", "sığınacaq", "spacecraft", "kosmik gəmi",
+    # Materials & Safety
+    "pmma", "nomex", "heptan", "heptane", "methanol", "metanol", "decan", "decane",
+    "ethanol", "etanol", "fhi", "detector", "detektor", "suppression", "söndür",
+    "flammab", "yanarlıq"
+]
+
+GREETINGS = [
+    "salam", "hello", "hi", "hey", "sən kimsən", "who are you",
+    "nə edə bilərsən", "what can you do", "kömək", "help"
+]
+
+def is_topic_relevant(text: str) -> bool:
+    """Return False if query is completely off-topic or inappropriate to save token budget."""
+    if not text:
+        return False
+    # 1. Inappropriate / vulgar / adult check
+    if INAPPROPRIATE_PATTERN.search(text):
+        return False
+        
+    t = text.lower().strip()
+    
+    # 2. Domain keywords check
+    for kw in FIREX_DOMAIN_KEYWORDS:
+        if kw in t:
+            return True
+            
+    # 3. Simple greetings / identity queries
+    words = t.split()
+    if len(words) <= 5:
+        for g in GREETINGS:
+            if g in t:
+                return True
+                
+    return False
+
 def build_system_prompt(language: str = "en", page_context: Optional[Dict[str, Any]] = None) -> str:
     """
     Constructs a specialized system prompt for the NASA Microgravity Combustion & Fire Safety Assistant.
@@ -87,7 +143,7 @@ Sizin missiyanız:
 3. Kosmik missiya mühitlərindəki yanğın risklərini izah etmək (BKS 21% O2 / 101.3 kPa vs Artemis Ay Yaşayış Modulu 34% O2 / 56.5 kPa / 8.2 psia vs Hipoqsik Sığınacaq 15% O2).
 4. Vebsaytdakı qrafikləri, eksperiment parametrlərini və missiya simulyasiyalarını təhlil etmək.
 5. İstifadəçiləri platformanın bölmələrinə (Tədqiqatçı/Explorer, Müqayisə Paneli, Missiya Simulyatoru) yönləndirmək.
-6. Mövzudan kənar (kosmos, yanma və FIRE-X ilə əlaqəsi olmayan) suallara nəzakətlə layihə mövzusuna qayıtmağı təklif etmək.
+6. MÜTLƏQ QAYDA: Yalnız və yalnız NASA FIRE-X platforması, kosmik gəmilərdə yanğın təhlükəsizliyi, mikroyerçəkimdə alov dinamikası və materialların alovlanma limitləri haqqında danışın. Mövzu ilə əlaqəsi olmayan istənilən başqa suala qətiyyətlə və birbaşa: 'Mən yalnız NASA FIRE-X layihəsi və kosmosda yanğın təhlükəsizliyi üzrə ixtisaslaşmış elmi köməkçiyəm. Zəhmət olmasa mikroyerçəkimdə yanma və ya missiya təhlükəsizliyi ilə bağlı suallarınızı verin.' cavabını verin.
 
 Qaydalar:
 - Peşəkar, elmi və aydın dildə cavab verin.
@@ -258,6 +314,26 @@ def query_ai_assistant(
 
     if len(latest_user_message) > 4000:
         latest_user_message = latest_user_message[:4000]
+
+    # 2.5 Topic Relevance & Guardrail Check (Avoid wasting tokens on unrelated/inappropriate queries)
+    if not is_topic_relevant(latest_user_message):
+        logger.info(f"Query rejected by topic guardrail: '{latest_user_message[:60]}...'")
+        is_az = language.lower().startswith("az")
+        rejection_msg = (
+            "⚠️ **Mövzudan kənar sorğu:**\n\n"
+            "Mən yalnız **NASA FIRE-X** platforması, kosmosda yanğın təhlükəsizliyi, mikroyerçəkimdə alov fizikası və 879 orbital eksperiment bazası üzrə sualları cavablandırmaq üçün proqramlaşdırılmış elmi köməkçiyəm.\n\n"
+            "Bu sual layihəmizin mövzusuna uyğun deyil. Zəhmət olmasa missiya təhlükəsizliyi, BKS/Artemis yanğın riskləri, damcı sönməsi (FLEX) və ya material alovlanması (BASS/SOFIE) ilə bağlı suallarınızı verin."
+            if is_az else
+            "⚠️ **Out-of-Scope Query:**\n\n"
+            "I am a specialized scientific assistant dedicated exclusively to the **NASA FIRE-X** platform, spacecraft fire safety, microgravity combustion physics, and the 879 flight experiments database.\n\n"
+            "This question is outside the project scope. Please submit inquiries regarding space mission safety, ISS/Artemis fire hazards, droplet extinction (FLEX), or material flammability (BASS/SOFIE)."
+        )
+        return {
+            "success": True,
+            "response": rejection_msg,
+            "provider": "FIRE-X Topic Guardian",
+            "model": "rule-based-guardrail"
+        }
 
     # 3. System Prompt Construction
     system_prompt = build_system_prompt(language=language, page_context=page_context)

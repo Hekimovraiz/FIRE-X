@@ -772,7 +772,88 @@
     }
 
     // ==========================================
-    // PAGE 5: ABOUT (/about)
+    // PAGE 5: AI ASSISTANT (/ai)
+    // ==========================================
+    else if (pathname === '/ai') {
+      const isAz = (lang === 'az');
+
+      const headEl = document.getElementById('ai-sidebar-heading') || document.querySelector('.sidebar-heading');
+      if (headEl) headEl.textContent = isAz ? TRANSLATIONS_AZ.ai.heading : 'RECOMMENDED SCIENTIFIC INQUIRIES';
+
+      const chips = document.querySelectorAll('.prompt-chip-btn');
+      const azChips = [
+        { text: 'FLEX-2 Soyuq Alov (Cool Flame) Kinetikası →', prompt: 'NASA FLEX-2 təcrübəsində müşahidə olunan soyuq alov (cool flame) fizikasını izah edin.' },
+        { text: 'Artemis 34% O₂ Yanğın Riski →', prompt: 'Artemis Ay Yaşayış Modulunun atmosferi (34% O2, 56.5 kPa) nəyə görə BKS-dən daha təhlükəlidir?' },
+        { text: 'Məcburi Hava Axını və Sönmə Hədləri →', prompt: 'Mikroyerçəkimdə hava axınının sürəti radiativ sönmə ilə konvektiv üfürməyə necə təsir edir?' },
+        { text: 'SAFFIRE Kosmik Gəmi Yanğınları →', prompt: 'SAFFIRE təcrübələri Cygnus kosmik gəmisində böyük miqyaslı alov yayılması haqqında nəyi aşkar etdi?' },
+        { text: 'NASA-STD-6001 Söndürmə Qaydaları →', prompt: 'NASA-STD-6001 standartı üzrə hipoqsik sığınacaqlar üçün hansı yanğın söndürmə protokolları tövsiyə olunur?' }
+      ];
+      const enChips = [
+        { text: 'Explain FLEX-2 Cool Flame Kinetics →', prompt: 'Explain the physics of cool-flame droplet combustion observed in NASA FLEX-2.' },
+        { text: 'Artemis 34% O₂ Combustion Risk →', prompt: 'Why is the Artemis Lunar Habitat atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?' },
+        { text: 'Forced Airflow Quenching Limits →', prompt: 'How does forced airflow velocity influence radiative quenching vs convective blowoff in microgravity?' },
+        { text: 'SAFFIRE Large-Scale Spacecraft Fires →', prompt: 'What did the SAFFIRE experiments reveal about large-scale flame spread aboard Cygnus spacecraft?' },
+        { text: 'NASA-STD-6001 Extinguishment Specs →', prompt: 'What are the recommended fire suppression protocols under NASA-STD-6001 for hypoxic havens?' }
+      ];
+
+      chips.forEach((chip, i) => {
+        const item = isAz ? azChips[i] : enChips[i];
+        if (item) {
+          chip.textContent = item.text;
+          chip.setAttribute('onclick', `sendPrompt('${item.prompt.replace(/'/g, "\\'")}')`);
+        }
+      });
+
+      const welcomeBubble = document.querySelector('.message-row.assistant .msg-bubble');
+      if (welcomeBubble) {
+        welcomeBubble.innerHTML = isAz ? `
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
+            ${TRANSLATIONS_AZ.ai.welcomeTitle}
+          </div>
+          ${TRANSLATIONS_AZ.ai.welcomeDesc}
+          <div class="msg-meta-bar">
+            <span>NASA FİZİKİ ELMLƏR İNFORMATİKASI // GROUND TRUTH</span>
+            <span>SİSTEM HAZIRDIR</span>
+          </div>
+        ` : `
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
+            FIRE-X Scientific Research Assistant Online
+          </div>
+          Welcome to the NASA Microgravity Combustion Intelligence Console. Powered by <strong>OpenAI GPT-6-luna</strong> and grounded in <strong>879 verified flight experiments</strong> from the International Space Station and Cygnus orbital campaigns.
+          <br><br>
+          You can ask detailed questions regarding droplet extinction (FLEX), solid fuel flammability (BASS/SOFIE), spacecraft fire propagation (SAFFIRE), or planetary habitat atmospheric safety (Artemis / ISS).
+          <div class="msg-meta-bar">
+            <span>NASA PHYSICAL SCIENCE INFORMATICS // GROUND TRUTH</span>
+            <span>SYSTEM READY</span>
+          </div>
+        `;
+      }
+
+      const inputEl = document.getElementById('user-input');
+      if (inputEl) inputEl.setAttribute('placeholder', isAz ? TRANSLATIONS_AZ.ai.placeholder : 'Ask about microgravity combustion, flame dynamics, or experiment IDs...');
+
+      const sendBtnText = document.getElementById('send-btn-text');
+      if (sendBtnText) sendBtnText.textContent = isAz ? TRANSLATIONS_AZ.ai.btnSend : 'Send Query';
+
+      const clearBtn = document.getElementById('btn-clear-chat');
+      if (clearBtn) clearBtn.textContent = isAz ? TRANSLATIONS_AZ.ai.btnClear : 'Clear Session';
+
+      const secNote = document.getElementById('ai-security-note');
+      if (secNote) secNote.textContent = isAz ? TRANSLATIONS_AZ.ai.securityNote : 'CONFIDENTIAL FLIGHT DATA ANALYZED THROUGH SECURE BACKEND PROXY';
+
+      const enterNote = document.getElementById('ai-enter-note');
+      if (enterNote) enterNote.textContent = isAz ? TRANSLATIONS_AZ.ai.enterNote : 'PRESS ENTER TO SEND';
+
+      const typingSpan = document.querySelector('#typing-indicator span');
+      if (typingSpan) typingSpan.textContent = isAz ? TRANSLATIONS_AZ.ai.typingText : 'Querying OpenAI gpt-6-luna & NASA PSI Telemetry...';
+
+      if (typeof syncAiPageLanguage === 'function') {
+        syncAiPageLanguage(lang);
+      }
+    }
+
+    // ==========================================
+    // PAGE 6: ABOUT (/about)
     // ==========================================
     else if (pathname === '/about') {
       if (isAz) {
