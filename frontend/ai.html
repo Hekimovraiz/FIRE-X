@@ -272,6 +272,48 @@ body {
   font-size: 0.85em;
 }
 
+/* Markdown Table Styles */
+.ai-table-wrapper {
+  overflow-x: auto;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 245, 255, 0.2);
+}
+
+.ai-md-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.ai-md-table thead th {
+  background: rgba(0, 245, 255, 0.08);
+  color: var(--neon-cyan);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid rgba(0, 245, 255, 0.25);
+  white-space: nowrap;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ai-md-table tbody td {
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #E2E8F0;
+}
+
+.ai-md-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ai-md-table tbody tr:hover {
+  background: rgba(0, 245, 255, 0.04);
+}
+
 .msg-meta-bar {
   display: flex;
   align-items: center;
@@ -691,11 +733,41 @@ function appendMessage(role, text, provider) {
 }
 
 function formatMarkdown(md) {
-  let s = md
+  // --- 1. Extract markdown tables BEFORE escaping ---
+  const tableBlocks = [];
+  const TBL = '@@TBLK_';
+  const lines = md.split('\n');
+  let idx = 0;
+  const processed = [];
+
+  while (idx < lines.length) {
+    if (/^\s*\|/.test(lines[idx])) {
+      const tbl = [];
+      while (idx < lines.length && /^\s*\|/.test(lines[idx])) {
+        tbl.push(lines[idx].trim());
+        idx++;
+      }
+      if (tbl.length >= 2) {
+        tableBlocks.push(buildTable(tbl));
+        processed.push(TBL + (tableBlocks.length - 1) + '@@');
+      } else {
+        processed.push(...tbl);
+      }
+    } else {
+      processed.push(lines[idx]);
+      idx++;
+    }
+  }
+
+  let s = processed.join('\n');
+
+  // --- 2. Escape HTML ---
+  s = s
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
+  // --- 3. Inline formatting ---
   // Bold
   s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   // Italic
@@ -705,7 +777,61 @@ function formatMarkdown(md) {
   // Newlines
   s = s.replace(/\n/g, '<br>');
 
+  // --- 4. Restore table blocks ---
+  for (let t = 0; t < tableBlocks.length; t++) {
+    s = s.replace(TBL + t + '@@', tableBlocks[t]);
+  }
+
   return s;
+}
+
+function buildTable(tableLines) {
+  const parseRow = (line) =>
+    line.replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
+
+  const isSep = (line) =>
+    /^\|[\s\-:|]+\|$/.test(line.trim()) || /^[\s\-:|]+$/.test(line.replace(/\|/g, '').trim());
+
+  let headerCells = null;
+  const dataRows = [];
+  let sepFound = false;
+
+  for (let j = 0; j < tableLines.length; j++) {
+    if (j === 1 && isSep(tableLines[j])) {
+      headerCells = parseRow(tableLines[0]);
+      sepFound = true;
+      continue;
+    }
+    if (j === 0 && sepFound) continue;
+    if (isSep(tableLines[j])) continue;
+
+    if (!sepFound && j === 0) {
+      headerCells = parseRow(tableLines[0]);
+      continue;
+    }
+    dataRows.push(parseRow(tableLines[j]));
+  }
+
+  if (!sepFound && dataRows.length === 0 && headerCells) {
+    headerCells = parseRow(tableLines[0]);
+    for (let j = 1; j < tableLines.length; j++) {
+      if (!isSep(tableLines[j])) dataRows.push(parseRow(tableLines[j]));
+    }
+  }
+
+  const esc = (c) => c
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  let h = '<div class="ai-table-wrapper"><table class="ai-md-table">';
+  if (headerCells) {
+    h += '<thead><tr>' + headerCells.map(c => `<th>${esc(c)}</th>`).join('') + '</tr></thead>';
+  }
+  if (dataRows.length) {
+    h += '<tbody>' + dataRows.map(r => '<tr>' + r.map(c => `<td>${esc(c)}</td>`).join('') + '</tr>').join('') + '</tbody>';
+  }
+  h += '</table></div>';
+  return h;
 }
 
 function scrollChatToBottom() {
