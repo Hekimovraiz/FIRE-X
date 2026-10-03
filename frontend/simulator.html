@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Planetary Mission Simulator // NASA FIRE-X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/ds.css">
+<link rel="stylesheet" href="/static/css/nav.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<style>
+body {
+  background-color: #020409;
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(255, 107, 53, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 10% 80%, rgba(0, 245, 255, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #020409 0%, #060B16 100%);
+  color: #E2E8F0;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+.sim-header {
+  padding: 105px 0 30px;
+  background: rgba(4, 8, 16, 0.85);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+  backdrop-filter: blur(16px);
+}
+
+.sim-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 32px;
+  padding: 36px 0 80px;
+}
+
+/* LEFT: ATMOSPHERE PRESET SELECTOR */
+.sim-controls-panel {
+  background: rgba(7, 13, 26, 0.85);
+  border: 1px solid rgba(0, 245, 255, 0.16);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+}
+
+.scenario-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.scenario-card-btn {
+  background: rgba(2, 4, 9, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scenario-card-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0; width: 4px;
+  background: var(--card-color, var(--neon-cyan));
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.scenario-card-btn:hover {
+  border-color: var(--card-color, var(--neon-cyan));
+  transform: translateX(4px);
+  background: rgba(7, 13, 26, 0.95);
+}
+
+.scenario-card-btn.active {
+  border-color: var(--card-color, var(--neon-cyan));
+  background: rgba(12, 24, 48, 0.8);
+  box-shadow: 0 0 25px rgba(0, 245, 255, 0.15);
+}
+
+.scenario-card-btn.active::before {
+  opacity: 1;
+  box-shadow: 0 0 12px var(--card-color, var(--neon-cyan));
+}
+
+.scenario-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.scenario-specs {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.scenario-fhi-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--card-color, var(--neon-cyan));
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-color, var(--neon-cyan));
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* CUSTOM SLIDERS BOX */
+.custom-sliders-box {
+  background: rgba(2, 4, 9, 0.6);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: 20px;
+  display: none;
+}
+
+.custom-sliders-box.show {
+  display: block;
+}
+
+.slider-group {
+  margin-bottom: 16px;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  margin-bottom: 6px;
+}
+
+/* RIGHT: HAZARD GAUGE & METRICS VIEW */
+.sim-results-panel {
+  background: rgba(7, 13, 26, 0.85);
+  border: 1px solid rgba(0, 245, 255, 0.16);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+}
+
+.hazard-summary-card {
+  background: radial-gradient(circle at 50% 50%, rgba(12, 24, 48, 0.7) 0%, rgba(4, 8, 16, 0.95) 100%);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.fhi-gauge-viewport {
+  width: 170px;
+  height: 170px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#canvas-3d-hazard {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fhi-score-center {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.fhi-score-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--neon-cyan);
+}
+
+.fhi-score-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+.hazard-info {
+  flex: 1;
+}
+
+.hazard-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 100px;
+  margin-bottom: 8px;
+}
+
+.hazard-scenario-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.hazard-scenario-desc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+/* 6 METRIC BOXES */
+.metrics-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sim-metric-card {
+  background: rgba(2, 4, 9, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.25s ease;
+}
+
+.sim-metric-card:hover {
+  border-color: rgba(0, 245, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.metric-card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.metric-card-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.metric-card-sub {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 4px;
+}
+
+/* ADVISORY CARD */
+.safety-advisory-box {
+  background: rgba(255, 107, 53, 0.05);
+  border: 1px solid rgba(255, 107, 53, 0.25);
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: auto;
+}
+
+.advisory-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #FF6B35;
+  margin-bottom: 8px;
+}
+
+.advisory-text {
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .sim-layout { grid-template-columns: 1fr; }
+  .metrics-matrix-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .hazard-summary-card { flex-direction: column; text-align: center; }
+  .metrics-matrix-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-progress-bar" id="nav-progress"></div>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/images/Fire-X.jpeg" alt="FIRE-X" class="nav-brand-logo">
+      <div class="nav-brand-text">
+        <div class="nav-brand-name">NASA FIRE-X</div>
+        <div class="nav-brand-sub">MICROGRAVITY COMBUSTION INTEL</div>
+      </div>
+    </a>
+    <ul class="nav-links" id="nav-links-list">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/analytics" class="nav-link">Analytics</a></li>
+      <li><a href="/explorer" class="nav-link">Data Explorer</a></li>
+      <li><a href="/simulator" class="nav-link active">Simulator</a></li>
+      <li><a href="/ai" class="nav-link">AI Assistant</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-lang-btn" id="nav-lang-btn">EN</button>
+      <a href="/ai" class="nav-ai-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        AI Assistant
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="sim-header">
+  <div class="container-wide">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.12em;color:var(--neon-orange);text-transform:uppercase;margin-bottom:6px;">
+      SPACE HABITAT FLAMMABILITY MODELING // NASA-STD-6001 COMPLIANCE
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem, 3.5vw, 2.8rem);font-weight:800;color:#fff;line-height:1.1;">
+      Planetary Mission <span class="text-gradient-fire">Fire Hazard Simulator</span>
+    </h1>
+    <p style="font-size:1.05rem;color:rgba(255,255,255,0.6);max-width:800px;margin-top:10px;line-height:1.6;">
+      Simulate combustion risk across ISS standard, Artemis Lunar Base exploration atmosphere, and Deep Space hypoxic haven protocols.
+    </p>
+  </div>
+</header>
+
+<main class="container-wide">
+  <div class="sim-layout">
+
+    <!-- LEFT CONTROLS -->
+    <div class="sim-controls-panel">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:16px;">
+        1. Select Spacecraft Habitat
+      </div>
+
+      <div class="scenario-cards-stack">
+        <!-- ISS -->
+        <button class="scenario-card-btn active" style="--card-color:#2979FF" onclick="selectScenario('iss')">
+          <div>
+            <div class="scenario-name">ISS Standard Atmosphere</div>
+            <div class="scenario-specs">21.0% O₂ · 101.3 kPa · Sea-Level Norm</div>
+          </div>
+          <span class="scenario-fhi-tag">FHI 5.1</span>
+        </button>
+
+        <!-- ARTEMIS LUNAR -->
+        <button class="scenario-card-btn" style="--card-color:#FF6B35" onclick="selectScenario('lunar_habitat')">
+          <div>
+            <div class="scenario-name">Artemis Lunar Habitat</div>
+            <div class="scenario-specs">34.0% O₂ · 56.5 kPa · Low Pressure EVA</div>
+          </div>
+          <span class="scenario-fhi-tag" style="background:rgba(255,107,53,0.1);color:#FF6B35;border-color:#FF6B35;">FHI 8.3</span>
+        </button>
+
+        <!-- HYPOXIC HAVEN -->
+        <button class="scenario-card-btn" style="--card-color:#00E676" onclick="selectScenario('lunar_hypoxic')">
+          <div>
+            <div class="scenario-name">Deep Space Hypoxic Safe-Haven</div>
+            <div class="scenario-specs">15.0% O₂ · 70.3 kPa · Fire Suppression</div>
+          </div>
+          <span class="scenario-fhi-tag" style="background:rgba(0,230,118,0.1);color:#00E676;border-color:#00E676;">FHI 2.1</span>
+        </button>
+
+        <!-- CUSTOM -->
+        <button class="scenario-card-btn" style="--card-color:#9B59B6" onclick="selectScenario('custom')">
+          <div>
+            <div class="scenario-name">Custom Atmosphere Lab</div>
+            <div class="scenario-specs">Parametric Oxidizer &amp; Pressure Sweep</div>
+          </div>
+          <span class="scenario-fhi-tag" style="color:#9B59B6;border-color:#9B59B6;">USER SWEEP</span>
+        </button>
+      </div>
+
+      <!-- CUSTOM SLIDERS -->
+      <div class="custom-sliders-box" id="custom-sliders-box">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;color:var(--neon-cyan);margin-bottom:14px;">
+          Adjust Custom Atmospheric Parameters
+        </div>
+        <div class="slider-group">
+          <div class="slider-header">
+            <span style="color:rgba(255,255,255,0.6)">Oxygen Fraction (O₂ %)</span>
+            <span style="color:var(--neon-cyan);font-weight:700;" id="val-custom-o2">21.0%</span>
+          </div>
+          <input type="range" min="10" max="60" value="21" step="0.5" id="slider-custom-o2" oninput="updateCustomSim()">
+        </div>
+        <div class="slider-group">
+          <div class="slider-header">
+            <span style="color:rgba(255,255,255,0.6)">Total Pressure (kPa)</span>
+            <span style="color:var(--neon-cyan);font-weight:700;" id="val-custom-press">101.3 kPa</span>
+          </div>
+          <input type="range" min="20" max="120" value="101.3" step="0.5" id="slider-custom-press" oninput="updateCustomSim()">
+        </div>
+      </div>
+
+      <div style="margin-top:28px;">
+        <button class="btn btn-neon" style="width:100%;justify-content:center;" onclick="askAIAboutHabitat()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Evaluate Habitat Safety with AI
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT RESULTS -->
+    <div class="sim-results-panel">
+      <!-- HAZARD SUMMARY -->
+      <div class="hazard-summary-card">
+        <div class="fhi-gauge-viewport">
+          <canvas id="canvas-3d-hazard"></canvas>
+          <div class="fhi-score-center">
+            <div class="fhi-score-number" id="fhi-score-val">5.1</div>
+            <div class="fhi-score-label">FHI / 10.0</div>
+          </div>
+        </div>
+        <div class="hazard-info">
+          <div class="hazard-level-badge badge-info" id="fhi-badge">NOMINAL RISK</div>
+          <h2 class="hazard-scenario-title" id="scenario-title-display">ISS Standard Atmosphere</h2>
+          <p class="hazard-scenario-desc" id="scenario-desc-display">
+            Standard Earth sea-level equivalent gas mixture. Fire behavior is baseline reference for microgravity research.
+          </p>
+        </div>
+      </div>
+
+      <!-- 6 METRICS MATRIX -->
+      <div class="metrics-matrix-grid">
+        <div class="sim-metric-card">
+          <div class="metric-card-label">O₂ Concentration</div>
+          <div class="metric-card-val" id="met-o2" style="color:var(--neon-cyan);">21.0 %</div>
+          <div class="metric-card-sub">Cabin volume fraction</div>
+        </div>
+        <div class="sim-metric-card">
+          <div class="metric-card-label">Total Pressure</div>
+          <div class="metric-card-val" id="met-press">101.3 kPa</div>
+          <div class="metric-card-sub">1.0 atm equivalent</div>
+        </div>
+        <div class="sim-metric-card">
+          <div class="metric-card-label">O₂ Partial Pressure</div>
+          <div class="metric-card-val" id="met-po2" style="color:#2979FF;">21.27 kPa</div>
+          <div class="metric-card-sub">Metabolic norm: 21.3 kPa</div>
+        </div>
+        <div class="sim-metric-card">
+          <div class="metric-card-label">Extinction Diam (de)</div>
+          <div class="metric-card-val" id="met-de" style="color:#FF6B35;">1.28 mm</div>
+          <div class="metric-card-sub">Quenching droplet size</div>
+        </div>
+        <div class="sim-metric-card">
+          <div class="metric-card-label">Flame Velocity Mult</div>
+          <div class="metric-card-val" id="met-mult">1.00×</div>
+          <div class="metric-card-sub">Normalized to 21% O₂</div>
+        </div>
+        <div class="sim-metric-card">
+          <div class="metric-card-label">Suppressant Required</div>
+          <div class="metric-card-val" id="met-purge" style="color:#00E676;">28.5 %</div>
+          <div class="metric-card-sub">N₂/CO₂ flood concentration</div>
+        </div>
+      </div>
+
+      <!-- SAFETY ADVISORY -->
+      <div class="safety-advisory-box">
+        <div class="advisory-header">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          AUTOMATED NASA CREW SAFETY ADVISORY
+        </div>
+        <p class="advisory-text" id="advisory-content">
+          Atmospheric parameters fall within nominal NASA ISS baseline standards. Standard fine water-mist and CO₂ portable extinguishers are certified for this regime. Ensure cabin air velocities remain below 15 cm/s during potential smoldering events.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="/static/js/nav.js"></script>
+<script>
+let currentScenarioId = 'iss';
+let hazardSphere, hazardRenderer, hazardScene, hazardCamera;
+
+function init3DHazardSphere() {
+  const canvas = document.getElementById('canvas-3d-hazard');
+  if (!canvas) return;
+
+  hazardScene = new THREE.Scene();
+  hazardCamera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  hazardCamera.position.z = 4.2;
+
+  hazardRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+  hazardRenderer.setSize(170, 170);
+  hazardRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // Outer wireframe ring
+  const ringGeo = new THREE.TorusGeometry(1.6, 0.04, 16, 64);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0x00F5FF, transparent: true, opacity: 0.3 });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.name = 'ring';
+  hazardScene.add(ring);
+
+  // Inner pulsing hazard sphere
+  const sphereGeo = new THREE.SphereGeometry(1.2, 24, 24);
+  const sphereMat = new THREE.MeshBasicMaterial({
+    color: 0x00F5FF,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.25
+  });
+  hazardSphere = new THREE.Mesh(sphereGeo, sphereMat);
+  hazardScene.add(hazardSphere);
+
+  animateHazard();
+}
+
+function animateHazard() {
+  requestAnimationFrame(animateHazard);
+  if (hazardSphere) {
+    hazardSphere.rotation.y += 0.01;
+    hazardSphere.rotation.x += 0.005;
+  }
+  const ring = hazardScene.getObjectByName('ring');
+  if (ring) {
+    ring.rotation.z += 0.008;
+  }
+  hazardRenderer.render(hazardScene, hazardCamera);
+}
+
+async function selectScenario(id) {
+  currentScenarioId = id;
+
+  document.querySelectorAll('.scenario-card-btn').forEach(btn => btn.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+
+  const customBox = document.getElementById('custom-sliders-box');
+  if (id === 'custom') {
+    customBox.classList.add('show');
+    updateCustomSim();
+    return;
+  } else {
+    customBox.classList.remove('show');
+  }
+
+  try {
+    const res = await fetch(`/api/mission-scenario/${id}`);
+    const json = await res.json();
+    const data = json.data || json;
+    applyScenarioData(data);
+  } catch (e) {
+    console.error('Scenario fetch error:', e);
+  }
+}
+
+function applyScenarioData(data) {
+  const m = data.metrics || {};
+  const fhi = data.fire_hazard_index != null ? data.fire_hazard_index : 5.1;
+  const color = data.status_color || '#00F5FF';
+
+  document.getElementById('fhi-score-val').textContent = fhi.toFixed(1);
+  document.getElementById('fhi-score-val').style.color = color;
+
+  const badge = document.getElementById('fhi-badge');
+  badge.textContent = data.risk_level_en || 'NOMINAL';
+  badge.style.color = color;
+  badge.style.borderColor = color;
+  badge.style.background = `${color}20`;
+
+  document.getElementById('scenario-title-display').textContent = data.scenario.name_en;
+  document.getElementById('scenario-desc-display').textContent = data.scenario.description_en;
+
+  document.getElementById('met-o2').textContent = (m.oxygen_pct != null ? m.oxygen_pct.toFixed(1) + '%' : '21.0%');
+  document.getElementById('met-press').textContent = (m.pressure_kpa != null ? m.pressure_kpa.toFixed(1) + ' kPa' : '101.3 kPa');
+  document.getElementById('met-po2').textContent = (m.oxygen_partial_pressure_kpa != null ? m.oxygen_partial_pressure_kpa.toFixed(2) + ' kPa' : '21.27 kPa');
+  document.getElementById('met-de').textContent = (m.projected_extinction_diameter_mm != null ? m.projected_extinction_diameter_mm.toFixed(3) + ' mm' : '1.28 mm');
+  document.getElementById('met-mult').textContent = (m.burn_rate_multiplier != null ? m.burn_rate_multiplier.toFixed(2) + '×' : '1.00×');
+  document.getElementById('met-purge').textContent = (m.required_inert_purge_pct != null ? m.required_inert_purge_pct.toFixed(1) + '%' : '28.5%');
+
+  document.getElementById('advisory-content').textContent = data.advisory_en || '';
+
+  // Update 3D sphere color
+  if (hazardSphere) {
+    hazardSphere.material.color.set(color);
+    const ring = hazardScene.getObjectByName('ring');
+    if (ring) ring.material.color.set(color);
+  }
+}
+
+async function updateCustomSim() {
+  const o2 = parseFloat(document.getElementById('slider-custom-o2').value);
+  const press = parseFloat(document.getElementById('slider-custom-press').value);
+
+  document.getElementById('val-custom-o2').textContent = o2.toFixed(1) + '%';
+  document.getElementById('val-custom-press').textContent = press.toFixed(1) + ' kPa';
+
+  try {
+    const res = await fetch(`/api/mission-scenario/custom?custom_o2=${o2}&custom_pressure=${press}`);
+    const json = await res.json();
+    const data = json.data || json;
+    applyScenarioData(data);
+  } catch (e) {
+    console.error('Custom sim error:', e);
+  }
+}
+
+function askAIAboutHabitat() {
+  const o2 = document.getElementById('met-o2').textContent;
+  const press = document.getElementById('met-press').textContent;
+  const fhi = document.getElementById('fhi-score-val').textContent;
+  const name = document.getElementById('scenario-title-display').textContent;
+  const prompt = `Evaluate spacecraft fire safety for ${name} (O2: ${o2}, Pressure: ${press}, Fire Hazard Index: ${fhi}/10). What extinguishing protocols are recommended under NASA-STD-6001?`;
+  window.location.href = `/ai?prompt=${encodeURIComponent(prompt)}`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  init3DHazardSphere();
+  selectScenario('iss');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Explorer // NASA FIRE-X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/ds.css">
+<link rel="stylesheet" href="/static/css/nav.css">
+<style>
+body {
+  background-color: #020409;
+  background-image: 
+    radial-gradient(circle at 80% 0%, rgba(0, 245, 255, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 10% 40%, rgba(255, 107, 53, 0.04) 0%, transparent 40%),
+    linear-gradient(180deg, #020409 0%, #040810 100%);
+  color: #E2E8F0;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+.explorer-header {
+  padding: 100px 0 24px;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+  background: rgba(4, 8, 16, 0.85);
+  backdrop-filter: blur(16px);
+}
+
+.explorer-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 28px;
+  padding: 32px 0 80px;
+}
+
+/* CYBERNETIC FILTER CONSOLE */
+.filter-console {
+  background: rgba(7, 13, 26, 0.85);
+  border: 1px solid rgba(0, 245, 255, 0.18);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  position: sticky;
+  top: 88px;
+  height: fit-content;
+}
+
+.filter-console-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.12);
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  background: rgba(2, 4, 9, 0.8);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  color: #fff;
+  padding: 10px 14px 10px 36px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-box input:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+}
+
+.search-box svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.custom-select {
+  width: 100%;
+  background: rgba(2, 4, 9, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.custom-select:focus {
+  border-color: var(--neon-cyan);
+}
+
+.range-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.range-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--neon-cyan);
+  min-width: 44px;
+  text-align: right;
+}
+
+/* DATA TABLE CONTAINER */
+.table-console {
+  background: rgba(7, 13, 26, 0.85);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  background: rgba(4, 8, 16, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.results-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.results-counter span {
+  color: var(--neon-cyan);
+  font-weight: 700;
+}
+
+.data-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.orbital-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.orbital-table thead {
+  background: rgba(4, 8, 16, 0.95);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.15);
+}
+
+.orbital-table th {
+  padding: 14px 18px;
+  text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.orbital-table th:hover {
+  color: var(--neon-cyan);
+}
+
+.orbital-table td {
+  padding: 13px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.orbital-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.orbital-table tbody tr:hover {
+  background: rgba(0, 245, 255, 0.035);
+}
+
+.td-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--neon-cyan);
+}
+
+.td-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* OUTCOME BADGES */
+.outcome-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-rad {
+  background: rgba(0, 245, 255, 0.12);
+  color: #00F5FF;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+}
+
+.badge-blow {
+  background: rgba(255, 107, 53, 0.12);
+  color: #FF6B35;
+  border: 1px solid rgba(255, 107, 53, 0.3);
+}
+
+.badge-dep {
+  background: rgba(155, 89, 182, 0.12);
+  color: #9B59B6;
+  border: 1px solid rgba(155, 89, 182, 0.3);
+}
+
+.badge-sus {
+  background: rgba(0, 230, 118, 0.12);
+  color: #00E676;
+  border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.action-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.table-action-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.table-action-btn:hover {
+  background: rgba(0, 245, 255, 0.15);
+  border-color: rgba(0, 245, 255, 0.4);
+  color: var(--neon-cyan);
+}
+
+.table-action-btn.active-cmp {
+  background: rgba(255, 107, 53, 0.15);
+  border-color: rgba(255, 107, 53, 0.4);
+  color: #FF6B35;
+}
+
+/* PAGINATION BAR */
+.table-pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: rgba(4, 8, 16, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* COMPARISON DOCK BAR */
+.compare-dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(6, 12, 24, 0.95);
+  border: 1px solid rgba(0, 245, 255, 0.35);
+  border-radius: 100px;
+  padding: 10px 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 245, 255, 0.2);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 1000;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.compare-dock.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* INSPECTOR DRAWER */
+.inspector-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.inspector-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.inspector-drawer {
+  position: fixed;
+  top: 0;
+  right: -600px;
+  width: 580px;
+  max-width: 90vw;
+  height: 100vh;
+  background: #040810;
+  border-left: 1px solid rgba(0, 245, 255, 0.25);
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9);
+  z-index: 100000;
+  padding: 32px;
+  overflow-y: auto;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.inspector-drawer.open {
+  right: 0;
+}
+
+.inspector-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.15);
+  margin-bottom: 24px;
+}
+
+.inspector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.inspector-field {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.inspector-field-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.inspector-field-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .explorer-layout { grid-template-columns: 1fr; }
+  .filter-console { position: static; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-progress-bar" id="nav-progress"></div>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/images/Fire-X.jpeg" alt="FIRE-X" class="nav-brand-logo">
+      <div class="nav-brand-text">
+        <div class="nav-brand-name">NASA FIRE-X</div>
+        <div class="nav-brand-sub">MICROGRAVITY COMBUSTION INTEL</div>
+      </div>
+    </a>
+    <ul class="nav-links" id="nav-links-list">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/analytics" class="nav-link">Analytics</a></li>
+      <li><a href="/explorer" class="nav-link active">Data Explorer</a></li>
+      <li><a href="/simulator" class="nav-link">Simulator</a></li>
+      <li><a href="/ai" class="nav-link">AI Assistant</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-lang-btn" id="nav-lang-btn">EN</button>
+      <a href="/ai" class="nav-ai-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        AI Assistant
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header class="explorer-header">
+  <div class="container-wide">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.12em;color:var(--neon-cyan);text-transform:uppercase;margin-bottom:6px;">
+          NASA PHYSICAL SCIENCE INFORMATICS // ORBITAL FLIGHT REPOSITORY
+        </div>
+        <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem, 3.5vw, 2.8rem);font-weight:800;color:#fff;line-height:1.1;">
+          Orbital Telemetry <span class="text-gradient">Data Explorer</span>
+        </h1>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Telemetry (.CSV)
+        </button>
+        <a href="/analytics" class="btn btn-neon btn-sm">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          3D Analytics View
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container-wide">
+  <div class="explorer-layout">
+
+    <!-- LEFT: CYBERNETIC FILTER CONSOLE -->
+    <aside class="filter-console">
+      <div class="filter-console-title">
+        <span>FILTERS &amp; SEARCH</span>
+        <button class="btn btn-ghost btn-sm" style="font-size:0.7rem;padding:4px 8px;" onclick="resetFilters()">Reset All</button>
+      </div>
+
+      <!-- SEARCH INPUT -->
+      <div class="filter-group">
+        <label class="filter-label">Quick Search</label>
+        <div class="search-box">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="filter-search" placeholder="ID, fuel, or outcome..." oninput="handleSearchInput()">
+        </div>
+      </div>
+
+      <!-- FAMILY SELECT -->
+      <div class="filter-group">
+        <label class="filter-label">Flight Family (16 Total)</label>
+        <select class="custom-select" id="filter-family" onchange="applyFilters()">
+          <option value="">All Flight Investigations</option>
+          <option value="FLEX">FLEX (Droplet Extinction)</option>
+          <option value="FLEX-2">FLEX-2 (Cool Flame Dynamics)</option>
+          <option value="BASS">BASS (Solid Material Flammability)</option>
+          <option value="BASS-II">BASS-II (Convective Suppression)</option>
+          <option value="SAFFIRE">SAFFIRE (Cygnus Spacecraft Fires)</option>
+          <option value="SOFIE">SOFIE (Solid Fuel Ignition)</option>
+          <option value="ACME">ACME (CIR Microgravity Burn)</option>
+          <option value="SLICE">SLICE (Structure &amp; Liftoff)</option>
+        </select>
+      </div>
+
+      <!-- FUEL MATERIAL SELECT -->
+      <div class="filter-group">
+        <label class="filter-label">Fuel / Material</label>
+        <select class="custom-select" id="filter-fuel" onchange="applyFilters()">
+          <option value="">All Materials &amp; Fuels</option>
+          <option value="n-Heptane">n-Heptane</option>
+          <option value="n-Decane">n-Decane</option>
+          <option value="Methanol">Methanol</option>
+          <option value="PMMA">PMMA (Cast Acrylic)</option>
+          <option value="Cotton">Cotton Fabric</option>
+          <option value="Delrin">Delrin (Polyacetal)</option>
+          <option value="Polyethylene">Polyethylene</option>
+          <option value="Silicone">Silicone Composite</option>
+        </select>
+      </div>
+
+      <!-- EXTINCTION OUTCOME -->
+      <div class="filter-group">
+        <label class="filter-label">Extinction Outcome</label>
+        <select class="custom-select" id="filter-outcome" onchange="applyFilters()">
+          <option value="">All Extinction Outcomes</option>
+          <option value="Radiative">Radiative Quenching</option>
+          <option value="Blowoff">Convective Blowoff</option>
+          <option value="Depletion">Fuel Depletion (Burnout)</option>
+          <option value="Sustained">Sustained Combustion</option>
+        </select>
+      </div>
+
+      <!-- O2 MIN SLIDER -->
+      <div class="filter-group">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <label class="filter-label" style="margin-bottom:0">Minimum O₂ Mole %</label>
+          <span class="range-val" id="val-o2-min">14%</span>
+        </div>
+        <input type="range" min="14" max="45" value="14" step="0.5" id="slider-o2-min" oninput="handleO2Min(this.value)">
+      </div>
+
+      <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
+        <a href="/ai" class="btn btn-neon" style="width:100%;justify-content:center;font-size:0.8rem;">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Ask AI About Dataset
+        </a>
+      </div>
+    </aside>
+
+    <!-- RIGHT: DATA TABLE CONSOLE -->
+    <section class="table-console">
+      <div class="table-toolbar">
+        <div class="results-counter">
+          SHOWING <span id="count-displayed">0</span> OF <span id="count-total">484</span> FLIGHT EXPERIMENTS
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.4);">PAGE SIZE:</span>
+          <select class="custom-select" style="padding:4px 8px;font-size:0.75rem;width:auto;" onchange="changeLimit(this.value)">
+            <option value="25">25</option>
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="data-table-responsive">
+        <table class="orbital-table">
+          <thead>
+            <tr>
+              <th onclick="sortTable('experiment_id')">Canonical ID ⬍</th>
+              <th onclick="sortTable('dataset_family')">Investigation ⬍</th>
+              <th onclick="sortTable('fuel_material')">Fuel / Material ⬍</th>
+              <th onclick="sortTable('oxygen_pct')">O₂ Mole % ⬍</th>
+              <th onclick="sortTable('pressure_kpa')">Pressure (kPa) ⬍</th>
+              <th onclick="sortTable('burn_time_s')">Burn Time (s) ⬍</th>
+              <th onclick="sortTable('extinction_diameter_mm')">Ext. d_e (mm) ⬍</th>
+              <th onclick="sortTable('extinction_outcome')">Outcome ⬍</th>
+              <th style="cursor:default;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- ROWS POPULATED VIA JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="table-pagination-bar">
+        <button class="btn btn-ghost btn-sm" id="btn-prev-page" onclick="prevPage()" disabled>← Previous</button>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(255,255,255,0.6);" id="page-indicator">
+          PAGE 1 OF 10
+        </span>
+        <button class="btn btn-ghost btn-sm" id="btn-next-page" onclick="nextPage()">Next →</button>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- FLOATING COMPARISON DOCK BAR -->
+<div class="compare-dock" id="compare-dock">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#fff;">
+    <span style="color:var(--neon-cyan);font-weight:700;" id="cmp-count">0</span> OF 4 EXPERIMENTS SELECTED
+  </div>
+  <button class="btn btn-solid-cyan btn-sm" onclick="runComparisonBenchmark()">
+    Compare Side-by-Side
+  </button>
+  <button class="btn btn-ghost btn-sm" onclick="clearComparison()">Clear</button>
+</div>
+
+<!-- TELEMETRY INSPECTOR MODAL DRAWER -->
+<div class="inspector-overlay" id="inspector-overlay" onclick="closeInspector()"></div>
+<div class="inspector-drawer" id="inspector-drawer">
+  <div class="inspector-header">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--neon-cyan);letter-spacing:0.1em;text-transform:uppercase;">
+        TELEMETRY INSPECTION // CANONICAL RECORD
+      </div>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;margin-top:4px;" id="insp-title">
+        FLEX-1-042
+      </h2>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="closeInspector()">✕ Close</button>
+  </div>
+
+  <div class="inspector-grid" id="insp-grid">
+    <!-- FIELDS -->
+  </div>
+
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:24px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:6px;">
+      NASA SCIENTIFIC OBSERVATION NOTES
+    </div>
+    <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.6;" id="insp-notes">
+      Spherical flame extinguishment achieved via radiative cooling. Soot-free low-intensity combustion verified by CIR UV/visible radiometer telemetry.
+    </p>
+  </div>
+
+  <div style="margin-top:auto;display:flex;gap:12px;">
+    <button class="btn btn-solid-cyan" style="flex:1;justify-content:center;" id="insp-ai-btn">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Analyze with GPT-6-luna
+    </button>
+    <button class="btn btn-ghost" onclick="closeInspector()">Dismiss</button>
+  </div>
+</div>
+
+<script src="/static/js/nav.js"></script>
+<script>
+let currentPage = 1;
+let pageSize = 50;
+let totalPages = 10;
+let currentSort = 'experiment_id';
+let currentSortDir = 'ASC';
+let selectedForCompare = new Set();
+let searchDebounceTimer;
+
+async function fetchExperiments() {
+  const query = document.getElementById('filter-search').value.trim();
+  const family = document.getElementById('filter-family').value;
+  const fuel = document.getElementById('filter-fuel').value;
+  const outcome = document.getElementById('filter-outcome').value;
+  const minO2 = document.getElementById('slider-o2-min').value;
+
+  let url = `/api/experiments?page=${currentPage}&limit=${pageSize}&sort_by=${currentSort}&sort_dir=${currentSortDir}`;
+  if (query) url += `&query=${encodeURIComponent(query)}`;
+  if (family) url += `&family=${encodeURIComponent(family)}`;
+  if (fuel) url += `&fuel=${encodeURIComponent(fuel)}`;
+  if (outcome) url += `&outcome=${encodeURIComponent(outcome)}`;
+  if (minO2 && minO2 > 14) url += `&min_o2=${minO2}`;
+
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:36px;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;">Querying NASA PSI Telemetry Records...</td></tr>`;
+
+  try {
+    const res = await fetch(url);
+    const json = await res.json();
+    const data = json.data || json;
+
+    renderTable(data.experiments || []);
+    document.getElementById('count-displayed').textContent = data.experiments ? data.experiments.length : 0;
+    document.getElementById('count-total').textContent = data.total || 484;
+    totalPages = data.total_pages || Math.ceil((data.total || 484) / pageSize);
+    updatePaginationUI();
+  } catch (e) {
+    console.error('Fetch error:', e);
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:36px;color:#FF5252;">Failed to load orbital database.</td></tr>`;
+  }
+}
+
+function renderTable(experiments) {
+  const tbody = document.getElementById('table-body');
+  if (!experiments.length) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:36px;color:rgba(255,255,255,0.4);">No matching flight experiments found for the current criteria.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = experiments.map(exp => {
+    const isCmp = selectedForCompare.has(exp.experiment_id);
+    const outcomeBadge = getBadgeHtml(exp.extinction_outcome);
+    return `
+      <tr>
+        <td class="td-id">${exp.experiment_id}</td>
+        <td><span style="font-weight:600;color:#fff;">${exp.dataset_family}</span></td>
+        <td class="td-mono">${exp.fuel_material || '—'}</td>
+        <td class="td-mono" style="color:var(--neon-cyan);">${exp.oxygen_pct != null ? exp.oxygen_pct.toFixed(1) + '%' : '—'}</td>
+        <td class="td-mono">${exp.pressure_kpa != null ? exp.pressure_kpa.toFixed(1) + ' kPa' : '—'}</td>
+        <td class="td-mono">${exp.burn_time_s != null ? exp.burn_time_s.toFixed(1) + ' s' : '—'}</td>
+        <td class="td-mono" style="color:var(--neon-orange);">${exp.extinction_diameter_mm != null ? exp.extinction_diameter_mm.toFixed(3) + ' mm' : '—'}</td>
+        <td>${outcomeBadge}</td>
+        <td>
+          <div class="action-btn-group">
+            <button class="table-action-btn" onclick="inspectExperiment('${exp.experiment_id}')">Inspect</button>
+            <button class="table-action-btn ${isCmp ? 'active-cmp' : ''}" onclick="toggleCompare('${exp.experiment_id}', this)">
+              ${isCmp ? '✓ Added' : '+ Compare'}
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function getBadgeHtml(outcome) {
+  const o = (outcome || '').toLowerCase();
+  if (o.includes('rad')) return `<span class="outcome-badge badge-rad">Radiative</span>`;
+  if (o.includes('blow') || o.includes('flow')) return `<span class="outcome-badge badge-blow">Blowoff</span>`;
+  if (o.includes('deplet') || o.includes('burnout')) return `<span class="outcome-badge badge-dep">Depleted</span>`;
+  if (o.includes('sustain')) return `<span class="outcome-badge badge-sus">Sustained</span>`;
+  return `<span class="outcome-badge badge-rad">${outcome || 'Extinguished'}</span>`;
+}
+
+function handleSearchInput() {
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => {
+    currentPage = 1;
+    fetchExperiments();
+  }, 300);
+}
+
+function applyFilters() {
+  currentPage = 1;
+  fetchExperiments();
+}
+
+function handleO2Min(val) {
+  document.getElementById('val-o2-min').textContent = val + '%';
+  currentPage = 1;
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(fetchExperiments, 250);
+}
+
+function resetFilters() {
+  document.getElementById('filter-search').value = '';
+  document.getElementById('filter-family').value = '';
+  document.getElementById('filter-fuel').value = '';
+  document.getElementById('filter-outcome').value = '';
+  document.getElementById('slider-o2-min').value = 14;
+  document.getElementById('val-o2-min').textContent = '14%';
+  currentPage = 1;
+  fetchExperiments();
+}
+
+function sortTable(column) {
+  if (currentSort === column) {
+    currentSortDir = currentSortDir === 'ASC' ? 'DESC' : 'ASC';
+  } else {
+    currentSort = column;
+    currentSortDir = 'ASC';
+  }
+  fetchExperiments();
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    fetchExperiments();
+  }
+}
+
+function nextPage() {
+  if (currentPage < totalPages) {
+    currentPage++;
+    fetchExperiments();
+  }
+}
+
+function changeLimit(val) {
+  pageSize = parseInt(val, 10);
+  currentPage = 1;
+  fetchExperiments();
+}
+
+function updatePaginationUI() {
+  document.getElementById('btn-prev-page').disabled = (currentPage <= 1);
+  document.getElementById('btn-next-page').disabled = (currentPage >= totalPages);
+  document.getElementById('page-indicator').textContent = `PAGE ${currentPage} OF ${totalPages || 1}`;
+}
+
+// INSPECTOR
+async function inspectExperiment(id) {
+  const overlay = document.getElementById('inspector-overlay');
+  const drawer = document.getElementById('inspector-drawer');
+  document.getElementById('insp-title').textContent = id;
+
+  try {
+    const res = await fetch(`/api/experiments/${encodeURIComponent(id)}`);
+    const json = await res.json();
+    const exp = json.data || json;
+
+    const fields = [
+      ['Investigation', exp.dataset_family],
+      ['Fuel / Material', exp.fuel_material],
+      ['Oxygen Fraction', (exp.oxygen_pct != null ? exp.oxygen_pct.toFixed(1) + '%' : '—')],
+      ['Pressure', (exp.pressure_kpa != null ? exp.pressure_kpa.toFixed(1) + ' kPa' : '—')],
+      ['Extinction Diam (de)', (exp.extinction_diameter_mm != null ? exp.extinction_diameter_mm.toFixed(3) + ' mm' : '—')],
+      ['Burn Duration', (exp.burn_time_s != null ? exp.burn_time_s.toFixed(1) + ' s' : '—')],
+      ['Airflow Velocity', (exp.airflow_velocity_cms != null ? exp.airflow_velocity_cms.toFixed(2) + ' cm/s' : '—')],
+      ['Flame Temperature', (exp.flame_temp_k != null ? exp.flame_temp_k.toFixed(0) + ' K' : '—')],
+      ['Extinction Outcome', exp.extinction_outcome || '—'],
+      ['Source Archive', exp.source_name || 'NASA PSI']
+    ];
+
+    document.getElementById('insp-grid').innerHTML = fields.map(([k, v]) => `
+      <div class="inspector-field">
+        <div class="inspector-field-label">${k}</div>
+        <div class="inspector-field-value">${v}</div>
+      </div>
+    `).join('');
+
+    if (exp.notes) document.getElementById('insp-notes').textContent = exp.notes;
+
+    document.getElementById('insp-ai-btn').onclick = () => {
+      window.location.href = `/ai?prompt=${encodeURIComponent(`Explain test ${exp.experiment_id}: ${exp.fuel_material} at ${exp.oxygen_pct}% O2 with outcome ${exp.extinction_outcome}`)}`;
+    };
+
+    overlay.classList.add('open');
+    drawer.classList.add('open');
+  } catch (e) {
+    console.error('Inspector fetch error:', e);
+  }
+}
+
+function closeInspector() {
+  document.getElementById('inspector-overlay').classList.remove('open');
+  document.getElementById('inspector-drawer').classList.remove('open');
+}
+
+// COMPARE
+function toggleCompare(id, btn) {
+  if (selectedForCompare.has(id)) {
+    selectedForCompare.delete(id);
+    btn.classList.remove('active-cmp');
+    btn.textContent = '+ Compare';
+  } else {
+    if (selectedForCompare.size >= 4) {
+      alert('Maximum 4 flight experiments can be benchmarked simultaneously.');
+      return;
+    }
+    selectedForCompare.add(id);
+    btn.classList.add('active-cmp');
+    btn.textContent = '✓ Added';
+  }
+  updateCompareDock();
+}
+
+function updateCompareDock() {
+  const dock = document.getElementById('compare-dock');
+  const count = document.getElementById('cmp-count');
+  count.textContent = selectedForCompare.size;
+  if (selectedForCompare.size > 0) {
+    dock.classList.add('visible');
+  } else {
+    dock.classList.remove('visible');
+  }
+}
+
+function clearComparison() {
+  selectedForCompare.clear();
+  updateCompareDock();
+  fetchExperiments();
+}
+
+function runComparisonBenchmark() {
+  const ids = Array.from(selectedForCompare).join(',');
+  window.location.href = `/simulator?compare=${encodeURIComponent(ids)}`;
+}
+
+function exportCSV() {
+  window.open('/api/experiments?limit=200', '_blank');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchExperiments();
+});
+</script>
+</body>
+</html>

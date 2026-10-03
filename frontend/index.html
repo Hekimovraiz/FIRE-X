@@ -1,1334 +1,720 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIRE-X — NASA Microgravity Fire Safety Intelligence Platform</title>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NASA FIRE-X — Flame in Freefall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/ds.css">
+<link rel="stylesheet" href="/static/css/nav.css">
+<style>
+/* PAGE-SPECIFIC */
+#particles-canvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.hero {
+  position: relative; height: 100vh; min-height: 700px;
+  display: flex; align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url('/images/hero_bg.jpg');
+  background-size: cover; background-position: center;
+  filter: brightness(0.45);
+}
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(to bottom,
+    rgba(2,4,9,0.1) 0%,
+    rgba(2,4,9,0.3) 50%,
+    rgba(2,4,9,0.95) 85%,
+    #020409 100%
+  );
+}
+.hero-content {
+  position: relative; z-index: 3;
+  max-width: 900px; padding: 0 24px;
+  margin: 0 auto; text-align: center;
+  margin-top: 68px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,245,255,0.08); border: 1px solid rgba(0,245,255,0.25);
+  padding: 6px 16px; border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; font-weight: 700; color: rgba(0,245,255,0.9);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 28px;
+  animation: slideDown 0.8s ease-out;
+}
+.hero-badge-dot { width: 6px; height: 6px; background: #00E676; border-radius: 50%; box-shadow: 0 0 8px #00E676; animation: glowPulse 2s infinite; }
+@keyframes glowPulse { 0%,100% { box-shadow: 0 0 6px #00E676; } 50% { box-shadow: 0 0 16px #00E676, 0 0 32px rgba(0,230,118,0.4); } }
+.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 800; line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: #fff; margin-bottom: 12px;
+  animation: slideUp 1s ease-out 0.2s both;
+}
+.hero-subtitle-line {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 600; color: rgba(255,255,255,0.7);
+  margin-bottom: 24px;
+  animation: slideUp 1s ease-out 0.35s both;
+}
+.hero-desc {
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  color: rgba(255,255,255,0.55);
+  max-width: 680px; margin: 0 auto 40px;
+  line-height: 1.7;
+  animation: slideUp 1s ease-out 0.5s both;
+}
+.hero-actions {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; flex-wrap: wrap;
+  animation: slideUp 1s ease-out 0.65s both;
+}
+.hero-clock {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; color: rgba(255,255,255,0.4);
+  margin-top: 32px;
+  animation: slideUp 1s ease-out 0.8s both;
+  justify-content: center;
+}
+.hero-clock-val { color: rgba(0,245,255,0.8); font-weight: 600; }
+.scroll-indicator {
+  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+  z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.scroll-indicator span { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; }
+.scroll-arrow { color: rgba(0,245,255,0.5); animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-    <style>
-        :root {
-            --bg-dark: #0b0f19;
-            --bg-card: #111827;
-            --bg-card-hover: #1f293d;
-            --border-color: #1f2937;
-            --border-highlight: #374151;
-            --accent-fire: #f97316;
-            --accent-blue: #38bdf8;
-            --accent-emerald: #10b981;
-            --text-primary: #f9fafb;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --font-main: 'Inter', system-ui, sans-serif;
-            --font-display: 'Space Grotesk', system-ui, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-        }
+/* STATS BAND */
+.stats-band {
+  background: var(--bg-surface-1);
+  border-top: 1px solid rgba(0,245,255,0.06);
+  border-bottom: 1px solid rgba(0,245,255,0.06);
+  padding: 48px 0;
+}
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(0,245,255,0.06); }
+.stat-item {
+  background: var(--bg-surface-1); padding: 32px 24px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.stat-item::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.stat-item:hover::before { opacity: 1; }
+.stat-num { font-family: 'JetBrains Mono', monospace; font-size: 3.5rem; font-weight: 700; line-height: 1; }
+.stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 10px; font-family: 'JetBrains Mono', monospace; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            font-family: var(--font-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+/* ABOUT SECTION */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.about-img-wrap {
+  position: relative;
+  perspective: 1200px;
+}
+.about-img {
+  width: 100%; border-radius: 16px;
+  border: 1px solid rgba(0,245,255,0.15);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(0,245,255,0.1);
+  transform: rotateY(-8deg) rotateX(4deg);
+  transition: transform 0.5s ease;
+}
+.about-img:hover { transform: rotateY(0) rotateX(0); }
+.about-img-badge {
+  position: absolute; bottom: -16px; right: -16px;
+  background: var(--bg-surface-2); border: 1px solid rgba(0,245,255,0.25);
+  padding: 12px 18px; border-radius: 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+.about-features { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+.feature-row {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px; border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.3s;
+}
+.feature-row:hover { background: rgba(0,245,255,0.04); border-color: rgba(0,245,255,0.12); }
+.feature-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(0,245,255,0.1); border: 1px solid rgba(0,245,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: var(--neon-cyan);
+}
+.feature-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+.feature-desc { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
 
-        /* --- Header & Navigation --- */
-        header {
-            background: #0f172a;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            padding: 0 1.5rem;
-        }
-        .nav-container {
-            max-width: 1350px;
-            margin: 0 auto;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: inherit;
-            cursor: pointer;
-        }
-        .logo-icon {
-            width: 34px;
-            height: 34px;
-            background: linear-gradient(135deg, #ea580c, #f97316);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-        .logo-title {
-            font-family: var(--font-display);
-            font-size: 1.3rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .logo-badge {
-            font-size: 0.65rem;
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--accent-blue);
-            padding: 2px 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            text-transform: uppercase;
-            font-family: var(--font-mono);
-        }
-        nav.nav-links {
-            display: flex;
-            gap: 4px;
-        }
-        .nav-tab {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.15s, color 0.15s;
-        }
-        .nav-tab:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        .nav-tab.active {
-            color: #fff;
-            background: #1e293b;
-            border: 1px solid var(--border-highlight);
-        }
+/* FAMILIES SCROLL */
+.families-scroll { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: thin; }
+.families-scroll::-webkit-scrollbar { height: 4px; }
+.families-scroll::-webkit-scrollbar-thumb { background: rgba(0,245,255,0.3); border-radius: 2px; }
+.family-card {
+  flex: 0 0 240px; background: var(--bg-surface-2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; padding: 24px;
+  cursor: pointer; transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.family-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent, var(--neon-cyan));
+  box-shadow: 0 0 16px var(--card-accent, var(--neon-cyan));
+}
+.family-card:hover { transform: translateY(-6px); border-color: rgba(0,245,255,0.25); box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 30px rgba(0,245,255,0.1); }
+.family-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+.family-count { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-bottom: 12px; }
+.family-desc { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
 
-        /* --- Main Layout --- */
-        main {
-            flex: 1;
-            max-width: 1350px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 1.8rem;
-        }
+/* MISSION ENV */
+.env-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.env-card {
+  background: var(--bg-surface-2);
+  border-radius: 20px; padding: 32px;
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative; overflow: hidden;
+  transition: all 0.3s;
+}
+.env-card::after {
+  content: ''; position: absolute;
+  inset: 0; border-radius: 20px;
+  background: radial-gradient(circle at 100% 0%, var(--env-color, rgba(0,245,255,0.08)) 0%, transparent 60%);
+  pointer-events: none;
+}
+.env-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+.env-label { font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.env-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 800; margin-bottom: 24px; }
+.env-params { display: flex; gap: 16px; margin-bottom: 20px; }
+.env-param { display: flex; flex-direction: column; gap: 3px; }
+.env-param-val { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 700; }
+.env-param-label { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
+.env-fhi { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.env-fhi-score { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 800; }
 
-        .view-panel { display: none; }
-        .view-panel.active { display: block; }
+/* NAV CARDS */
+.nav-cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.nav-card {
+  background: var(--bg-surface-2); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; padding: 28px 32px;
+  text-decoration: none; color: inherit;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.nav-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 0% 50%, rgba(0,245,255,0.05) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.nav-card:hover { transform: translateX(4px); border-color: rgba(0,245,255,0.2); box-shadow: 0 0 30px rgba(0,245,255,0.08); }
+.nav-card:hover::before { opacity: 1; }
+.nav-card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.nav-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+.nav-card-desc { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+.nav-card-arrow { color: rgba(255,255,255,0.2); transition: all 0.3s; flex-shrink: 0; }
+.nav-card:hover .nav-card-arrow { color: var(--neon-cyan); transform: translateX(4px); }
 
-        /* --- Hero Section --- */
-        .hero {
-            background: #131c2e;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2.2rem;
-            margin-bottom: 1.8rem;
-        }
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: 2.3rem;
-            font-weight: 700;
-            margin-bottom: 0.6rem;
-            color: #fff;
-        }
-        .hero p.tagline {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            max-width: 780px;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-        }
-        .search-hero {
-            display: flex;
-            gap: 10px;
-            max-width: 720px;
-        }
-        .search-hero input {
-            flex: 1;
-            background: #090e17;
-            border: 1px solid var(--border-color);
-            padding: 13px 16px;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-        }
-        .search-hero input:focus {
-            border-color: var(--accent-blue);
-        }
-        .btn-fire {
-            background: #ea580c;
-            color: #fff;
-            border: none;
-            padding: 13px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background 0.15s;
-            white-space: nowrap;
-        }
-        .btn-fire:hover {
-            background: #f97316;
-        }
+/* FOOTER */
+.footer { border-top: 1px solid rgba(0,245,255,0.06); background: #020409; padding: 48px 0 32px; margin-top: 0; }
+.footer-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.footer-brand-logo { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(0,245,255,0.2); }
+.footer-brand-name { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; letter-spacing: 0.05em; }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 12px; }
+.footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.3); font-family: 'JetBrains Mono', monospace; }
 
-        /* --- KPI Stat Cards --- */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 1.8rem;
-        }
-        .kpi-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1.3rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .kpi-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 8px;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        .kpi-val {
-            font-family: var(--font-display);
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: #fff;
-        }
-        .kpi-lbl {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        /* --- Charts Grid --- */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        @media (max-width: 900px) {
-            .charts-grid { grid-template-columns: 1fr; }
-        }
-        .chart-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1.3rem;
-        }
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .chart-title {
-            font-family: var(--font-display);
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #f3f4f6;
-        }
-        /* CRITICAL: Explicit container height to prevent Chart.js infinite resize loop */
-        .chart-container-box {
-            position: relative;
-            height: 250px;
-            width: 100%;
-        }
-
-        /* --- Families Grid --- */
-        .families-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 1.8rem;
-        }
-        .family-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: border-color 0.15s;
-        }
-        .family-card:hover {
-            border-color: var(--accent-blue);
-        }
-        .family-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.72rem;
-            font-family: var(--font-mono);
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .family-flex { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 189, 248, 0.3); }
-        .family-bass { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
-        .family-saffire { background: rgba(249, 115, 22, 0.15); color: var(--accent-fire); border: 1px solid rgba(249, 115, 22, 0.3); }
-
-        /* --- Filters Area --- */
-        .filter-bar {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1.2rem;
-            margin-bottom: 1.2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            align-items: end;
-        }
-        .filter-group label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        .filter-group select, .filter-group input {
-            width: 100%;
-            background: #090e17;
-            border: 1px solid var(--border-color);
-            padding: 9px 12px;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 0.88rem;
-            outline: none;
-        }
-        .filter-group select:focus, .filter-group input:focus {
-            border-color: var(--accent-blue);
-        }
-
-        /* --- Table Styling --- */
-        .table-wrapper {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            overflow-x: auto;
-        }
-        table.fire-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.88rem;
-            text-align: left;
-        }
-        table.fire-table th {
-            background: #0c1220;
-            color: var(--text-secondary);
-            font-weight: 600;
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.76rem;
-            text-transform: uppercase;
-        }
-        table.fire-table td {
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--border-color);
-            color: #d1d5db;
-        }
-        table.fire-table tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
-            color: #fff;
-        }
-        .pill {
-            display: inline-block;
-            padding: 2px 7px;
-            border-radius: 4px;
-            font-size: 0.72rem;
-            font-weight: 600;
-        }
-        .pill-blue { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); }
-        .pill-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
-        .pill-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-
-        /* --- Pagination --- */
-        .pagination-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 14px;
-            background: #0c1220;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-        }
-        .btn-page {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 5px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.82rem;
-        }
-        .btn-page:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-        }
-
-        /* --- Detail Modal --- */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-card {
-            background: #111827;
-            border: 1px solid var(--border-highlight);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 780px;
-            max-height: 88vh;
-            overflow-y: auto;
-            padding: 1.8rem;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.4rem;
-            cursor: pointer;
-        }
-        .modal-close:hover { color: #fff; }
-        .param-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.2rem;
-        }
-        .param-box {
-            background: #090e17;
-            border: 1px solid var(--border-color);
-            padding: 10px 14px;
-            border-radius: 8px;
-        }
-        .param-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; }
-        .param-val { font-size: 1rem; font-weight: 600; color: #fff; margin-top: 3px; font-family: var(--font-mono); }
-
-        /* --- Compare View --- */
-        .compare-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.2rem;
-            margin-top: 1.2rem;
-        }
-        .compare-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1.3rem;
-        }
-
-        /* --- Mission Scenarios --- */
-        .scenario-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-        .scenario-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            padding: 11px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-        .scenario-btn.active {
-            background: rgba(56, 189, 248, 0.15);
-            border-color: var(--accent-blue);
-            color: #fff;
-        }
-
-        /* --- Fire AI RAG Output --- */
-        .ai-result-box {
-            background: #111827;
-            border: 1px solid var(--border-highlight);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        .ai-section-title {
-            color: var(--accent-fire);
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        .ai-text {
-            color: #e5e7eb;
-            line-height: 1.6;
-            margin-bottom: 1.2rem;
-            font-size: 0.94rem;
-        }
-        .btn-inspect {
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-blue);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .btn-inspect:hover {
-            background: rgba(56, 189, 248, 0.2);
-            color: #fff;
-        }
-        .source-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: var(--accent-blue);
-            text-decoration: none;
-            font-size: 0.78rem;
-            font-family: var(--font-mono);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 3px 8px;
-            border-radius: 14px;
-            background: rgba(56, 189, 248, 0.08);
-        }
-        .source-badge:hover {
-            background: rgba(56, 189, 248, 0.2);
-            color: #fff;
-        }
-
-        /* --- Footer --- */
-        footer {
-            border-top: 1px solid var(--border-color);
-            padding: 1.5rem;
-            background: #090e17;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: auto;
-        }
-    </style>
+@media (max-width: 1024px) { .about-grid { grid-template-columns: 1fr; } .env-grid { grid-template-columns: 1fr; } }
+@media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .nav-cards-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 
-    <!-- Header Navigation -->
-    <header>
-        <div class="nav-container">
-            <div class="logo-area" onclick="switchTab('home')">
-                <div class="logo-icon">🔥</div>
-                <div class="logo-title">
-                    FIRE-X
-                    <span class="logo-badge">NASA Microgravity AI</span>
-                </div>
-            </div>
-            <nav class="nav-links">
-                <button class="nav-tab active" onclick="switchTab('home')">🏠 Home</button>
-                <button class="nav-tab" onclick="switchTab('explorer')">🔍 Explorer</button>
-                <button class="nav-tab" onclick="switchTab('compare')">⚖️ Compare (<span id="compareBadgeCount">0</span>)</button>
-                <button class="nav-tab" onclick="switchTab('scenario')">🚀 Mission Scenarios</button>
-                <button class="nav-tab" onclick="switchTab('ai')">🤖 Fire AI (RAG)</button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Content Panels -->
-    <main>
-
-        <!-- PANEL 1: HOME -->
-        <section id="panel-home" class="view-panel active">
-            <div class="hero">
-                <h1>Flame in Freefall</h1>
-                <p class="tagline">
-                    An evidence-backed microgravity combustion intelligence platform. Translating decades of NASA Physical Sciences Informatics (PSI) space experiments into actionable spacecraft fire-safety insights.
-                </p>
-                <div class="search-hero">
-                    <input type="text" id="homeSearchInput" placeholder="Ask about NASA fire experiments (e.g. 'How does low oxygen affect PMMA extinction?')..." onkeydown="if(event.key==='Enter') triggerHomeSearch()">
-                    <button class="btn-fire" onclick="triggerHomeSearch()">Run AI Query</button>
-                </div>
-            </div>
-
-            <!-- KPIs -->
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-icon">🧪</div>
-                    <div>
-                        <div class="kpi-val" id="kpiTotal">442</div>
-                        <div class="kpi-lbl">Ingested NASA Experiments</div>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-icon">🗂️</div>
-                    <div>
-                        <div class="kpi-val">5</div>
-                        <div class="kpi-lbl">Mission Families (FLEX·BASS·SAFFIRE·ACME+)</div>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-icon">🔥</div>
-                    <div>
-                        <div class="kpi-val" id="kpiFuels">27</div>
-                        <div class="kpi-lbl">Tested Fuels & Polymers</div>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-icon">💨</div>
-                    <div>
-                        <div class="kpi-val">12% - 34%</div>
-                        <div class="kpi-lbl">Oxygen Concentration Range</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Charts Grid (Fixed Container Height to Prevent Resize Loops) -->
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">Oxygen Concentration vs Burn Duration</div>
-                        <span class="logo-badge">NASA PSI Correlation</span>
-                    </div>
-                    <div class="chart-container-box">
-                        <canvas id="o2BurnChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">Extinction Outcomes</div>
-                        <span class="logo-badge">442 Tests</span>
-                    </div>
-                    <div class="chart-container-box">
-                        <canvas id="outcomesChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Experiment Families -->
-            <h2 style="font-family: var(--font-display); margin-bottom: 1rem; font-size: 1.3rem;">NASA Combustion Experiment Families</h2>
-            <div class="families-grid">
-                <div class="family-card" onclick="filterByFamily('FLEX')">
-                    <span class="family-badge family-flex">PSI-69 • 274 Tests</span>
-                    <h3 style="margin-bottom: 6px;">FLEX & FLEX-2</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.45; margin-bottom: 10px;">
-                        Flame Extinction Experiment. Investigates liquid-fuel droplet combustion, cool-flame phenomena, and radiative extinction limits in freefall.
-                    </p>
-                    <span style="color: var(--accent-blue); font-size: 0.82rem; font-weight: 600;">Explore FLEX tests →</span>
-                </div>
-
-                <div class="family-card" onclick="filterByFamily('BASS-II')">
-                    <span class="family-badge family-bass">PSI-25 • 129 Tests</span>
-                    <h3 style="margin-bottom: 6px;">BASS & BASS-II</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.45; margin-bottom: 10px;">
-                        Burning and Suppression of Solids. Examines flame propagation, blowoff, and extinction mechanics of polymers (PMMA, Delrin) and aerospace fabrics.
-                    </p>
-                    <span style="color: var(--accent-emerald); font-size: 0.82rem; font-weight: 600;">Explore BASS-II tests →</span>
-                </div>
-
-                <div class="family-card" onclick="filterByFamily('SAFFIRE-I')">
-                    <span class="family-badge family-saffire">PSI-98 • Cygnus Cargo Craft</span>
-                    <h3 style="margin-bottom: 6px;">SAFFIRE-I</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.45; margin-bottom: 10px;">
-                        Spacecraft Fire Safety Demonstration. Full-scale (1-meter panel) uncrewed spacecraft fires inside Orbital ATK Cygnus vehicle.
-                    </p>
-                    <span style="color: var(--accent-fire); font-size: 0.82rem; font-weight: 600;">Explore SAFFIRE tests →</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- PANEL 2: EXPERIMENT EXPLORER -->
-        <section id="panel-explorer" class="view-panel">
-            <h2 style="font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 0.4rem;">NASA Experiment Explorer</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.95rem;">
-                Filter, search, inspect, and select experiments from NASA PSI repositories for side-by-side comparison.
-            </p>
-
-            <div class="filter-bar">
-                <div class="filter-group">
-                    <label>Keyword Search</label>
-                    <input type="text" id="explorerQuery" placeholder="Material, ID (e.g. PMMA, FLEX-012)..." oninput="debounceFetch()">
-                </div>
-                <div class="filter-group">
-                    <label>Research Family</label>
-                    <select id="familySelect" onchange="fetchExperiments(1)">
-                        <option value="all">All Families (409)</option>
-                        <option value="FLEX">FLEX (274)</option>
-                        <option value="BASS-II">BASS-II (129)</option>
-                        <option value="SAFFIRE-I">SAFFIRE-I (4)</option>
-                        <option value="NTRS-Combustion">NTRS Citations</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Extinction Outcome</label>
-                    <select id="outcomeSelect" onchange="fetchExperiments(1)">
-                        <option value="all">All Outcomes</option>
-                        <option value="Extinction">Extinction</option>
-                        <option value="Blowoff">Blowoff Extinction</option>
-                        <option value="Disruption">Disruption</option>
-                        <option value="Burnout">Complete Burnout</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Min Oxygen %: <span id="lblMinO2">12%</span></label>
-                    <input type="range" id="minO2Range" min="12" max="35" value="12" oninput="updateO2Filter()">
-                </div>
-            </div>
-
-            <div class="table-wrapper">
-                <table class="fire-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 40px;">Select</th>
-                            <th>ID & Family</th>
-                            <th>Material / Fuel</th>
-                            <th>O₂ %</th>
-                            <th>Pressure (mmHg)</th>
-                            <th>Burn Duration</th>
-                            <th>Extinction Outcome</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="experimentsTableBody">
-                        <tr><td colspan="8" style="text-align: center; padding: 2rem;">Loading NASA experiments...</td></tr>
-                    </tbody>
-                </table>
-                <div class="pagination-bar">
-                    <div>Showing <span id="pageRange">0-0</span> of <span id="totalRecords">0</span> experiments</div>
-                    <div style="display: flex; gap: 6px;">
-                        <button class="btn-page" id="btnPrev" onclick="changePage(-1)">← Previous</button>
-                        <button class="btn-page" id="btnNext" onclick="changePage(1)">Next →</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PANEL 3: COMPARE -->
-        <section id="panel-compare" class="view-panel">
-            <h2 style="font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 0.4rem;">Side-by-Side Experiment Comparison</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.95rem;">
-                Compare 2 to 4 microgravity combustion tests under differing environmental conditions (O₂, pressure, geometry).
-            </p>
-
-            <div id="compareEmptyState" style="text-align: center; padding: 3.5rem; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 10px;">
-                <p style="color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 1rem;">No experiments selected for comparison yet.</p>
-                <button class="btn-fire" onclick="switchTab('explorer')">Open Explorer & Select Experiments</button>
-            </div>
-
-            <div id="compareContainer" style="display: none;">
-                <div class="compare-grid" id="compareCards"></div>
-            </div>
-        </section>
-
-        <!-- PANEL 4: MISSION SCENARIOS -->
-        <section id="panel-scenario" class="view-panel">
-            <h2 style="font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 0.4rem;">Spacecraft Mission Environment Scenarios</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.95rem;">
-                Select a space exploration habitat condition to analyze flammability thresholds against real NASA empirical tests.
-            </p>
-
-            <div class="scenario-selector">
-                <button class="scenario-btn active" onclick="loadScenario('iss', this)">🛰️ ISS Standard Cabin (21% O₂)</button>
-                <button class="scenario-btn" onclick="loadScenario('lunar_habitat', this)">🌕 Artemis Lunar Habitat (34% O₂)</button>
-                <button class="scenario-btn" onclick="loadScenario('lunar_hypoxic', this)">🛡️ Hypoxic Fire-Safe Module (16% O₂)</button>
-            </div>
-
-            <div class="ai-result-box" id="scenarioDetailsBox">
-                <h3 id="scenTitle" style="font-family: var(--font-display); font-size: 1.4rem; color: #fff; margin-bottom: 4px;">International Space Station (ISS) Standard</h3>
-                <p id="scenAtmo" style="color: var(--accent-blue); font-family: var(--font-mono); margin-bottom: 0.8rem; font-size: 0.9rem;">21% O2, 760 mmHg (101.3 kPa), Microgravity (0g)</p>
-                <p id="scenDesc" style="color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.2rem; font-size: 0.92rem;">Standard shirtsleeve habitable cabin environment. Airflow is strictly fan-driven.</p>
-
-                <div class="ai-section-title">🚨 Microgravity Combustion & Safety Insight:</div>
-                <div class="ai-text" id="scenInsight">In zero-g natural convection ceases. Flames become spherical, burn slower, but can smolder undetected. Low airflow promotes radiative extinction.</div>
-
-                <div class="ai-section-title">📊 Supporting NASA Test Records in this Regime:</div>
-                <div class="table-wrapper" style="margin-top: 8px;">
-                    <table class="fire-table">
-                        <thead>
-                            <tr>
-                                <th>Test ID</th>
-                                <th>Family</th>
-                                <th>Material</th>
-                                <th>O₂ %</th>
-                                <th>Pressure</th>
-                                <th>Burn Time</th>
-                                <th>Outcome</th>
-                                <th>NASA Link</th>
-                            </tr>
-                        </thead>
-                        <tbody id="scenarioTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- PANEL 5: FIRE AI (RAG ENGINE) -->
-        <section id="panel-ai" class="view-panel">
-            <h2 style="font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 0.4rem;">Fire AI — Scientific RAG Query</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.95rem;">
-                Natural-language combustion reasoning backed by deterministic SQL calculations and NASA Physical Sciences evidence.
-            </p>
-
-            <div class="search-hero" style="max-width: 100%; margin-bottom: 1.2rem;">
-                <input type="text" id="aiInput" placeholder="Ask e.g.: 'How does oxygen concentration affect flame extinction under microgravity?'" onkeydown="if(event.key==='Enter') runAiQuery()">
-                <button class="btn-fire" onclick="runAiQuery()">Ask the Data</button>
-            </div>
-
-            <!-- Preset inquiries -->
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.2rem;">
-                <span style="color: var(--text-muted); font-size: 0.82rem; align-self: center;">Suggested inquiries:</span>
-                <button class="btn-inspect" onclick="setAiQuery('How does oxygen concentration affect flame extinction under microgravity conditions?')">Oxygen Extinction Thresholds</button>
-                <button class="btn-inspect" onclick="setAiQuery('What are the combustion characteristics and risks of PMMA acrylic in space?')">PMMA Flammability in Space</button>
-                <button class="btn-inspect" onclick="setAiQuery('Compare liquid fuel droplets (methanol) vs solid fabrics (Nomex, SIBAL) in zero-g.')">Droplet vs Solid Fabrics</button>
-            </div>
-
-            <div id="aiLoading" style="display: none; padding: 2.5rem; text-align: center; color: var(--text-secondary);">
-                <div style="font-size: 1.8rem; margin-bottom: 8px;">⚙️</div>
-                Computing SQL aggregates across 409 NASA records and generating Gemini scientific synthesis...
-            </div>
-
-            <div class="ai-result-box" id="aiResultBox" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">
-                    <div>
-                        <span class="logo-badge" style="background: rgba(249, 115, 22, 0.2); color: var(--accent-fire);">Deterministic RAG Report</span>
-                        <h3 id="aiQueryEcho" style="font-family: var(--font-display); font-size: 1.2rem; margin-top: 4px; color: #fff;"></h3>
-                    </div>
-                    <span id="aiSampleBadge" class="pill pill-blue">NASA Matches: 15</span>
-                </div>
-
-                <div class="ai-section-title">📝 Executive Summary & Findings:</div>
-                <div class="ai-text" id="aiSummary"></div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem;">
-                    <div style="background: #090e17; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
-                        <div class="ai-section-title">🌡️ Thermal & Kinetic Profile:</div>
-                        <div class="ai-text" id="aiThermal" style="margin-bottom: 0;"></div>
-                    </div>
-                    <div style="background: #090e17; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
-                        <div class="ai-section-title">💨 Extinction & Suppression Dynamics:</div>
-                        <div class="ai-text" id="aiExtinction" style="margin-bottom: 0;"></div>
-                    </div>
-                </div>
-
-                <div class="ai-section-title">🛡️ Spacecraft Fire Safety Recommendation:</div>
-                <div class="ai-text" id="aiRecommendation" style="color: #6ee7b7; font-weight: 500;"></div>
-
-                <div class="ai-section-title">⚠️ Scientific Uncertainties & Limitations:</div>
-                <div class="ai-text" id="aiLimitations" style="color: var(--text-muted); font-size: 0.88rem;"></div>
-
-                <div class="ai-section-title">📑 Supporting NASA PSI Evidence:</div>
-                <div class="table-wrapper">
-                    <table class="fire-table">
-                        <thead>
-                            <tr>
-                                <th>Test ID</th>
-                                <th>Family</th>
-                                <th>Material</th>
-                                <th>O₂ %</th>
-                                <th>Pressure (mmHg)</th>
-                                <th>Burn Time</th>
-                                <th>Outcome</th>
-                                <th>NASA Link</th>
-                            </tr>
-                        </thead>
-                        <tbody id="aiEvidenceTable"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Detail Modal -->
-    <div class="modal-overlay" id="detailModal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <div>
-                    <span id="modalFamilyBadge" class="family-badge family-flex">PSI-69</span>
-                    <h2 id="modalTestId" style="font-family: var(--font-display); font-size: 1.5rem; color: #fff;">FLEX-001</h2>
-                    <p id="modalMaterial" style="color: var(--accent-blue); font-weight: 500; font-size: 1.05rem; margin-top: 3px;">Methanol</p>
-                </div>
-                <button class="modal-close" onclick="closeModal()">✕</button>
-            </div>
-
-            <div class="param-grid">
-                <div class="param-box">
-                    <div class="param-label">Oxygen Concentration</div>
-                    <div class="param-val" id="modalO2">21.0%</div>
-                </div>
-                <div class="param-box">
-                    <div class="param-label">Ambient Pressure</div>
-                    <div class="param-val" id="modalPressure">757.7 mmHg</div>
-                </div>
-                <div class="param-box">
-                    <div class="param-label">Burn Duration</div>
-                    <div class="param-val" id="modalBurnTime">4.3 s</div>
-                </div>
-                <div class="param-box">
-                    <div class="param-label">Extinction Diameter</div>
-                    <div class="param-val" id="modalExtDiam">0.89 mm</div>
-                </div>
-                <div class="param-box">
-                    <div class="param-label">Extinction Outcome</div>
-                    <div class="param-val" id="modalOutcome" style="font-size: 0.9rem;">Extinction</div>
-                </div>
-                <div class="param-box">
-                    <div class="param-label">Airflow Velocity</div>
-                    <div class="param-val" id="modalAirflow">0.0 cm/s</div>
-                </div>
-            </div>
-
-            <div style="background: #090e17; border: 1px solid var(--border-color); padding: 1rem; border-radius: 8px; margin-bottom: 1.2rem;">
-                <h4 style="color: var(--text-secondary); margin-bottom: 4px; font-size: 0.85rem;">Experimental Notes</h4>
-                <p id="modalNotes" style="color: #cbd5e1; line-height: 1.5; font-size: 0.9rem;"></p>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span id="modalSourceOrg" style="color: var(--text-muted); font-size: 0.8rem;">NASA Physical Sciences Informatics</span>
-                <a id="modalSourceLink" href="#" target="_blank" class="source-badge">Official NASA PSI Record ↗</a>
-            </div>
-        </div>
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-progress-bar" id="nav-progress"></div>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/images/Fire-X.jpeg" alt="FIRE-X" class="nav-brand-logo">
+      <div class="nav-brand-text">
+        <div class="nav-brand-name">NASA FIRE-X</div>
+        <div class="nav-brand-sub">MICROGRAVITY COMBUSTION INTEL</div>
+      </div>
+    </a>
+    <ul class="nav-links" id="nav-links-list">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/analytics" class="nav-link">Analytics</a></li>
+      <li><a href="/explorer" class="nav-link">Data Explorer</a></li>
+      <li><a href="/simulator" class="nav-link">Simulator</a></li>
+      <li><a href="/ai" class="nav-link">AI Assistant</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#00E676;border:1px solid rgba(0,230,118,0.25);background:rgba(0,230,118,0.08);padding:5px 12px;border-radius:100px">
+        <div class="nav-status-dot"></div> LIVE
+      </div>
+      <button class="nav-lang-btn" id="nav-lang-btn">EN</button>
+      <a href="/ai" class="nav-ai-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        AI Assistant
+      </a>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
     </div>
+  </div>
+</nav>
 
-    <!-- Footer -->
-    <footer>
-        <p>FIRE-X • NASA Space Apps Challenge 2026 • Flame in Freefall</p>
-        <p style="margin-top: 4px;">Data Sources: NASA Physical Sciences Informatics (PSI-69, PSI-25, PSI-98) & NASA NTRS.</p>
-    </footer>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <canvas id="particles-canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      NASA SPACE APPS CHALLENGE 2026 &nbsp;·&nbsp; FIRE SAFETY IN SPACE
+    </div>
+    <h1 class="hero-title">
+      <span class="text-gradient">FLAME IN FREEFALL</span>
+    </h1>
+    <div class="hero-subtitle-line">FIRE-X Intelligence Platform</div>
+    <p class="hero-desc">484 verified microgravity combustion experiments analyzed by AI — powering the future of spacecraft fire safety aboard the ISS, Artemis Lunar Habitat, and beyond.</p>
+    <div class="hero-actions">
+      <a href="/explorer" class="btn btn-solid-cyan btn-lg">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Explore Data
+      </a>
+      <a href="/simulator" class="btn btn-neon btn-lg">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>
+        Launch Simulator
+      </a>
+    </div>
+    <div class="hero-clock">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+      MISSION TIME (UTC): <span class="hero-clock-val" id="hero-clock-val">—</span>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <svg class="scroll-arrow" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+  </div>
+</section>
 
-    <!-- Interactive Script -->
-    <script>
-        let currentTab = 'home';
-        let currentPage = 1;
-        let totalPages = 1;
-        let selectedExperiments = new Set();
-        let debounceTimer = null;
-        let o2ChartInstance = null;
-        let outcomesChartInstance = null;
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-num text-gradient" id="stat-exp">0</div>
+      <div class="stat-label">Canonical Experiments</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:#FF6B35" id="stat-fam">0</div>
+      <div class="stat-label">Flight Families</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:#9B59B6" id="stat-scen">0</div>
+      <div class="stat-label">Mission Scenarios</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:#00E676" id="stat-int">0</div>
+      <div class="stat-label">Data Integrity</div>
+    </div>
+  </div>
+</div>
 
-        function switchTab(tabName) {
-            currentTab = tabName;
-            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+<hr class="divider">
 
-            const panel = document.getElementById(`panel-${tabName}`);
-            if (panel) panel.classList.add('active');
+<!-- ABOUT -->
+<section class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap reveal">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/International_Space_Station_after_undocking_of_STS-132.jpg/1280px-International_Space_Station_after_undocking_of_STS-132.jpg"
+             alt="ISS" class="about-img" loading="lazy">
+        <div class="about-img-badge">
+          <div style="font-size:0.65rem;color:rgba(255,255,255,0.4);margin-bottom:4px">PLATFORM</div>
+          <div style="color:#00F5FF;font-weight:700">Intl. Space Station</div>
+          <div style="font-size:0.65rem;color:rgba(255,255,255,0.5)">Orbit: 408 km | Speed: 27,600 km/h</div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="section-eyebrow">About the Project</div>
+        <h2 class="section-title-xl" style="margin-bottom:16px">Fire Safety Science <span class="text-gradient">in Orbit</span></h2>
+        <p style="color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:32px">FIRE-X aggregates and analyzes NASA's most comprehensive microgravity combustion database. Without gravity, fire behaves fundamentally differently — flames become spherical, cool flames persist, and conventional fire safety wisdom no longer applies.</p>
+        <div class="about-features">
+          <div class="feature-row">
+            <div class="feature-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+            <div>
+              <div class="feature-title">484 Verified Experiments</div>
+              <div class="feature-desc">From FLEX droplet flames to SAFFIRE large-scale spacecraft burn tests — all canonical NASA PSI data.</div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon" style="background:rgba(255,107,53,0.1);border-color:rgba(255,107,53,0.2);color:#FF6B35"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5"/></svg></div>
+            <div>
+              <div class="feature-title">AI-Powered Analysis</div>
+              <div class="feature-desc">GPT-6-luna integrated with deterministic NASA data for hallucination-free scientific answers.</div>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon" style="background:rgba(155,89,182,0.1);border-color:rgba(155,89,182,0.2);color:#9B59B6"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg></div>
+            <div>
+              <div class="feature-title">Mission Scenario Simulator</div>
+              <div class="feature-desc">Model fire hazards across ISS, Artemis Lunar Habitat (34% O₂), and Deep Space environments.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            const navBtn = Array.from(document.querySelectorAll('.nav-tab')).find(b => b.getAttribute('onclick')?.includes(tabName));
-            if (navBtn) navBtn.classList.add('active');
+<hr class="divider">
 
-            if (tabName === 'explorer') {
-                fetchExperiments(currentPage);
-            } else if (tabName === 'compare') {
-                renderCompareView();
-            } else if (tabName === 'scenario') {
-                loadScenario('iss');
-            }
-        }
+<!-- FLIGHT FAMILIES -->
+<section class="section" style="background:var(--bg-surface-1)">
+  <div class="container">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px" class="reveal">
+      <div>
+        <div class="section-eyebrow">Flight Investigations</div>
+        <h2 class="section-title-xl">16 <span class="text-gradient">Experiment Families</span></h2>
+      </div>
+      <a href="/explorer" class="btn btn-ghost btn-sm">View All Data →</a>
+    </div>
+    <div class="families-scroll reveal reveal-delay-1">
+      <div class="family-card" style="--card-accent:#00F5FF">
+        <div class="family-name">FLEX</div>
+        <div class="family-count">PSI-69 / PSI-70 · 96 EXPERIMENTS</div>
+        <div class="family-desc">Flame Extinction in a Droplet. Spherical droplet combustion and cool-flame phenomena in microgravity.</div>
+      </div>
+      <div class="family-card" style="--card-accent:#FF6B35">
+        <div class="family-name">BASS</div>
+        <div class="family-count">PSI-25 · 44 EXPERIMENTS</div>
+        <div class="family-desc">Burning and Suppression of Solids. Solid material flammability under forced convective airflow.</div>
+      </div>
+      <div class="family-card" style="--card-accent:#FF1744">
+        <div class="family-name">SAFFIRE</div>
+        <div class="family-count">PSI-98 · I–VI · 72 EXPERIMENTS</div>
+        <div class="family-desc">Spacecraft Fire Safety. Large-scale fire propagation aboard unmanned Cygnus vehicles post-ISS departure.</div>
+      </div>
+      <div class="family-card" style="--card-accent:#2979FF">
+        <div class="family-name">ACME</div>
+        <div class="family-count">CIR · 58 EXPERIMENTS</div>
+        <div class="family-desc">Advanced Combustion via Microgravity Experiments. Flame structure and soot formation studies.</div>
+      </div>
+      <div class="family-card" style="--card-accent:#9B59B6">
+        <div class="family-name">SOFIE</div>
+        <div class="family-count">84 EXPERIMENTS</div>
+        <div class="family-desc">Solid Fuel Ignition and Extinction. Ignition boundaries and extinction limits for solid fuels.</div>
+      </div>
+      <div class="family-card" style="--card-accent:#00E676">
+        <div class="family-name">SLICE</div>
+        <div class="family-count">63 EXPERIMENTS</div>
+        <div class="family-desc">Structure and Liftoff in Combustion Experiment. Jet diffusion flame structure and blowout limits.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        async function initPlatform() {
-            try {
-                const res = await fetch('/api/stats');
-                const stats = await res.json();
+<hr class="divider">
 
-                document.getElementById('kpiTotal').innerText = stats.total_experiments;
-                document.getElementById('kpiFuels').innerText = stats.total_fuels;
+<!-- MISSION ENVIRONMENTS -->
+<section class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:56px">
+      <div class="section-eyebrow" style="justify-content:center">Planetary Fire Risk</div>
+      <h2 class="section-title-xl">Mission <span class="text-gradient">Environments</span></h2>
+      <p class="section-desc" style="margin:0 auto;text-align:center">Fire behaves differently in every spacecraft atmosphere. The oxygen fraction and pressure define everything.</p>
+    </div>
+    <div class="env-grid">
+      <div class="env-card reveal" style="--env-color:rgba(41,121,255,0.1)">
+        <div class="env-label" style="color:#2979FF">Standard</div>
+        <div class="env-name">ISS Atmosphere</div>
+        <div class="env-params">
+          <div class="env-param">
+            <div class="env-param-val" style="color:#2979FF">21%</div>
+            <div class="env-param-label">Oxygen</div>
+          </div>
+          <div class="env-param">
+            <div class="env-param-val">101.3</div>
+            <div class="env-param-label">kPa</div>
+          </div>
+        </div>
+        <div class="env-fhi">
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4)">Fire Hazard Index</div>
+          <div class="env-fhi-score" style="color:#2979FF">5.1</div>
+        </div>
+        <div class="hazard-gauge-track"><div class="hazard-gauge-fill" style="width:51%;background:#2979FF;color:#2979FF"></div></div>
+        <div style="margin-top:16px"><span class="badge badge-info">NOMINAL RISK</span></div>
+      </div>
+      <div class="env-card reveal reveal-delay-1" style="--env-color:rgba(255,107,53,0.1)">
+        <div class="env-label" style="color:#FF6B35">Artemis Program</div>
+        <div class="env-name">Lunar Habitat</div>
+        <div class="env-params">
+          <div class="env-param">
+            <div class="env-param-val" style="color:#FF6B35">34%</div>
+            <div class="env-param-label">Oxygen</div>
+          </div>
+          <div class="env-param">
+            <div class="env-param-val">56.5</div>
+            <div class="env-param-label">kPa</div>
+          </div>
+        </div>
+        <div class="env-fhi">
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4)">Fire Hazard Index</div>
+          <div class="env-fhi-score" style="color:#FF6B35">8.3</div>
+        </div>
+        <div class="hazard-gauge-track"><div class="hazard-gauge-fill" style="width:83%;background:#FF6B35;color:#FF6B35"></div></div>
+        <div style="margin-top:16px"><span class="badge badge-elevated">ELEVATED HAZARD</span></div>
+      </div>
+      <div class="env-card reveal reveal-delay-2" style="--env-color:rgba(155,89,182,0.1)">
+        <div class="env-label" style="color:#9B59B6">Emergency Protocol</div>
+        <div class="env-name">Hypoxic Safe-Haven</div>
+        <div class="env-params">
+          <div class="env-param">
+            <div class="env-param-val" style="color:#9B59B6">15%</div>
+            <div class="env-param-label">Oxygen</div>
+          </div>
+          <div class="env-param">
+            <div class="env-param-val">70.3</div>
+            <div class="env-param-label">kPa</div>
+          </div>
+        </div>
+        <div class="env-fhi">
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4)">Fire Hazard Index</div>
+          <div class="env-fhi-score" style="color:#9B59B6">2.1</div>
+        </div>
+        <div class="hazard-gauge-track"><div class="hazard-gauge-fill" style="width:21%;background:#9B59B6;color:#9B59B6"></div></div>
+        <div style="margin-top:16px"><span class="badge badge-nominal">SUPPRESSED</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                renderCharts(stats);
-            } catch (e) {
-                console.error("Stats load error:", e);
-            }
-        }
+<hr class="divider">
 
-        function renderCharts(stats) {
-            const scatterCanvas = document.getElementById('o2BurnChart');
-            const outcomesCanvas = document.getElementById('outcomesChart');
-            if (!scatterCanvas || !outcomesCanvas) return;
+<!-- NAVIGATE TO OTHER PAGES -->
+<section class="section" style="background:var(--bg-surface-1)">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:48px">
+      <div class="section-eyebrow" style="justify-content:center">Platform Modules</div>
+      <h2 class="section-title-xl">Explore the <span class="text-gradient">Platform</span></h2>
+    </div>
+    <div class="nav-cards-grid">
+      <a href="/analytics" class="nav-card reveal">
+        <div>
+          <div class="nav-card-icon" style="background:rgba(0,245,255,0.1);border:1px solid rgba(0,245,255,0.2);color:var(--neon-cyan)">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+          </div>
+          <div class="nav-card-title">Analytics Hub</div>
+          <div class="nav-card-desc">Interactive 3D charts — extinction scatter, airflow correlations, fuel distribution and outcome analysis.</div>
+        </div>
+        <svg class="nav-card-arrow" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+      </a>
+      <a href="/explorer" class="nav-card reveal reveal-delay-1">
+        <div>
+          <div class="nav-card-icon" style="background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.2);color:#FF6B35">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="nav-card-title">Data Explorer</div>
+          <div class="nav-card-desc">Browse, filter, and inspect all 484 NASA flight experiments with full telemetry inspection.</div>
+        </div>
+        <svg class="nav-card-arrow" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+      </a>
+      <a href="/simulator" class="nav-card reveal reveal-delay-2">
+        <div>
+          <div class="nav-card-icon" style="background:rgba(155,89,182,0.1);border:1px solid rgba(155,89,182,0.2);color:#9B59B6">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="nav-card-title">Mission Simulator</div>
+          <div class="nav-card-desc">Simulate fire hazard indices across ISS, Artemis Lunar, and custom spacecraft atmospheres.</div>
+        </div>
+        <svg class="nav-card-arrow" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+      </a>
+      <a href="/ai" class="nav-card reveal reveal-delay-3">
+        <div>
+          <div class="nav-card-icon" style="background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.2);color:#00E676">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div class="nav-card-title">AI Research Assistant</div>
+          <div class="nav-card-desc">Ask GPT-6-luna specialized NASA combustion questions with context-aware scientific answers.</div>
+        </div>
+        <svg class="nav-card-arrow" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
 
-            const scatterData = stats.o2_vs_burn_scatter.map(pt => ({
-                x: pt.oxygen_pct,
-                y: pt.burn_time_s
-            }));
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <img src="/images/Fire-X.jpeg" alt="FIRE-X" class="footer-brand-logo">
+          <div class="footer-brand-name">NASA FIRE-X</div>
+        </div>
+        <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);max-width:320px;line-height:1.6">AI-Powered Fire Safety Insights from Microgravity Combustion Data. NASA Space Apps Challenge 2026.</p>
+      </div>
+      <div style="display:flex;gap:48px">
+        <div>
+          <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">Platform</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="/analytics" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='#00F5FF'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Analytics Hub</a>
+            <a href="/explorer" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='#00F5FF'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Data Explorer</a>
+            <a href="/simulator" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='#00F5FF'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Mission Simulator</a>
+            <a href="/ai" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem;transition:color 0.2s" onmouseover="this.style.color='#00F5FF'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">AI Assistant</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">Data</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="color:rgba(255,255,255,0.55);font-size:0.85rem">NASA PSI</span>
+            <span style="color:rgba(255,255,255,0.55);font-size:0.85rem">NASA NTRS</span>
+            <span style="color:rgba(255,255,255,0.55);font-size:0.85rem">ISS Research</span>
+            <a href="/about" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem">Documentation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 NASA FIRE-X · Built for NASA Space Apps Challenge</p>
+      <p>Data: NASA Physical Science Informatics (PSI) · 484 canonical experiments</p>
+    </div>
+  </div>
+</footer>
 
-            if (o2ChartInstance) {
-                o2ChartInstance.destroy();
-                o2ChartInstance = null;
-            }
+<script src="/static/js/nav.js"></script>
+<script>
+// UTC Clock
+setInterval(() => {
+  const now = new Date();
+  const utc = now.toISOString().replace('T',' ').substring(0,19) + ' UTC';
+  const el = document.getElementById('hero-clock-val');
+  if (el) el.textContent = utc;
+}, 1000);
 
-            o2ChartInstance = new Chart(scatterCanvas.getContext('2d'), {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'NASA PSI Tests',
-                        data: scatterData,
-                        backgroundColor: 'rgba(56, 189, 248, 0.75)',
-                        borderColor: '#38bdf8',
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false, /* Turn off animation to save CPU/GPU */
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Oxygen Concentration (%)', color: '#9ca3af' },
-                            grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#9ca3af' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Burn Duration (s)', color: '#9ca3af' },
-                            grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#9ca3af' }
-                        }
-                    }
-                }
-            });
+// Counter animation
+const counters = [
+  { id: 'stat-exp', target: 484, suffix: '', prefix: '' },
+  { id: 'stat-fam', target: 16, suffix: '', prefix: '' },
+  { id: 'stat-scen', target: 3, suffix: '', prefix: '' },
+  { id: 'stat-int', target: 99.8, suffix: '%', prefix: '', decimals: 1 }
+];
+const animateCounter = (el, target, suffix, decimals) => {
+  const duration = 2000;
+  const start = performance.now();
+  const step = (now) => {
+    const progress = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const val = target * ease;
+    el.textContent = (decimals ? val.toFixed(decimals) : Math.floor(val)) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+};
+const statsObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      counters.forEach(c => {
+        const el = document.getElementById(c.id);
+        if (el) animateCounter(el, c.target, c.suffix || '', c.decimals || 0);
+      });
+      statsObs.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+const statsEl = document.querySelector('.stats-band');
+if (statsEl) statsObs.observe(statsEl);
 
-            if (outcomesChartInstance) {
-                outcomesChartInstance.destroy();
-                outcomesChartInstance = null;
-            }
+// Three.js particle system — microgravity fire particles
+(function() {
+  const canvas = document.getElementById('particles-canvas');
+  if (!canvas) return;
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
+  script.onload = () => initParticles(canvas);
+  document.head.appendChild(script);
+})();
 
-            outcomesChartInstance = new Chart(outcomesCanvas.getContext('2d'), {
-                type: 'doughnut',
-                data: {
-                    labels: stats.outcomes.map(o => o.outcome),
-                    datasets: [{
-                        data: stats.outcomes.map(o => o.count),
-                        backgroundColor: ['#38bdf8', '#f97316', '#10b981', '#fbbf24', '#a855f7', '#f43f5e'],
-                        borderWidth: 1,
-                        borderColor: '#111827'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: false, /* Turn off animation to save CPU/GPU */
-                    plugins: {
-                        legend: { position: 'right', labels: { color: '#d1d5db', font: { size: 10 } } }
-                    }
-                }
-            });
-        }
+function initParticles(canvas) {
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(canvas.parentElement.clientWidth, canvas.parentElement.clientHeight);
+  renderer.setClearColor(0x000000, 0);
 
-        async function fetchExperiments(page = 1) {
-            currentPage = page;
-            const q = document.getElementById('explorerQuery').value.trim();
-            const family = document.getElementById('familySelect').value;
-            const outcome = document.getElementById('outcomeSelect').value;
-            const minO2 = document.getElementById('minO2Range').value;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, canvas.parentElement.clientWidth / canvas.parentElement.clientHeight, 0.1, 1000);
+  camera.position.z = 5;
 
-            const url = `/api/experiments?page=${page}&limit=12&q=${encodeURIComponent(q)}&family=${encodeURIComponent(family)}&outcome=${encodeURIComponent(outcome)}&min_o2=${minO2}`;
+  // Create particles
+  const N = 1200;
+  const positions = new Float32Array(N * 3);
+  const colors = new Float32Array(N * 3);
+  const sizes = new Float32Array(N);
+  const velocities = [];
 
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                totalPages = data.pages || 1;
+  for (let i = 0; i < N; i++) {
+    positions[i*3] = (Math.random() - 0.5) * 14;
+    positions[i*3+1] = (Math.random() - 0.5) * 10;
+    positions[i*3+2] = (Math.random() - 0.5) * 6;
+    // Color: cyan to orange spectrum
+    const t = Math.random();
+    if (t < 0.5) { colors[i*3]=0; colors[i*3+1]=t*1.96+0.02; colors[i*3+2]=1; }
+    else { colors[i*3]=1; colors[i*3+1]=(1-t)*0.8+0.1; colors[i*3+2]=0; }
+    sizes[i] = Math.random() * 3 + 1;
+    velocities.push({ x:(Math.random()-0.5)*0.002, y:(Math.random()-0.5)*0.002, z:(Math.random()-0.5)*0.001 });
+  }
 
-                document.getElementById('totalRecords').innerText = data.total;
-                const start = data.total === 0 ? 0 : (currentPage - 1) * 12 + 1;
-                const end = Math.min(currentPage * 12, data.total);
-                document.getElementById('pageRange').innerText = `${start}-${end}`;
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-                document.getElementById('btnPrev').disabled = currentPage <= 1;
-                document.getElementById('btnNext').disabled = currentPage >= totalPages;
+  const mat = new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false });
+  const particles = new THREE.Points(geo, mat);
+  scene.add(particles);
 
-                const tbody = document.getElementById('experimentsTableBody');
-                if (data.records.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem; color: #9ca3af;">No matching NASA experiments found.</td></tr>';
-                    return;
-                }
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', e => { mouseX = (e.clientX/window.innerWidth-0.5)*0.5; mouseY = (e.clientY/window.innerHeight-0.5)*0.3; });
 
-                tbody.innerHTML = data.records.map(r => {
-                    const isChecked = selectedExperiments.has(r.experiment_id) ? 'checked' : '';
-                    let pillClass = 'pill-blue';
-                    if (r.dataset_family === 'BASS-II') pillClass = 'pill-green';
-                    if (r.dataset_family === 'SAFFIRE-I') pillClass = 'pill-amber';
+  function animate() {
+    requestAnimationFrame(animate);
+    const pos = geo.attributes.position.array;
+    for (let i = 0; i < N; i++) {
+      pos[i*3] += velocities[i].x;
+      pos[i*3+1] += velocities[i].y;
+      pos[i*3+2] += velocities[i].z;
+      if (Math.abs(pos[i*3]) > 7) velocities[i].x *= -1;
+      if (Math.abs(pos[i*3+1]) > 5) velocities[i].y *= -1;
+    }
+    geo.attributes.position.needsUpdate = true;
+    particles.rotation.y += 0.0003;
+    particles.rotation.x += 0.0001;
+    camera.position.x += (mouseX - camera.position.x) * 0.02;
+    camera.position.y += (-mouseY - camera.position.y) * 0.02;
+    camera.lookAt(scene.position);
+    renderer.render(scene, camera);
+  }
+  animate();
 
-                    return `
-                        <tr>
-                            <td>
-                                <input type="checkbox" onchange="toggleCompare('${r.experiment_id}', this.checked)" ${isChecked}>
-                            </td>
-                            <td>
-                                <span class="pill ${pillClass}">${r.dataset_family}</span>
-                                <div style="font-weight: 600; margin-top: 3px; font-family: var(--font-mono); font-size: 0.82rem;">${r.experiment_id}</div>
-                            </td>
-                            <td style="font-weight: 500; color: #fff;">${r.fuel_material}</td>
-                            <td>${r.oxygen_pct !== null ? r.oxygen_pct + '%' : 'N/A'}</td>
-                            <td>${r.pressure_mmhg !== null ? r.pressure_mmhg + ' mmHg' : 'N/A'}</td>
-                            <td>${r.burn_time_s !== null ? r.burn_time_s + ' s' : 'N/A'}</td>
-                            <td><span class="pill pill-blue">${r.extinction_outcome || 'Completed'}</span></td>
-                            <td>
-                                <button class="btn-inspect" onclick="openDetailModal('${r.experiment_id}')">Inspect</button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-
-            } catch (e) {
-                console.error("Experiment fetch error:", e);
-            }
-        }
-
-        function changePage(delta) {
-            const newPage = currentPage + delta;
-            if (newPage >= 1 && newPage <= totalPages) {
-                fetchExperiments(newPage);
-            }
-        }
-
-        function debounceFetch() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => fetchExperiments(1), 250);
-        }
-
-        function updateO2Filter() {
-            const val = document.getElementById('minO2Range').value;
-            document.getElementById('lblMinO2').innerText = val + '%';
-            fetchExperiments(1);
-        }
-
-        function filterByFamily(family) {
-            switchTab('explorer');
-            document.getElementById('familySelect').value = family;
-            fetchExperiments(1);
-        }
-
-        function toggleCompare(id, checked) {
-            if (checked) {
-                if (selectedExperiments.size >= 4) {
-                    alert("You can select up to 4 experiments to compare.");
-                    return;
-                }
-                selectedExperiments.add(id);
-            } else {
-                selectedExperiments.delete(id);
-            }
-            document.getElementById('compareBadgeCount').innerText = selectedExperiments.size;
-        }
-
-        async function renderCompareView() {
-            const container = document.getElementById('compareContainer');
-            const emptyState = document.getElementById('compareEmptyState');
-            const cardsDiv = document.getElementById('compareCards');
-
-            if (selectedExperiments.size === 0) {
-                container.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            }
-
-            emptyState.style.display = 'none';
-            container.style.display = 'block';
-
-            try {
-                const res = await fetch('/api/compare', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ experiment_ids: Array.from(selectedExperiments) })
-                });
-                const data = await res.json();
-
-                cardsDiv.innerHTML = data.experiments.map(exp => `
-                    <div class="compare-card">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.8rem;">
-                            <div>
-                                <span class="family-badge family-flex">${exp.dataset_family}</span>
-                                <h3 style="font-family: var(--font-display); font-size: 1.3rem; color: #fff;">${exp.experiment_id}</h3>
-                            </div>
-                            <button class="btn-inspect" onclick="toggleCompare('${exp.experiment_id}', false); renderCompareView();">Remove</button>
-                        </div>
-                        <h4 style="color: var(--accent-blue); margin-bottom: 0.8rem;">${exp.fuel_material}</h4>
-                        <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.86rem;">
-                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 3px;">
-                                <span style="color: var(--text-muted);">Oxygen %:</span>
-                                <b>${exp.oxygen_pct}%</b>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 3px;">
-                                <span style="color: var(--text-muted);">Pressure:</span>
-                                <b>${exp.pressure_mmhg} mmHg</b>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 3px;">
-                                <span style="color: var(--text-muted);">Burn Duration:</span>
-                                <b>${exp.burn_time_s} s</b>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 3px;">
-                                <span style="color: var(--text-muted);">Outcome:</span>
-                                <b style="color: #6ee7b7;">${exp.extinction_outcome}</b>
-                            </div>
-                        </div>
-                        <div style="margin-top: 1rem;">
-                            <a href="${exp.source_url}" target="_blank" class="source-badge">NASA PSI Record ↗</a>
-                        </div>
-                    </div>
-                `).join('');
-
-            } catch (e) {
-                console.error("Compare error:", e);
-            }
-        }
-
-        async function openDetailModal(id) {
-            try {
-                const res = await fetch(`/api/experiments/${id}`);
-                const data = await res.json();
-
-                document.getElementById('modalFamilyBadge').innerText = data.investigation_id || data.dataset_family;
-                document.getElementById('modalTestId').innerText = data.experiment_id;
-                document.getElementById('modalMaterial').innerText = data.fuel_material;
-                document.getElementById('modalO2').innerText = data.oxygen_pct !== null ? data.oxygen_pct + '%' : 'N/A';
-                document.getElementById('modalPressure').innerText = data.pressure_mmhg ? `${data.pressure_mmhg} mmHg` : 'N/A';
-                document.getElementById('modalBurnTime').innerText = data.burn_time_s ? `${data.burn_time_s} s` : 'N/A';
-                document.getElementById('modalExtDiam').innerText = data.extinction_diameter_mm ? `${data.extinction_diameter_mm} mm` : 'N/A';
-                document.getElementById('modalOutcome').innerText = data.extinction_outcome || 'N/A';
-                document.getElementById('modalAirflow').innerText = data.airflow_velocity_cms ? `${data.airflow_velocity_cms} cm/s` : '0.0 cm/s';
-                document.getElementById('modalNotes').innerText = data.notes || data.sample_description || 'Standard microgravity test condition.';
-                document.getElementById('modalSourceOrg').innerText = data.source_name;
-                document.getElementById('modalSourceLink').href = data.source_url;
-
-                document.getElementById('detailModal').classList.add('active');
-            } catch (e) {
-                alert("Could not load details for: " + id);
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('detailModal').classList.remove('active');
-        }
-
-        async function loadScenario(scenarioId, btn = null) {
-            if (btn) {
-                document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            }
-
-            try {
-                const res = await fetch(`/api/mission-scenario/${scenarioId}`);
-                const data = await res.json();
-
-                document.getElementById('scenTitle').innerText = data.scenario.name;
-                document.getElementById('scenAtmo').innerText = data.scenario.atmosphere;
-                document.getElementById('scenDesc').innerText = data.scenario.description;
-                document.getElementById('scenInsight').innerText = data.scenario.safety_insight;
-
-                const tbody = document.getElementById('scenarioTableBody');
-                tbody.innerHTML = data.matching_experiments.map(r => `
-                    <tr>
-                        <td><b>${r.experiment_id}</b></td>
-                        <td>${r.dataset_family}</td>
-                        <td style="color:#fff;">${r.fuel_material}</td>
-                        <td>${r.oxygen_pct}%</td>
-                        <td>${r.pressure_mmhg} mmHg</td>
-                        <td>${r.burn_time_s} s</td>
-                        <td><span class="pill pill-blue">${r.extinction_outcome}</span></td>
-                        <td><a href="${r.source_url}" target="_blank" class="source-badge">PSI ↗</a></td>
-                    </tr>
-                `).join('');
-
-            } catch (e) {
-                console.error("Scenario error:", e);
-            }
-        }
-
-        function triggerHomeSearch() {
-            const query = document.getElementById('homeSearchInput').value.trim();
-            if (!query) return;
-            switchTab('ai');
-            document.getElementById('aiInput').value = query;
-            runAiQuery();
-        }
-
-        function setAiQuery(q) {
-            document.getElementById('aiInput').value = q;
-            runAiQuery();
-        }
-
-        async function runAiQuery() {
-            const query = document.getElementById('aiInput').value.trim();
-            if (!query) return;
-
-            document.getElementById('aiLoading').style.display = 'block';
-            document.getElementById('aiResultBox').style.display = 'none';
-
-            try {
-                const res = await fetch('/api/ask-ai', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question: query })
-                });
-                const data = await res.json();
-
-                document.getElementById('aiQueryEcho').innerText = `"${data.query}"`;
-                document.getElementById('aiSampleBadge').innerText = `NASA Empirical Matches: ${data.sample_size}`;
-                document.getElementById('aiSummary').innerText = data.report_summary;
-                document.getElementById('aiThermal').innerText = data.thermal;
-                document.getElementById('aiExtinction').innerText = data.extinction;
-                document.getElementById('aiRecommendation').innerText = data.recommendation;
-                document.getElementById('aiLimitations').innerText = data.limitations;
-
-                const tbody = document.getElementById('aiEvidenceTable');
-                tbody.innerHTML = data.rows.map(r => `
-                    <tr>
-                        <td><b>${r.experiment_id}</b></td>
-                        <td>${r.dataset_family}</td>
-                        <td style="color:#fff;">${r.fuel_material}</td>
-                        <td>${r.oxygen_pct !== null ? r.oxygen_pct + '%' : 'N/A'}</td>
-                        <td>${r.pressure_mmhg} mmHg</td>
-                        <td>${r.burn_time_s} s</td>
-                        <td><span class="pill pill-blue">${r.extinction_outcome}</span></td>
-                        <td><a href="${r.source_url}" target="_blank" class="source-badge">PSI ↗</a></td>
-                    </tr>
-                `).join('');
-
-                document.getElementById('aiLoading').style.display = 'none';
-                document.getElementById('aiResultBox').style.display = 'block';
-
-            } catch (e) {
-                document.getElementById('aiLoading').style.display = 'none';
-                alert("AI service error: " + e);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initPlatform();
-        });
-    </script>
+  window.addEventListener('resize', () => {
+    const w = canvas.parentElement.clientWidth, h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  });
+}
+</script>
 </body>
 </html>

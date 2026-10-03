@@ -1,0 +1,32 @@
+# Environment & secrets — NEVER commit these
+.env
+*.env
+.env.local
+.env.production
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+
+# SQLite DBs
+*.db
+
+# Data files (optional — add back if desired)
+# data/processed/
+
+# System
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs
+*.log

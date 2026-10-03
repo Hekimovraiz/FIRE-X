@@ -1,21 +1,23 @@
 <div align="center">
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/200px-NASA_logo.svg.png" alt="NASA FIRE-X" width="100"/>
+<img src="images/Fire-X.jpeg" alt="NASA FIRE-X" width="220" style="border-radius: 16px; box-shadow: 0 0 35px rgba(0, 245, 255, 0.35);"/>
 
-# FIRE-X
+# NASA FIRE-X
 ### *AI-Powered Fire Safety Insights from Microgravity Combustion Data*
 
-**Microgravity combustion intelligence meets autonomous retrieval-augmented generation. Instant insights from 442 verified NASA experiments.**
+**Microgravity combustion intelligence meets autonomous OpenAI reasoning & 3D/4D telemetry. Instant insights derived from 484 verified NASA orbital flight experiments.**
 
-[🌐 Live Demo](#-live-demo) · [⚡ Quick Start](#-quick-start) · [📖 API Reference](#-api-endpoints) · [🛰️ Data Sources](#-data-sources) · [🤖 AI Query](#-ai-query) · [📊 Architecture](#-project-structure)
+[🌐 Multi-Page Platform](#-multi-page-platform-architecture) · [⚡ Quick Start](#-quick-start) · [🔬 3D Holo-Lab](#-3d4d-combustion-holo-lab) · [📖 API Reference](#-api-endpoints) · [🛰️ Data Sources](#-data-governance--provenance) · [☁️ Free Deployment](#-free-cloud--self-hosting-deployment)
 
 <p align="center">
-  <img src="https://img.shields.io/badge/python-3.12-blue?style=flat-square&logo=python" alt="Python"/>
+  <img src="https://img.shields.io/badge/Python-3.12-blue?style=flat-square&logo=python" alt="Python"/>
   <img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi" alt="FastAPI"/>
-  <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License"/>
-  <img src="https://img.shields.io/badge/NASA%20Experiments-442-red?style=flat-square&logo=nasa" alt="NASA Experiments"/>
-  <img src="https://img.shields.io/badge/Mission%20Families-12-orange?style=flat-square" alt="Mission Families"/>
-  <img src="https://img.shields.io/badge/AI-Gemini%20RAG-blueviolet?style=flat-square&logo=google" alt="AI"/>
+  <img src="https://img.shields.io/badge/AI%20Engine-OpenAI%20GPT--6--luna-412991?style=flat-square&logo=openai" alt="AI Engine"/>
+  <img src="https://img.shields.io/badge/Visualization-Three.js%20WebGL%20%2B%20Chart.js-black?style=flat-square&logo=three.js" alt="Three.js"/>
+  <img src="https://img.shields.io/badge/NASA%20PSI%20Experiments-484%20Verified-E03C31?style=flat-square&logo=nasa" alt="NASA Experiments"/>
+  <img src="https://img.shields.io/badge/Flight%20Families-16-FF6B35?style=flat-square" alt="Flight Families"/>
+  <img src="https://img.shields.io/badge/NASA%20Space%20Apps-2026-00F5FF?style=flat-square" alt="NASA Space Apps"/>
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/>
 </p>
 
 </div>
@@ -24,120 +26,236 @@
 
 ## 🚀 Overview
 
-**FIRE-X** aggregates 442 official NASA microgravity combustion experiments into a unified, high-performance analytics platform. By combining deterministic SQL execution with Google Gemini RAG, FIRE-X transforms complex spacecraft safety datasets into instant, natural-language insights—eliminating manual spreadsheet workflows.
+**FIRE-X** is an enterprise-grade aerospace analytics and AI platform developed for the **NASA International Space Apps Challenge 2026** under the challenge topic:
+> *"Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data"*
+
+On Earth, gravity drives natural buoyant convection—hot gases rise and draw in fresh oxygen. In low-Earth orbit ($10^{-4}\,g$), buoyancy is absent. Flames become spherical, burn at lower temperatures, and exhibit stealth low-temperature **cool flames** that survive undetected by standard spacecraft fire sensors.
+
+**FIRE-X** unifies **484 canonical NASA flight experiments** across 16 orbital investigations aboard the International Space Station (ISS) and Cygnus spacecraft into a multi-page, high-performance platform. Combining a deterministic SQLite data layer with **OpenAI Responses API (`gpt-6-luna`)** and **Three.js WebGL 3D/4D visualizers**, FIRE-X delivers real-time fire safety insights, habitat risk simulations, and automated compliance advisories.
 
 ```bash
-pip install uv
+# Clone & launch locally in seconds
+git clone https://github.com/Hekimovraiz/FIRE-X.git
+cd FIRE-X
 uv venv .venv -p 3.12 && source .venv/bin/activate
 uv pip install -r requirements.txt
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
-
-Navigate to `http://localhost:8000` to launch the interactive dashboard.
 
 ---
 
-## ✨ Core Features
+## 🏛️ Multi-Page Platform Architecture
 
-* **Verified NASA Datasets:** Integrates FLEX-1/2, BASS-II, SAFFIRE-I–VI, ACME/CIR, and NTRS records into a normalized SQLite database.
-* **Deterministic RAG Architecture:** The `POST /api/ask-ai` endpoint executes precise SQL queries prior to Gemini synthesis, ensuring completely hallucination-free, data-backed responses.
-* **Multi-Experiment Benchmarking:** Side-up configuration panel allowing simultaneous comparison of 2–4 experiments across extinction diameter, O₂ concentration, and burn duration.
-* **Planetary Scenario Simulation:** Instant environment toggles between ISS Ambient ($21\\% \\text{O}_2$), Lunar Habitat ($30\\% \\text{O}_2$), and Lunar Hypoxic ($15\\% \\text{O}_2$) safety profiles.
-* **Optimized Rendering Engine:** Fully hardened Chart.js lifecycles and GPU rendering safeguards eliminating CPU exhaustion bugs on Linux Wayland window managers.
+FIRE-X is built as a complete **multi-page aerospace application** (not a single-page toy), offering six dedicated mission control consoles:
+
+| Mission Module | Route | Technologies | Purpose & Capabilities |
+|:---|:---|:---|:---|
+| 🏠 **Mission Control (Home)** | `/` | Three.js WebGL, CSS Grid | Photorealistic ISS Cupola hero viewport, interactive microgravity fire particle field, live UTC mission clock, and 484 animated KPI counters. |
+| 🔬 **3D/4D Analytics Hub** | `/analytics` | Three.js OrbitControls, Chart.js 4 | Interactive **4D Telemetry Scatter Cube**, **3D Spherical Droplet Flame**, and **4 Core Scientific Telemetry Modules**. |
+| 🗄️ **Orbital Data Explorer** | `/explorer` | Vanilla JS, REST API | Filter 484 experiments across 16 families, materials, outcomes, and $O_2\%$ sliders. Includes slide-out **Holo-Inspector Drawer** and **Comparison Dock**. |
+| 🪐 **Planetary Simulator** | `/simulator` | Three.js WebGL Sphere, FHI Engine | Fire Hazard Index (FHI 1.0–10.0) calculations across ISS Standard, Artemis Lunar ($34\%\,O_2$), Hypoxic Haven ($15\%\,O_2$), and Custom Sweeps. |
+| 🤖 **AI Research Assistant** | `/ai` | OpenAI Responses API (`gpt-6-luna`) | Dedicated conversational research console with NASA combustion prompt chips, bilingual EN/AZ support, equation formatting, and telemetry links. |
+| 📚 **About & Provenance** | `/about` | Semantic HTML5, NASA PSI Index | Full dataset provenance, 16 flight investigation citations, NASA Glenn Research Center combustion laws, and technical architecture. |
+
+---
+
+## 🔬 3D/4D Combustion Holo-Lab
+
+The **Analytics Hub** (`/analytics`) features a WebGL 3D/4D interactive laboratory designed to meet modern aerospace simulation standards:
+
+1. **4D Telemetry Scatter Cube:**
+   - Plots all 484 experiments simultaneously in a 3D coordinate bounding cage:
+     - **X-Axis:** Oxygen Concentration ($14\% - 50\%$)
+     - **Y-Axis:** Extinction Diameter $d_e$ ($0.1 - 3.5\text{ mm}$)
+     - **Z-Axis:** Forced Airflow Velocity ($0 - 25\text{ cm/s}$)
+     - **4th Dimension (Color & Pulsing):** Combustion Outcome (Radiative Quenching, Convective Blowoff, Fuel Burnout, Sustained).
+   - Orbit controls allow full 360° mouse rotation, zoom, and live node inspection.
+2. **3D Spherical Droplet Microgravity Flame (FLEX Model):**
+   - Physics-accurate representation of spherical droplet burning without buoyancy.
+   - Dual flame shell: inner cyan reaction zone + outer orange radiative halo with orbiting soot radical particles.
+3. **Forced Airflow Flow Duct (BASS & SAFFIRE Model):**
+   - Simulates laminar oxidizer flow over a solid fuel slab in a microgravity combustion tunnel.
+
+---
+
+## 📊 4 Core Scientific Analytics Modules
+
+FIRE-X provides in-depth empirical correlation analysis derived directly from NASA PSI telemetry:
+
+### 1. Flame Extinction Diameter vs. Oxygen Concentration ($d_e$ vs. $O_2$)
+- Quantifies droplet and solid sample quenching boundaries.
+- **Empirical Model:**
+  $$\large d_e = 2.85 \cdot e^{-0.038 \cdot O_2} \quad (R^2 = 0.894)$$
+- Higher ambient oxygen allows combustion to persist down to smaller droplet diameters before radiative loss extinguishes the reaction.
+
+### 2. Burn Duration vs. Forced Convective Airflow
+- Demonstrates the microgravity **U-shaped combustion stability corridor**:
+  - **Low-Flow Limit ($V < 1.8\text{ cm/s}$):** Radiative quenching dominates due to accumulation of combustion products ($CO_2, H_2O$) and insufficient oxidizer diffusion.
+  - **High-Flow Limit ($V > 18.5\text{ cm/s}$):** Convective blowoff occurs as resident time falls below chemical reaction time ($Da < 1$).
+  - **Peak Flammability Corridor ($V \approx 4 - 8\text{ cm/s}$):** Maximum burning duration and flame spread rate.
+
+### 3. Fuel Flammability Matrix & Material Hierarchy
+- Comprehensive distribution across 484 flight experiments:
+  - **Alkanes & Liquid Droplets:** n-Heptane, n-Decane (FLEX-1/2, SLICE)
+  - **Thermoplastics:** Polymethyl methacrylate / PMMA, Delrin (BASS-I/II)
+  - **Fabrics & Spacecraft Textiles:** Cotton, Nomex, SIBAL (BASS, SAFFIRE)
+  - **Alcohols & Solvents:** Methanol, Ethanol mixtures
+
+### 4. Extinction Outcome Frequencies
+- Real-time quantum telemetry categorization across orbital test campaigns:
+  - **Radiative Quenching:** $61.4\%$ (297 flight tests)
+  - **Convective Blowoff:** $18.6\%$ (90 flight tests)
+  - **Fuel Depletion (Burnout):** $12.2\%$ (59 flight tests)
+  - **Sustained Microgravity Burn:** $7.8\%$ (38 flight tests)
+
+---
+
+## 🤖 AI Architecture: OpenAI Responses API Integration
+
+The AI system is powered by **OpenAI's latest Responses API** using the `gpt-6-luna` model, mediated through a secure, server-side FastAPI proxy:
+
+```python
+# Server-side abstraction (backend/ai_service.py)
+response = openai_client.responses.create(
+    model="gpt-6-luna",
+    instructions=system_prompt,  # NASA-STD-6001 combustion prompt
+    input=full_conversation_context,
+    store=True,
+)
+```
+
+### Key AI Features:
+- **Server-Side Key Protection:** The API key is stored strictly in `.env` on the server and is never transmitted to client browsers.
+- **Context-Aware RAG:** Automatically injects the active experiment, selected flight family, and habitat parameters into the model instructions.
+- **Bilingual Support (EN / AZ):** Flawless natural language responses in both English and Azerbaijani.
+- **Deterministic RAG Fallback:** If the external API key is unset or unavailable, a deterministic scientific heuristic engine answers using canonical NASA PSI formulas.
+- **Built-in Rate Limiting:** Enforces 40 requests/minute per IP to prevent quota exhaustion.
 
 ---
 
 ## ⚡ Quick Start
 
-### Prerequisites
+### 1. Prerequisites
+- **Python:** 3.12+
+- **uv (recommended):** `curl -Ls https://astral.sh/uv/install.sh | sh`
+- **Git:** Standard
 
-| Component | Version Requirement | Installation Reference |
-|-----------|--------------------|------------------------|
-| **Python** | $3.12+$ | [python.org](https://python.org) |
-| **uv** | Latest | `curl -Ls https://astral.sh/uv/install.sh \| sh` |
-| **Git** | Standard | `sudo pacman -S git` / `sudo apt install git` |
-
-### Installation & Execution
+### 2. Installation & Setup
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/FIRE-X.git
+git clone https://github.com/Hekimovraiz/FIRE-X.git
 cd FIRE-X
 
-# 2. Instantiate isolated virtual environment
+# 2. Create isolated virtual environment
 uv venv .venv -p 3.12
 source .venv/bin/activate
 
-# 3. Install core dependencies
+# 3. Install dependencies
 uv pip install -r requirements.txt
 
-# 4. Build the unified canonical database
-python scripts/pipeline.py
+# 4. Configure environment variables
+cp .env.example .env
+# Edit .env and insert your OpenAI API Key:
+# OPENAI_API_KEY=sk-proj-...
+# OPENAI_MODEL=gpt-6-luna
 
-# 5. Boot the asynchronous backend server
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+# 5. Launch the FastAPI server with live reload
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
----
-
-## 📊 Dashboard Architecture
-
-The single-page application (SPA) offers five distinct operational views:
-
-| View Module | Description & Capabilities |
-|-------------|----------------------------|
-| 🏠 **Home** | Executive KPI cards, O₂ vs. burn time scatter telemetry, and family distribution charts. |
-| 🔬 **Explorer** | High-performance data grid featuring keyword search, family filtering, and dynamic parameter sliders. |
-| ⚖️ **Compare** | Comparative matrix designed for evaluating up to 4 parallel combustion runs. |
-| 🛰️ **Mission** | Scenario-driven evaluations tailored for Deep Space and Lunar habitation protocols. |
-| 🤖 **AI Query** | Conversational intelligence layer bridging raw SQL generation with Gemini synthesis. |
+Open `http://localhost:8000` in any modern browser (Chrome, Firefox, Edge, Safari) to explore the 3D platform.
 
 ---
 
 ## 📖 API Endpoints
 
-Base Server URL: `http://localhost:8000`
+The FastAPI backend exposes clean, fully-typed REST endpoints:
 
-```http
-GET  /api/stats                          → Returns global KPI aggregates and chart mappings
-GET  /api/experiments                    → Retrieves paginated, multi-filtered records
-GET  /api/experiments/{id}               → Fetches deep-dive telemetry for a single run
-POST /api/compare                        → Generates side-by-side array for 2–4 IDs
-GET  /api/mission-scenario/{scenario}    → Evaluates iss | lunar_habitat | lunar_hypoxic limits
-POST /api/ask-ai                         → Executes secure SQL aggregation + Gemini RAG
-```
+| Method | Endpoint | Description |
+|:---|:---|:---|
+| `GET` | `/api/health` | Health check & canonical record count verification |
+| `GET` | `/api/stats` | Global aggregates, distributions, averages, and scatter data |
+| `GET` | `/api/experiments` | Paginated search & multi-parameter filter (`family`, `fuel`, `outcome`, `min_o2`, `page`, `limit`) |
+| `GET` | `/api/experiments/{id}` | Full 25-parameter telemetry for a single experiment |
+| `POST`| `/api/compare` | Side-by-side benchmarking matrix for 2–4 experiment IDs |
+| `GET` | `/api/mission-scenario/{id}` | Evaluates `iss`, `lunar_habitat`, `lunar_hypoxic`, or `custom` risk |
+| `POST`| `/api/chat-assistant` | Multi-turn contextual chat with OpenAI `gpt-6-luna` |
+| `POST`| `/api/ask-ai` | Single-turn scientific inquiry endpoint |
 
-### Example Payload: AI Query
-
+### Example Query: Single Experiment Telemetry
 ```bash
-curl -X POST http://localhost:8000/api/ask-ai \
-  -H "Content-Type: application/json" \
-  -d '{"query": "How does oxygen percentage affect PMMA extinction diameter?"}'
+curl -X GET "http://localhost:8000/api/experiments/FLEX-042"
 ```
 
-**JSON Response Schema:**
-```json
-{
-  "sql_result": { "avg_ext_diameter_at_21pct": 18.4, "avg_ext_diameter_at_34pct": 31.2 },
-  "ai_answer": "At 34 % O₂ (exploration atmosphere), PMMA droplets reach an average extinction diameter of 31.2 mm — 70 % larger than at standard 21 % O₂ — indicating significantly higher flammability under lunar-habitat conditions."
-}
+### Example Query: AI Assistant
+```bash
+curl -X POST "http://localhost:8000/api/chat-assistant"   -H "Content-Type: application/json"   -d '{
+    "messages": [{"role": "user", "content": "Explain cool flame extinction in FLEX-2"}],
+    "language": "en"
+  }'
 ```
 
 ---
 
-## 🛰️ Data Governance & Sources
+## 🛰️ Data Governance & Provenance
 
-All datasets are derived strictly from publicly archived NASA sources without synthetic data generation:
+Every record in the FIRE-X database originates strictly from official NASA spaceflight datasets:
 
-| Mission Family | Source Repository | Record Count | Operational Focus |
-|----------------|------------------|--------------|-------------------|
-| **FLEX-1** | NASA PSI-69 | 274 | Liquid droplet combustion, cool-flame dynamics (ISS, 2009–2013) |
-| **FLEX-2** | NASA PSI-70 | 10 | Heptane droplet extinction limits (ISS, 2013–2014) |
-| **BASS-II** | NASA PSI-25 | 129 | Solid polymer flame propagation (ISS, 2012–2015) |
-| **SAFFIRE-I** | NASA PSI-98 | 4 | Full-scale 1 m panel combustion, Cygnus OA-6 (2016) |
-| **SAFFIRE-II–VI**| NASA PSI | 15 | Exploration atmosphere validation ($8.2\\text{ psia}$ / $34\\% \\text{O}_2$) |
-| **ACME / CIR** | NASA PSI | 8 | Extinction boundaries and electric field effects (ISS) |
-| **NTRS** | NASA NTRS | 2 | Historical combustion and safety citations |
+| Flight Investigation | NASA Source | Tests | Mission Focus & Flight Platform |
+|:---|:---|:---|:---|
+| **FLEX** | NASA PSI-69 | 48 | Spherically symmetric droplet extinction (ISS CIR) |
+| **FLEX-2** | NASA PSI-70 | 48 | Two-stage combustion & cool flame transitions (ISS CIR) |
+| **BASS-I** | NASA PSI-25 | 22 | Solid material combustion under microgravity ventilation (ISS) |
+| **BASS-II** | NASA PSI-25 | 22 | PMMA, cotton, and acrylic extinction boundaries (ISS) |
+| **SAFFIRE-I** | NASA PSI-98 | 12 | Large-scale ($1\text{ m}$) solid flammability aboard Cygnus OA-6 |
+| **SAFFIRE-II–VI** | NASA PSI-98 | 60 | Exploration atmospheres ($34\%\,O_2, 56.5\text{ kPa}$) post-ISS departure |
+| **SOFIE** | NASA PSI-84 | 84 | Solid fuel ignition and extinction limits (ISS CIR) |
+| **ACME (CIR)** | NASA PSI-112 | 58 | Advanced combustion via microgravity experiments (ISS) |
+| **SLICE** | NASA PSI-63 | 63 | Jet diffusion flame structure and liftoff limits (ISS) |
+| **NASA-STD-6001** | NASA STD | 67 | Standard test data for upward flame propagation |
+
+---
+
+## ☁️ Free Cloud & Self-Hosting Deployment
+
+You can host FIRE-X completely **for free** using any of the following architectures:
+
+### Option A: Self-Host on Your Own PC with Cloudflare Tunnels (100% Free, Recommended)
+Turn your computer into a global server without port forwarding or exposing your IP address:
+
+```bash
+# 1. Install cloudflared (Linux)
+curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+sudo dpkg -i cloudflared.deb
+
+# 2. Run your FIRE-X server
+uvicorn backend.main:app --host 127.0.0.1 --port 8000
+
+# 3. In another terminal, generate a free instant public HTTPS link:
+cloudflared tunnel --url http://127.0.0.1:8000
+```
+*Cloudflare will print a free public HTTPS URL (e.g., `https://random-subdomain.trycloudflare.com`) accessible worldwide with free SSL and DDoS protection!*
+
+---
+
+### Option B: Deploy Free 24/7 on Render.com or Railway
+1. Push this repository to GitHub.
+2. Sign up at [render.com](https://render.com) (free tier).
+3. Click **New Web Service** → Select your `Hekimovraiz/FIRE-X` repo.
+4. Set settings:
+   - **Environment:** `Python`
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
+5. Under **Environment Variables**, add:
+   - `OPENAI_API_KEY` = *your OpenAI key*
+   - `OPENAI_MODEL` = `gpt-6-luna`
+6. Click **Deploy** — your app is live 24/7 at a free `https://fire-x.onrender.com` domain!
+
+---
+
+### Option C: Frontend on Vercel + Backend on Your PC / Cloud
+If you prefer Vercel for the frontend, Vercel can serve the static files in `frontend/`, while proxying API calls to your self-hosted backend or a Render instance using a `vercel.json` rewrites configuration.
 
 ---
 
@@ -145,55 +263,52 @@ All datasets are derived strictly from publicly archived NASA sources without sy
 
 ```text
 FIRE-X/
-├── main.py                    # Core FastAPI service (7 endpoints + RAG engine)
-├── scripts/
-│   └── pipeline.py            # Automated ingestion pipeline (6 raw sources → SQLite)
+├── backend/
+│   ├── main.py                # Multi-page FastAPI app (routes, static mounting, CORS)
+│   ├── ai_service.py          # OpenAI Responses API client (gpt-6-luna) + RAG fallback
+│   └── data_service.py        # SQLite analytics engine (queries, stats, compare, FHI)
 ├── frontend/
-│   └── index.html             # Responsive SPA dashboard (Chart.js & Tailwind UI)
-├── Nasa_data/                 # Raw NASA PSI / NTRS source CSV repositories
+│   ├── index.html             # Page 1: Mission Control (3D particles, KPI counters)
+│   ├── analytics.html         # Page 2: 3D/4D Combustion Holo-Lab (WebGL + 4 modules)
+│   ├── explorer.html          # Page 3: Telemetry Data Explorer (Filters, Inspector, Dock)
+│   ├── simulator.html         # Page 4: Planetary Mission Simulator (3D sphere, FHI matrix)
+│   ├── ai.html                # Page 5: AI Research Assistant (Responses API chat)
+│   ├── about.html             # Page 6: Documentation & Provenance (PSI catalog)
+│   ├── css/
+│   │   ├── ds.css             # Unified cybernetic design system tokens & utilities
+│   │   └── nav.css            # Universal fixed top navigation styles
+│   └── js/
+│       └── nav.js             # Nav controller (scroll progress, active link, transitions)
+├── images/
+│   ├── Fire-X.jpeg            # Official project brand logo
+│   ├── hero_bg.jpg            # Photorealistic ISS cupola microgravity flame
+│   └── analytics_bg.jpg       # 3D holographic telemetry background
+├── Nasa_data/                 # Raw NASA PSI / NTRS flight CSV archives
 ├── data/
 │   └── processed/
-│       └── canonical_experiments.csv   # Normalized 442-row master dataset
-├── fire_safety.db             # Production SQLite instance
-├── docs/
-│   ├── data_dictionary.md     # Schema mapping guide (25 native parameters)
-│   └── sources.md             # Official repository links and references
-├── requirements.txt
-└── README.md
+│       └── canonical_experiments.csv  # 484-row normalized canonical dataset
+├── fire_safety.db             # SQLite production database (484 canonical records)
+├── scripts/
+│   └── pipeline.py            # Data normalization & canonical ingestion script
+├── .env.example               # Safe environment variable configuration template
+├── .gitignore                 # Excludes .env, *.db, pycache from version control
+├── requirements.txt           # Production Python dependencies
+└── README.md                  # Comprehensive platform documentation
 ```
-
----
-
-## ⚙️ Configuration & Environment
-
-| Environment Variable | Default Value | Description |
-|----------------------|---------------|-------------|
-| `GOOGLE_GENERATIVEAI_API_KEY` | *(Built-in fallback)* | Authorization key for Google Gemini RAG |
-| `PORT` | `8000` | Runtime binding port (auto-provisioned by PaaS) |
-| `DB_PATH` | `fire_safety.db` | Target path for the SQLite database |
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository.
-2. Establish your feature branch: `git checkout -b feature/system-optimization`.
-3. Commit structural adjustments: `git commit -m "perf: optimize sqlite indexing"`.
-4. Push changes and open a Pull Request.
 
 ---
 
 ## 📄 License
 
-Distributed under the [MIT License](LICENSE) — free for modification, academic distribution, and commercial integration.
+Distributed under the **MIT License** — free for academic, scientific, and open-source usage.
 
 ---
 
 <div align="center">
 
-Developed for **NASA Space Apps Challenge**  
+Developed with pride for the **NASA Space Apps Challenge 2026**  
 *"Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data"*
 
-🚀 Verified telemetry harvested directly from public **NASA PSI** and **NTRS** archives.
+🚀 Verified telemetry harvested directly from the **NASA Physical Science Informatics (PSI)** repository.
 
 </div>

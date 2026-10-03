@@ -1,0 +1,128 @@
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 68px; z-index: 9999;
+  background: rgba(2,4,9,0.93);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(0,245,255,0.07);
+  display: flex; align-items: center;
+  transition: all 0.3s ease;
+}
+.navbar.scrolled {
+  height: 58px;
+  background: rgba(2,4,9,0.98);
+  border-bottom-color: rgba(0,245,255,0.12);
+}
+.nav-progress-bar {
+  position: absolute; top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue), var(--electric-purple));
+  box-shadow: 0 0 10px var(--neon-cyan);
+  transition: width 0.1s linear;
+  z-index: 10000;
+}
+.nav-inner {
+  display: flex; align-items: center;
+  width: 100%; max-width: 1400px;
+  margin: 0 auto; padding: 0 28px;
+  gap: 0;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; flex-shrink: 0;
+  margin-right: 40px;
+}
+.nav-brand-logo {
+  width: 38px; height: 38px; border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid rgba(0,245,255,0.3);
+  box-shadow: 0 0 16px rgba(0,245,255,0.2);
+}
+.nav-brand-text { display: flex; flex-direction: column; }
+.nav-brand-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800; font-size: 1.1rem;
+  color: #fff; letter-spacing: 0.05em;
+  line-height: 1;
+}
+.nav-brand-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: rgba(0,245,255,0.7);
+  letter-spacing: 0.1em; margin-top: 2px;
+}
+.nav-links {
+  display: flex; align-items: center;
+  gap: 4px; list-style: none; flex: 1;
+}
+.nav-link {
+  position: relative;
+  font-size: 0.88rem; font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.nav-link:hover { color: #fff; background: rgba(255,255,255,0.06); }
+.nav-link.active {
+  color: var(--neon-cyan);
+  background: rgba(0,245,255,0.07);
+}
+.nav-link.active::after {
+  content: '';
+  position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 20px; height: 2px;
+  background: var(--neon-cyan);
+  border-radius: 1px;
+  box-shadow: 0 0 8px var(--neon-cyan);
+}
+.nav-actions {
+  display: flex; align-items: center; gap: 12px; margin-left: auto;
+}
+.nav-lang-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem; font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 6px 12px; border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.nav-lang-btn:hover { color: var(--neon-cyan); border-color: rgba(0,245,255,0.3); }
+.nav-ai-btn {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--neon-cyan);
+  background: rgba(0,245,255,0.08);
+  border: 1px solid rgba(0,245,255,0.25);
+  padding: 8px 16px; border-radius: 8px;
+  cursor: pointer; text-decoration: none;
+  transition: all 0.2s;
+}
+.nav-ai-btn:hover { background: rgba(0,245,255,0.15); border-color: rgba(0,245,255,0.5); box-shadow: 0 0 20px rgba(0,245,255,0.2); }
+.nav-status-dot {
+  width: 7px; height: 7px;
+  background: #00E676; border-radius: 50%;
+  box-shadow: 0 0 8px #00E676;
+  animation: glowPulse 2s infinite;
+}
+@keyframes glowPulse { 0%,100% { box-shadow: 0 0 6px #00E676; } 50% { box-shadow: 0 0 14px #00E676, 0 0 28px rgba(0,230,118,0.4); } }
+.mobile-menu-btn {
+  display: none; background: none; border: none;
+  color: #fff; cursor: pointer; padding: 8px;
+}
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .mobile-menu-btn { display: block; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: fixed; top: 68px; left: 0; right: 0;
+    background: rgba(2,4,9,0.98); backdrop-filter: blur(20px);
+    padding: 16px; gap: 4px; border-bottom: 1px solid rgba(0,245,255,0.1);
+    animation: slideDown 0.3s ease;
+  }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+}

@@ -431,6 +431,170 @@ def get_ntrs_historical():
     ]
 
 
+def parse_sofie():
+    path = os.path.join(DATA_DIR, "SOFIE_Flight_Data.csv")
+    if not os.path.exists(path):
+        return []
+    df = pd.read_csv(path)
+    records = []
+    for _, row in df.iterrows():
+        p_kpa = clean_num(row.get("pressure_kpa"))
+        p_mmhg = round(p_kpa * 7.50062, 1) if p_kpa else 760.0
+        rec = {
+            "experiment_id": str(row.get("experiment_id")),
+            "dataset_family": "SOFIE",
+            "investigation_id": str(row.get("investigation_id")),
+            "original_test_id": str(row.get("experiment_id")),
+            "fuel_material": str(row.get("fuel_material")),
+            "material_category": str(row.get("material_category")),
+            "sample_description": str(row.get("fuel_material")),
+            "oxygen_pct": clean_num(row.get("oxygen_pct")),
+            "pressure_mmhg": p_mmhg,
+            "pressure_kpa": p_kpa,
+            "burn_time_s": clean_num(row.get("burn_time_s")),
+            "extinction_outcome": str(row.get("extinction_outcome")),
+            "extinction_diameter_mm": clean_num(row.get("extinction_diameter_mm")),
+            "initial_diameter_mm": clean_num(row.get("initial_diameter_mm")),
+            "burning_rate_mms": clean_num(row.get("burning_rate_mms")),
+            "airflow_velocity_cms": clean_num(row.get("airflow_velocity_cms")),
+            "flame_temp_k": clean_num(row.get("flame_temp_k")),
+            "gravity_condition": "Microgravity (~0g)",
+            "ignition_power_w": clean_num(row.get("ignition_power_w")),
+            "ignition_time_s": clean_num(row.get("ignition_time_s")),
+            "co2_pct": clean_num(row.get("co2_pct")),
+            "co_ppm": clean_num(row.get("co_ppm")),
+            "test_date": str(row.get("test_date")),
+            "source_name": str(row.get("source_name")),
+            "source_url": str(row.get("source_url")),
+            "notes": str(row.get("notes"))
+        }
+        records.append(rec)
+    return records
+
+
+def parse_std6001():
+    path = os.path.join(DATA_DIR, "NASA_STD_6001_Materials.csv")
+    if not os.path.exists(path):
+        return []
+    df = pd.read_csv(path)
+    records = []
+    for _, row in df.iterrows():
+        p_kpa = clean_num(row.get("pressure_kpa"))
+        p_mmhg = round(p_kpa * 7.50062, 1) if p_kpa else 760.0
+        rec = {
+            "experiment_id": str(row.get("experiment_id")),
+            "dataset_family": "NASA-STD-6001",
+            "investigation_id": str(row.get("investigation_id")),
+            "original_test_id": str(row.get("experiment_id")),
+            "fuel_material": str(row.get("fuel_material")),
+            "material_category": str(row.get("material_category")),
+            "sample_description": str(row.get("fuel_material")),
+            "oxygen_pct": clean_num(row.get("oxygen_pct")),
+            "pressure_mmhg": p_mmhg,
+            "pressure_kpa": p_kpa,
+            "burn_time_s": clean_num(row.get("burn_time_s")),
+            "extinction_outcome": str(row.get("extinction_outcome")),
+            "extinction_diameter_mm": clean_num(row.get("extinction_diameter_mm")),
+            "initial_diameter_mm": clean_num(row.get("initial_diameter_mm")),
+            "burning_rate_mms": clean_num(row.get("burning_rate_mms")),
+            "airflow_velocity_cms": clean_num(row.get("airflow_velocity_cms")),
+            "flame_temp_k": clean_num(row.get("flame_temp_k")),
+            "gravity_condition": "Microgravity (~0g)",
+            "ignition_power_w": clean_num(row.get("ignition_power_w")),
+            "ignition_time_s": clean_num(row.get("ignition_time_s")),
+            "co2_pct": clean_num(row.get("co2_pct")),
+            "co_ppm": clean_num(row.get("co_ppm")),
+            "test_date": str(row.get("test_date")),
+            "source_name": str(row.get("source_name")),
+            "source_url": str(row.get("source_url")),
+            "notes": str(row.get("notes"))
+        }
+        records.append(rec)
+    return records
+
+
+def parse_slice():
+    path = os.path.join(DATA_DIR, "SLICE_Extinguishment_Data.csv")
+    if not os.path.exists(path):
+        return []
+    df = pd.read_csv(path)
+    records = []
+    for _, row in df.iterrows():
+        p_kpa = clean_num(row.get("pressure_kpa"))
+        p_mmhg = round(p_kpa * 7.50062, 1) if p_kpa else 760.0
+        rec = {
+            "experiment_id": str(row.get("experiment_id")),
+            "dataset_family": "SLICE",
+            "investigation_id": str(row.get("investigation_id")),
+            "original_test_id": str(row.get("experiment_id")),
+            "fuel_material": str(row.get("fuel_material")),
+            "material_category": str(row.get("material_category")),
+            "sample_description": str(row.get("fuel_material")),
+            "oxygen_pct": clean_num(row.get("oxygen_pct")),
+            "pressure_mmhg": p_mmhg,
+            "pressure_kpa": p_kpa,
+            "burn_time_s": clean_num(row.get("burn_time_s")),
+            "extinction_outcome": str(row.get("extinction_outcome")),
+            "extinction_diameter_mm": clean_num(row.get("extinction_diameter_mm")),
+            "initial_diameter_mm": clean_num(row.get("initial_diameter_mm")),
+            "burning_rate_mms": clean_num(row.get("burning_rate_mms")),
+            "airflow_velocity_cms": clean_num(row.get("airflow_velocity_cms")),
+            "flame_temp_k": clean_num(row.get("flame_temp_k")),
+            "gravity_condition": "Microgravity (~0g)",
+            "ignition_power_w": clean_num(row.get("ignition_power_w")),
+            "ignition_time_s": clean_num(row.get("ignition_time_s")),
+            "co2_pct": clean_num(row.get("co2_pct")),
+            "co_ppm": clean_num(row.get("co_ppm")),
+            "test_date": str(row.get("test_date")),
+            "source_name": str(row.get("source_name")),
+            "source_url": str(row.get("source_url")),
+            "notes": str(row.get("notes"))
+        }
+        records.append(rec)
+    return records
+
+
+def parse_bass1():
+    path = os.path.join(DATA_DIR, "BASS1_Initial_ISS_Data.csv")
+    if not os.path.exists(path):
+        return []
+    df = pd.read_csv(path)
+    records = []
+    for _, row in df.iterrows():
+        p_kpa = clean_num(row.get("pressure_kpa"))
+        p_mmhg = round(p_kpa * 7.50062, 1) if p_kpa else 760.0
+        rec = {
+            "experiment_id": str(row.get("experiment_id")),
+            "dataset_family": "BASS-I",
+            "investigation_id": str(row.get("investigation_id")),
+            "original_test_id": str(row.get("experiment_id")),
+            "fuel_material": str(row.get("fuel_material")),
+            "material_category": str(row.get("material_category")),
+            "sample_description": str(row.get("fuel_material")),
+            "oxygen_pct": clean_num(row.get("oxygen_pct")),
+            "pressure_mmhg": p_mmhg,
+            "pressure_kpa": p_kpa,
+            "burn_time_s": clean_num(row.get("burn_time_s")),
+            "extinction_outcome": str(row.get("extinction_outcome")),
+            "extinction_diameter_mm": clean_num(row.get("extinction_diameter_mm")),
+            "initial_diameter_mm": clean_num(row.get("initial_diameter_mm")),
+            "burning_rate_mms": clean_num(row.get("burning_rate_mms")),
+            "airflow_velocity_cms": clean_num(row.get("airflow_velocity_cms")),
+            "flame_temp_k": clean_num(row.get("flame_temp_k")),
+            "gravity_condition": "Microgravity (~0g)",
+            "ignition_power_w": clean_num(row.get("ignition_power_w")),
+            "ignition_time_s": clean_num(row.get("ignition_time_s")),
+            "co2_pct": clean_num(row.get("co2_pct")),
+            "co_ppm": clean_num(row.get("co_ppm")),
+            "test_date": str(row.get("test_date")),
+            "source_name": str(row.get("source_name")),
+            "source_url": str(row.get("source_url")),
+            "notes": str(row.get("notes"))
+        }
+        records.append(rec)
+    return records
+
+
 def main():
     print("=" * 60)
     print("FIRE-X EXPANDED CANONICAL INGESTION PIPELINE")
@@ -440,9 +604,13 @@ def main():
     all_records.extend(parse_flex())
     all_records.extend(parse_flex2())
     all_records.extend(parse_bass_ii())
+    all_records.extend(parse_bass1())
     all_records.extend(parse_saffire_1())
     all_records.extend(parse_saffire_ii_to_vi())
     all_records.extend(parse_acme())
+    all_records.extend(parse_sofie())
+    all_records.extend(parse_std6001())
+    all_records.extend(parse_slice())
     all_records.extend(get_ntrs_historical())
 
     print(f"\n[+] Total Unified Records Ingested: {len(all_records)}")
