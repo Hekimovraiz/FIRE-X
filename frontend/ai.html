@@ -191,10 +191,44 @@ body {
 }
 
 .msg-avatar.ai {
-  background: rgba(0, 245, 255, 0.15);
-  border: 1px solid rgba(0, 245, 255, 0.4);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  overflow: visible;
+  width: auto;
+  height: auto;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ai-avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ai-avatar-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1.5px solid rgba(0, 245, 255, 0.5);
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.35), 0 0 4px rgba(0, 245, 255, 0.2);
+}
+
+.ai-avatar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: rgba(0, 245, 255, 0.8);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .msg-avatar.user {
@@ -439,7 +473,10 @@ body {
     <div class="messages-scroller" id="chat-messages">
       <!-- ASSISTANT WELCOME -->
       <div class="message-row assistant">
-        <div class="msg-avatar ai">AI</div>
+        <div class="ai-avatar-wrap">
+          <img src="/images/Fire-X.jpeg" alt="FIRE-X AI" class="ai-avatar-img">
+          <span class="ai-avatar-label">FIRE-X AI</span>
+        </div>
         <div class="msg-bubble">
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
             FIRE-X Scientific Research Assistant Online
@@ -620,9 +657,18 @@ function appendMessage(role, text, provider) {
   const row = document.createElement('div');
   row.className = `message-row ${role}`;
 
-  const avatar = document.createElement('div');
-  avatar.className = `msg-avatar ${role === 'assistant' ? 'ai' : 'user'}`;
-  avatar.textContent = (role === 'assistant' ? 'AI' : 'U');
+  let avatar;
+  if (role === 'assistant') {
+    avatar = document.createElement('div');
+    avatar.className = 'ai-avatar-wrap';
+    avatar.innerHTML = `
+      <img src="/images/Fire-X.jpeg" alt="FIRE-X AI" class="ai-avatar-img">
+      <span class="ai-avatar-label">FIRE-X AI</span>`;
+  } else {
+    avatar = document.createElement('div');
+    avatar.className = 'msg-avatar user';
+    avatar.textContent = 'U';
+  }
 
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
