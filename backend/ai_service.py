@@ -86,8 +86,18 @@ FIREX_DOMAIN_KEYWORDS = [
 
 GREETINGS = [
     "salam", "hello", "hi", "hey", "sən kimsən", "who are you",
-    "nə edə bilərsən", "what can you do", "kömək", "help"
+    "nə edə bilərsən", "what can you do", "kömək", "help",
+    "ok", "okay", "so", "thanks", "thank you", "teşekkür", "sağ ol",
+    "why", "how", "what", "when", "where", "which", "who", "tell me",
+    "niyə", "necə", "nə", "harada", "nə vaxt", "başlayaq", "continue",
+    "got it", "understood", "interesting", "cool", "great", "nice",
+    "good", "bad", "yes", "no", "bəli", "xeyr", "yaxşı", "and", "but",
+    "sure", "please", "əla", "davam et", "go on", "more", "explain",
+    "really", "wow", "oh", "ah", "hmm", "i see", "anladım", "bilirəm"
 ]
+
+# Short conversational messages that are clearly not off-topic spam
+SHORT_MESSAGE_THRESHOLD = 4  # messages with <= this many words pass through
 
 def is_topic_relevant(text: str) -> bool:
     """Return False if query is completely off-topic or inappropriate to save token budget."""
@@ -95,19 +105,24 @@ def is_topic_relevant(text: str) -> bool:
         return False
     if INAPPROPRIATE_PATTERN.search(text):
         return False
-        
+
     t = text.lower().strip()
-    
+
+    # Always allow very short messages (conversational continuations like "so?", "ok", "why?")
+    words = t.split()
+    if len(words) <= SHORT_MESSAGE_THRESHOLD:
+        return True
+
+    # Check domain keywords
     for kw in FIREX_DOMAIN_KEYWORDS:
         if kw in t:
             return True
-            
-    words = t.split()
-    if len(words) <= 5:
-        for g in GREETINGS:
-            if g in t:
-                return True
-                
+
+    # Check greeting/conversational patterns for slightly longer messages
+    for g in GREETINGS:
+        if g in t:
+            return True
+
     return False
 
 def build_system_prompt(language: str = "en", page_context: Optional[Dict[str, Any]] = None) -> str:
@@ -172,7 +187,7 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
     High-precision deterministic scientific synthesis generator when OpenAI API Key is pending.
     Provides mathematically accurate answers based on the 879 NASA experiment dataset.
     """
-    msg = user_message.lower()
+    msg = user_message.lower().strip().rstrip("?!.,")
     is_az = language.lower().startswith("az")
 
     has_flex = "flex" in msg or "droplet" in msg or "damcı" in msg
@@ -181,6 +196,23 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
     has_artemis = "artemis" in msg or "lunar" in msg or "ay" in msg or "34%" in msg
     has_iss = "iss" in msg or "bks" in msg or "21%" in msg
     has_extinction = "extinct" in msg or "sönmə" in msg or "diameter" in msg or "diametr" in msg or "limit" in msg
+
+    # Brief friendly response for greetings and very short conversational messages
+    _science_words = {"flex","bass","saffire","artemis","iss","bks","acme","sofie","slice","droplet","flame","extinction","lunar","combustion","oxygen","fire"}
+    _is_greeting = (len(msg.split()) <= 3 and not any(kw in msg for kw in _science_words))
+    if _is_greeting:
+        if is_az:
+            return (
+                "Salam! 👋 Mən **NASA FIRE-X** platformasının süni intellekt köməkçisiyəm.\n\n"
+                "Mikroqravitasiyada yanma fizikası, ISS/Artemis yanğın riskləri, FLEX/BASS/SAFFIRE eksperimentləri "
+                "haqqında suallarınızı verə bilərsiniz. Necə kömək edə bilərəm?"
+            )
+        else:
+            return (
+                "Hello! 👋 I'm the **NASA FIRE-X** AI research assistant.\n\n"
+                "I can answer questions about microgravity combustion physics, ISS/Artemis fire hazards, "
+                "and the 879-experiment database. What would you like to know?"
+            )
 
     if is_az:
         if has_artemis:
@@ -229,7 +261,7 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
                 "- **Tədqiqatçı Bölməsi:** Yanacaq növü (PMMA, n-Heptan, Pambıq, Etanol), oksigen faizi ($15\\%-50\\%$) və təzyiq parametrlərinə görə eksperimentləri filtrasiya edin.\n"
                 "- **Simulyator:** Artemis Ay Modulu (34% O₂), BKS (21% O₂) və Dərin Kosmos mühitlərində yanğın təhlükəsini hesablayın.\n"
                 "- **Müqayisə:** 2-4 eksperiment seçərək yanma müddəti və sönmə diametrlərini müqayisə edin.\n\n"
-                "*Qeyd: Sistem real OpenAI API inteqrasiyasına tam hazırdır (`OPENAI_API_KEY` aktiv edildikdə avtomatik canlı GPT modeli işə düşür).*"
+                "Konkret bir sual versəniz — FLEX, BASS, SAFFIRE, ACME və ya missiya mühiti haqqında — ətraflı elmi cavab verə bilərəm."
             )
     else:
         if has_artemis:
@@ -277,7 +309,7 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
                 "- **Explorer:** Filter by fuel material (PMMA, n-Heptane, Cotton, Ethanol), oxygen fraction ($15\\%-50\\%$), and pressure regimes.\n"
                 "- **Scenario Simulator:** Model fire risks under Artemis Lunar Habitat (34% O₂), ISS (21% O₂), and Deep Space Hypoxic Haven conditions.\n"
                 "- **Benchmark Tool:** Select 2–4 experiments for side-by-side metric and extinction parameter comparisons.\n\n"
-                "*Note: The system is fully wired for production OpenAI API execution (`OPENAI_API_KEY` in `.env` activates real-time GPT synthesis).*"
+                "Ask me anything about FLEX, BASS, SAFFIRE, ACME, or mission atmosphere fire hazards and I'll give you a detailed scientific answer."
             )
 
 
