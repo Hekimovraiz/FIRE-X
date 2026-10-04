@@ -197,9 +197,17 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
     has_iss = "iss" in msg or "bks" in msg or "21%" in msg
     has_extinction = "extinct" in msg or "sönmə" in msg or "diameter" in msg or "diametr" in msg or "limit" in msg
 
-    # Brief friendly response for greetings and very short conversational messages
-    _science_words = {"flex","bass","saffire","artemis","iss","bks","acme","sofie","slice","droplet","flame","extinction","lunar","combustion","oxygen","fire"}
-    _is_greeting = (len(msg.split()) <= 3 and not any(kw in msg for kw in _science_words))
+    # Brief friendly response ONLY for pure greetings (≤2 words, no science content)
+    _science_words = {
+        "flex","bass","saffire","artemis","iss","bks","acme","sofie","slice",
+        "droplet","flame","extinction","lunar","combustion","oxygen","fire",
+        "o2","o₂","co2","co₂","pmma","heptan","heptane","methanol","ethanol",
+        "pressure","kpa","psia","nitrogen","ignit","suppres","smoke","burn",
+        "micrograv","gravity","cygnus","spacecraft","habitat","experiment",
+        "who","what","how","why","which","explain","tell","describe","define"
+    }
+    _words = msg.split()
+    _is_greeting = (len(_words) <= 2 and not any(kw in msg for kw in _science_words))
     if _is_greeting:
         if is_az:
             return (
