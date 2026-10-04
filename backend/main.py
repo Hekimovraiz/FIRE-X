@@ -4,10 +4,6 @@ Multi-page FastAPI backend with OpenAI Responses API integration.
 """
 
 import os
-import time
-import random
-import hmac
-import hashlib
 import logging
 from typing import Optional, List, Dict, Any
 from fastapi import FastAPI, HTTPException, Query, Request
@@ -34,33 +30,7 @@ app.add_middleware(
 )
 
 
-CAPTCHA_SECRET = os.getenv("CAPTCHA_SECRET", "firex_space_apps_secure_key_2026")
 
-def generate_captcha_challenge():
-    a = random.randint(3, 19)
-    b = random.randint(2, 9)
-    ans = a + b
-    timestamp = int(time.time())
-    sig = hmac.new(CAPTCHA_SECRET.encode(), f"{ans}:{timestamp}".encode(), hashlib.sha256).hexdigest()
-    return {
-        "question": f"{a} + {b} = ?",
-        "challenge_token": f"{sig}.{timestamp}"
-    }
-
-def verify_captcha_solution(solution: str, challenge_token: str) -> bool:
-    try:
-        if not solution or not challenge_token or "." not in challenge_token:
-            return False
-        sig, ts_str = challenge_token.split(".", 1)
-        ts = int(ts_str)
-        # Token valid for 10 minutes (600 seconds)
-        if time.time() - ts > 600 or time.time() < ts - 10:
-            return False
-        sol_clean = solution.strip()
-        expected_sig = hmac.new(CAPTCHA_SECRET.encode(), f"{sol_clean}:{ts}".encode(), hashlib.sha256).hexdigest()
-        return hmac.compare_digest(sig, expected_sig)
-    except Exception:
-        return False
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
@@ -79,15 +49,11 @@ class ChatRequest(BaseModel):
     messages: List[MessageItem]
     language: str = 'en'
     page_context: Optional[Dict[str, Any]] = None
-    captcha_solution: Optional[str] = None
-    captcha_token: Optional[str] = None
 
 class AskAIRequest(BaseModel):
     prompt: str
     language: str = 'en'
     page_context: Optional[Dict[str, Any]] = None
-    captcha_solution: Optional[str] = None
-    captcha_token: Optional[str] = None
 
 
 # API Routes
@@ -151,37 +117,15 @@ def get_client_ip(request: Request) -> str:
     return "anonymous"
 
 
-@app.get('/api/captcha')
-def get_captcha():
-    return {"success": True, "data": generate_captcha_challenge()}
-
 @app.post('/api/chat-assistant')
 def chat_with_assistant(req: ChatRequest, request: Request):
     client_ip = get_client_ip(request)
-    
-    # Verify Captcha
-    if not verify_captcha_solution(req.captcha_solution or "", req.captcha_token or ""):
-        err_msg = "Təhlükəsizlik yoxlaması (CAPTCHA) uğursuz oldu və ya vaxtı bitdi. Zəhmət olmasa yenidən cəhd edin." if req.language.startswith("az") else "Security verification (CAPTCHA) failed or expired. Please solve the security check."
-        return {
-            "success": False,
-            "error": "captcha_failed",
-            "response": err_msg,
-            "provider": "FIRE-X Security Firewall",
-            "require_captcha": True
-        }
-
     messages_payload = [{'role': m.role, 'content': m.content} for m in req.messages]
     return query_ai_assistant(messages=messages_payload, language=req.language, page_context=req.page_context, client_id=client_ip)
 
 @app.post('/api/ask-ai')
 def ask_ai_single_prompt(req: AskAIRequest, request: Request):
     client_ip = get_client_ip(request)
-    
-    # Verify Captcha if provided or enforce
-    if req.captcha_token and not verify_captcha_solution(req.captcha_solution or "", req.captcha_token or ""):
-        err_msg = "CAPTCHA yoxlaması uğursuz oldu." if req.language.startswith("az") else "CAPTCHA verification failed."
-        return {"success": False, "error": "captcha_failed", "response": err_msg, "require_captcha": True}
-
     return query_ai_assistant(messages=[{'role': 'user', 'content': req.prompt}], language=req.language, page_context=req.page_context, client_id=client_ip)
 
 

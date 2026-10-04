@@ -382,67 +382,6 @@ body {
 }
 
 
-.captcha-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(7, 13, 26, 0.95);
-  border: 1px solid rgba(0, 245, 255, 0.35);
-  border-radius: 10px;
-  padding: 6px 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
-  color: var(--neon-cyan);
-}
-
-.captcha-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(0, 245, 255, 0.12);
-  border: 1px solid rgba(0, 245, 255, 0.3);
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: #fff;
-  white-space: nowrap;
-}
-
-.captcha-input {
-  width: 52px;
-  background: rgba(2, 4, 9, 0.8);
-  border: 1px solid rgba(0, 245, 255, 0.4);
-  border-radius: 6px;
-  color: #00F5FF;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-align: center;
-  padding: 5px 6px;
-  outline: none;
-}
-.captcha-input:focus {
-  border-color: #33F7FF;
-  box-shadow: 0 0 10px rgba(0, 245, 255, 0.4);
-}
-
-.captcha-refresh-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-.captcha-refresh-btn:hover {
-  color: var(--neon-cyan);
-  transform: rotate(90deg);
-}
-
 .send-action-btn:hover {
   background: #33F7FF;
   box-shadow: 0 0 20px rgba(0, 245, 255, 0.6);
@@ -573,17 +512,7 @@ body {
       <div class="input-container">
         <input type="text" class="chat-input" id="user-input" placeholder="Ask about microgravity combustion, flame dynamics, or experiment IDs..." onkeydown="handleKeyDown(event)">
         
-        <!-- NASA SECURITY CAPTCHA -->
-        <div class="captcha-container" id="captcha-dock">
-          <div class="captcha-badge" title="Security Verification / Human Proof">
-            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <span id="captcha-text">...</span>
-          </div>
-          <input type="text" class="captcha-input" id="captcha-answer" placeholder="?" maxlength="4" onkeydown="handleKeyDown(event)" autocomplete="off">
-          <button type="button" class="captcha-refresh-btn" onclick="fetchNewCaptcha()" title="Refresh Security Math Check">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          </button>
-        </div>
+
 
         <button class="send-action-btn" id="btn-send-query" onclick="sendMessage()">
           <span id="send-btn-text">Send Query</span>
@@ -602,32 +531,11 @@ body {
 
 
 
-<script src="/static/js/nav.js?v=5.3"></script>
+<script src="/static/js/nav.js?v=5.4"></script>
 <script>
 let currentLang = localStorage.getItem('firex_lang') || 'en';
 
-let currentCaptchaToken = '';
 
-async function fetchNewCaptcha() {
-  const textEl = document.getElementById('captcha-text');
-  const answerEl = document.getElementById('captcha-answer');
-  if (textEl) textEl.textContent = '...';
-  if (answerEl) answerEl.value = '';
-  
-  try {
-    const res = await fetch('/api/captcha');
-    const json = await res.json();
-    if (json.success && json.data) {
-      currentCaptchaToken = json.data.challenge_token;
-      if (textEl) textEl.textContent = json.data.question;
-    }
-  } catch (e) {
-    console.error('Failed to load CAPTCHA:', e);
-    if (textEl) textEl.textContent = '5 + 4 = ?';
-  }
-}
-
-document.addEventListener('DOMContentLoaded', fetchNewCaptcha);
 
 let messageHistory = [];
 
@@ -691,7 +599,7 @@ function syncAiPageLanguage(lang) {
   if (secNote) secNote.textContent = isAz ? 'MƏXFİ UÇUŞ DATALARI TƏHLÜKƏSİZ SERVER VASİTƏSİLƏ TƏHLİL OLUNUR' : 'CONFIDENTIAL FLIGHT DATA ANALYZED THROUGH SECURE BACKEND PROXY';
 
   const enterNote = document.getElementById('ai-enter-note');
-  if (enterNote) enterNote.textContent = isAz ? 'CAPTCHA HƏLLİ VƏ ENTER İLƏ GÖNDƏRİN' : 'SOLVE CAPTCHA & PRESS ENTER TO SEND';
+  if (enterNote) enterNote.textContent = isAz ? 'GÖNDƏRMƏK ÜÇÜN ENTER BASIN' : 'PRESS ENTER TO SEND';
 
   const typingSpan = document.querySelector('#typing-indicator span');
   if (typingSpan) typingSpan.textContent = isAz ? 'OpenAI gpt-6-luna və NASA PSI Telemetriyası sorğulanır...' : 'Querying OpenAI gpt-6-luna & NASA PSI Telemetry...';
@@ -732,17 +640,6 @@ async function sendMessage() {
   scrollChatToBottom();
 
   try {
-    const captchaAns = (document.getElementById('captcha-answer')?.value || '').trim();
-    if (!captchaAns) {
-      typingEl.style.display = 'none';
-    fetchNewCaptcha();
-      if (sendBtn) sendBtn.disabled = false;
-      const warn = currentLang === 'az' ? 'Zəhmət olmasa təhlükəsizlik kodunu (CAPTCHA hesabını) daxil edin.' : 'Please solve the security math check (CAPTCHA) to send.';
-      appendMessage('assistant', warn, 'FIRE-X Security Firewall');
-      document.getElementById('captcha-answer')?.focus();
-      return;
-    }
-
     const res = await fetch('/api/chat-assistant', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -753,9 +650,7 @@ async function sendMessage() {
           platform: 'NASA FIRE-X',
           facility: 'ISS CIR / DECLIC',
           canonical_records: 879
-        },
-        captcha_solution: captchaAns,
-        captcha_token: currentCaptchaToken
+        }
       })
     });
 
