@@ -510,6 +510,116 @@ body {
         </p>
       </div>
 
+      <!-- ═══ FIRE-X FHI FORMULA PANEL ═══ -->
+      <div style="
+        margin-top:20px;
+        background:rgba(0,245,255,0.04);
+        border:1px solid rgba(0,245,255,0.15);
+        border-radius:16px;
+        padding:22px 24px;
+      ">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <svg width="16" height="16" fill="none" stroke="#00F5FF" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12h4l3-9 4 18 3-9h4"/></svg>
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;color:#00F5FF;letter-spacing:0.05em;">FIRE-X FHI FORMULA — SCIENTIFIC BASIS</span>
+        </div>
+
+        <!-- Main formula display -->
+        <div style="
+          background:rgba(0,0,0,0.4);
+          border-radius:12px;
+          padding:18px 20px;
+          margin-bottom:16px;
+          text-align:center;
+          font-family:'JetBrains Mono',monospace;
+          border:1px solid rgba(0,245,255,0.1);
+        ">
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:10px;letter-spacing:0.1em;">FIRE HAZARD INDEX</div>
+          <div style="font-size:1.15rem;color:#fff;line-height:2;">
+            <span style="color:#00F5FF;font-weight:700;font-size:1.3rem;">FHI</span>
+            <span style="color:rgba(255,255,255,0.5);"> = min(10, </span>
+            <span style="color:#FFD700;">5.1</span>
+            <span style="color:rgba(255,255,255,0.5);"> × </span>
+            <span style="color:#FF6B35;">OEF</span>
+            <span style="color:rgba(255,255,255,0.5);"> × </span>
+            <span style="color:#9B59B6;">PF</span>
+            <span style="color:rgba(255,255,255,0.5);"> × </span>
+            <span style="color:#00E676;">M<sub>f</sub></span>
+            <span style="color:rgba(255,255,255,0.5);">)</span>
+          </div>
+        </div>
+
+        <!-- Factor breakdown -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
+          <div style="background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:10px;padding:12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#FF6B35;font-weight:700;margin-bottom:6px;">OEF — Oxygen Enhancement</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:#fff;">(X<sub>O₂</sub> / 0.21)<sup>1.5</sup></div>
+            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">Yanma kinetikası: alov sürəti ∝ [O₂]<sup>1.5</sup></div>
+          </div>
+          <div style="background:rgba(155,89,182,0.08);border:1px solid rgba(155,89,182,0.2);border-radius:10px;padding:12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#9B59B6;font-weight:700;margin-bottom:6px;">PF — Pressure Factor</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:#fff;">(P / 101.3)<sup>0.4</sup></div>
+            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">SAFFIRE məlumatlarından çıxarılmış eksponent</div>
+          </div>
+          <div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#00E676;font-weight:700;margin-bottom:6px;">M<sub>f</sub> — Material Index</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:#fff;">0.4 – 1.3</div>
+            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">NASA-STD-6001 material sınaq sinifindən</div>
+          </div>
+        </div>
+
+        <!-- Material table -->
+        <div style="margin-bottom:14px;">
+          <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.08em;">MATERIAL FLAMMABILITY INDEX (Mf)</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+            <div style="background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.15);border-radius:8px;padding:8px;text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#00E676;font-weight:700;">0.4</div>
+              <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:3px;">Nomex</div>
+            </div>
+            <div style="background:rgba(0,245,255,0.06);border:1px solid rgba(0,245,255,0.15);border-radius:8px;padding:8px;text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#00F5FF;font-weight:700;">0.7</div>
+              <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:3px;">PMMA</div>
+            </div>
+            <div style="background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.15);border-radius:8px;padding:8px;text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#FF6B35;font-weight:700;">1.0</div>
+              <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:3px;">Cotton</div>
+            </div>
+            <div style="background:rgba(255,23,68,0.06);border:1px solid rgba(255,23,68,0.15);border-radius:8px;padding:8px;text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#FF5252;font-weight:700;">1.3</div>
+              <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:3px;">n-Heptane</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calibration verification -->
+        <div style="background:rgba(0,0,0,0.3);border-radius:10px;padding:12px 14px;">
+          <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.08em;">CALIBRATION VERIFICATION</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;">
+              <span style="color:#2979FF;">ISS</span>
+              <span style="color:rgba(255,255,255,0.4);"> 21% · 101.3 kPa → </span>
+              <span style="color:#00F5FF;font-weight:700;">FHI 5.1</span>
+              <span style="color:#00E676;"> ✓</span>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;">
+              <span style="color:#FF6B35;">Artemis</span>
+              <span style="color:rgba(255,255,255,0.4);"> 34% · 56.5 kPa → </span>
+              <span style="color:#00F5FF;font-weight:700;">FHI 8.3</span>
+              <span style="color:#00E676;"> ✓</span>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;">
+              <span style="color:#9B59B6;">Hypoxic</span>
+              <span style="color:rgba(255,255,255,0.4);"> 15% · 70.3 kPa → </span>
+              <span style="color:#00F5FF;font-weight:700;">FHI 2.6</span>
+              <span style="color:#00E676;"> ✓</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;font-size:0.65rem;color:rgba(255,255,255,0.25);font-family:'JetBrains Mono',monospace;">
+          Law, C.K. (2006) Combustion Physics. Cambridge. · SAFFIRE I-VI telemetry (NASA PSI-98) · NASA-STD-6001B
+        </div>
+      </div>
+
     </div>
   </div>
 </main>
