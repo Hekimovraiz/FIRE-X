@@ -184,12 +184,50 @@ class FireXAIAssistant {
   }
 
   parseMarkdown(text) {
-    // Escape HTML first
-    let safe = text
+    // --- 1. Extract and convert markdown tables BEFORE escaping ---
+    // We process tables on the raw text to preserve pipe characters.
+    const tableBlocks = [];
+    const TABLE_PLACEHOLDER = '@@TABLE_BLOCK_';
+
+    // Regex: find consecutive lines that start and end with |
+    const lines = text.split('\n');
+    let i = 0;
+    const processedLines = [];
+
+    while (i < lines.length) {
+      // Check if current line looks like a table row (starts with |)
+      if (/^\s*\|/.test(lines[i])) {
+        // Collect all consecutive table lines
+        const tableLines = [];
+        while (i < lines.length && /^\s*\|/.test(lines[i])) {
+          tableLines.push(lines[i].trim());
+          i++;
+        }
+        // Need at least 2 lines (header + separator or header + data)
+        if (tableLines.length >= 2) {
+          const tableHTML = this._buildHTMLTable(tableLines);
+          const idx = tableBlocks.length;
+          tableBlocks.push(tableHTML);
+          processedLines.push(TABLE_PLACEHOLDER + idx + '@@');
+        } else {
+          // Not enough lines for a table, keep as-is
+          processedLines.push(...tableLines);
+        }
+      } else {
+        processedLines.push(lines[i]);
+        i++;
+      }
+    }
+
+    let safe = processedLines.join('\n');
+
+    // --- 2. Escape HTML (won't affect placeholders) ---
+    safe = safe
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
+    // --- 3. Inline formatting ---
     // Bold: **text**
     safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     // Italic: *text*
@@ -204,7 +242,102 @@ class FireXAIAssistant {
     safe = safe.replace(/\n{2,}/g, '<br><br>');
     safe = safe.replace(/\n/g, '<br>');
 
+    // --- 4. Restore table HTML blocks ---
+    for (let t = 0; t < tableBlocks.length; t++) {
+      safe = safe.replace(TABLE_PLACEHOLDER + t + '@@', tableBlocks[t]);
+    }
+
     return safe;
+  }
+
+  /**
+   * Converts an array of markdown table lines into a styled HTML <table>.
+   * Handles header row, separator row (|---|---|), and data rows.
+   */
+  _buildHTMLTable(tableLines) {
+    // Parse each line into cells
+    const parseRow = (line) => {
+      // Remove leading/trailing pipes and split
+      return line
+        .replace(/^\|/, '')
+        .replace(/\|$/, '')
+        .split('|')
+        .map(cell => cell.trim());
+    };
+
+    // Detect separator row: |---|---| or |:---:|---:| etc.
+    const isSeparator = (line) => /^\|[\s\-:|]+\|$/.test(line.trim()) || /^[\s\-:|]+$/.test(line.replace(/\|/g, '').trim());
+
+    let headerCells = null;
+    const dataRows = [];
+    let separatorFound = false;
+
+    for (let j = 0; j < tableLines.length; j++) {
+      if (j === 1 && isSeparator(tableLines[j])) {
+        // Line 0 was the header, line 1 is separator
+        headerCells = parseRow(tableLines[0]);
+        separatorFound = true;
+        continue;
+      }
+      if (j === 0 && separatorFound) continue; // already used as header
+      if (isSeparator(tableLines[j])) continue; // skip any extra separators
+
+      if (!separatorFound && j === 0) {
+        // If no separator found yet, treat first row as header anyway
+        headerCells = parseRow(tableLines[0]);
+        continue;
+      }
+
+      dataRows.push(parseRow(tableLines[j]));
+    }
+
+    // If we only had a header with no separator or data, treat all as data
+    if (!separatorFound && dataRows.length === 0 && headerCells) {
+      // Re-parse: treat all lines as data rows, first as header
+      headerCells = parseRow(tableLines[0]);
+      for (let j = 1; j < tableLines.length; j++) {
+        if (!isSeparator(tableLines[j])) {
+          dataRows.push(parseRow(tableLines[j]));
+        }
+      }
+    }
+
+    // Build HTML
+    let html = '<div class="ai-table-wrapper"><table class="ai-md-table">';
+
+    if (headerCells) {
+      html += '<thead><tr>';
+      headerCells.forEach(cell => {
+        // Escape cell content
+        const escaped = cell
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        html += `<th>${escaped}</th>`;
+      });
+      html += '</tr></thead>';
+    }
+
+    if (dataRows.length > 0) {
+      html += '<tbody>';
+      dataRows.forEach(row => {
+        html += '<tr>';
+        row.forEach(cell => {
+          const escaped = cell
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+          html += `<td>${escaped}</td>`;
+        });
+        html += '</tr>';
+      });
+      html += '</tbody>';
+    }
+
+    html += '</table></div>';
+    return html;
   }
 
   showTypingIndicator() {
