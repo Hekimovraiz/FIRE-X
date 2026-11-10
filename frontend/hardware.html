@@ -495,6 +495,10 @@ body {
           <button class="btn-demo btn-demo-search" onclick="triggerHardwareDemo('disconnect')" title="Simulyasiyanı söndür və fiziki cihazı gözləmə rejiminə keçir">
             Söndür (Axtarış Rejimi)
           </button>
+          <a href="#section-3d-cad" class="btn-demo" style="background:rgba(0,245,255,0.08); border-color:rgba(0,245,255,0.45); color:#00F5FF; text-decoration:none; display:inline-flex; align-items:center; gap:6px;" title="Aşağıdakı İnteraktiv 3D Korpus & Elektronika CAD modelinə keç">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            🔬 3D Korpus Baxışı ↓
+          </a>
         </div>
       </div>
 
@@ -665,7 +669,145 @@ body {
   </section>
 
   <!-- ════════════════════════════════════════════════════════════════════════ -->
-  <!-- 2. NƏ ETMİŞİK? (HOW IT WORKS - 4-STEP PIPELINE)                          -->
+  <!-- 2. İNTERAKTİV 3D KORPUS & ELEKTRONİKA CAD BAXIŞI (3D CAD VIEWER)        -->
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <section class="hw-section" id="section-3d-cad" style="border-top:1px solid rgba(0,245,255,0.18); padding-top:40px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:14px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div style="display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700; color:#00F5FF; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px;">
+          <span style="width:7px; height:7px; border-radius:50%; background:#00E676; box-shadow:0 0 10px #00E676; display:inline-block;"></span>
+          3D MODULAR CAD ENCLOSURE // v3.1 GLUELESS SNAP-FIT SYSTEM
+        </div>
+        <div class="hw-section-title">
+          <svg width="24" height="24" fill="none" stroke="var(--neon-cyan)" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          İnteraktiv 3D Korpus &amp; Tam Elektronika Baxışı
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button onclick="toggleCadFullscreen()" class="btn-demo" style="background:rgba(0,245,255,0.1); border-color:#00F5FF; color:#00F5FF; padding:8px 14px; border-radius:8px; font-family:'Space Grotesk',sans-serif; font-size:0.8rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          Tam Ekran (Fullscreen)
+        </button>
+        <a href="/hardware/3d_viewer.html" target="_blank" class="btn-demo" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.2); color:#fff; padding:8px 14px; border-radius:8px; font-family:'Space Grotesk',sans-serif; font-size:0.8rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Ayrı Pəncərədə Aç ↗
+        </a>
+      </div>
+    </div>
+    
+    <p class="hw-section-desc">
+      100% Yapışqansız, Taxıb-Çıxarılan Korpus Dizaynı: Bütün komponentlər (ESP32 DevKit V1, MQ-2 Qaz Sensoru Qülləsi, Aktiv Buzzer və 2× Status LED-ləri) alt bazanın daxilindəki dəqiq yuvalara birbaşa kliklənərək oturur. Modeli siçan və ya barmaqla fırladın, yaxınlaşdırın, partladılmış və ya şəffaf (X-Ray) rejimdə daxili mexanizmi araşdırın:
+    </p>
+
+    <!-- 3D Interactive WebGL Container -->
+    <div id="cad-viewer-container" style="
+      position:relative; width:100%; border-radius:18px; overflow:hidden;
+      border:1px solid rgba(0, 245, 255, 0.35);
+      background: radial-gradient(circle at 50% 20%, rgba(0,245,255,0.06) 0%, #02050B 75%);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.85), 0 0 35px rgba(0,245,255,0.12);
+      margin-top:16px;
+    ">
+      <iframe id="cad-iframe" src="/hardware/3d_viewer.html" style="
+        width:100%; height:640px; border:none; display:block; background:transparent;
+      " allow="fullscreen" loading="lazy"></iframe>
+    </div>
+
+    <!-- Quick Action / Download Hub Bar -->
+    <div style="
+      margin-top:16px; background:rgba(7, 13, 26, 0.85); border:1px solid rgba(0, 245, 255, 0.18);
+      border-radius:14px; padding:14px 20px; display:flex; justify-content:space-between; align-items:center;
+      flex-wrap:wrap; gap:12px;
+    ">
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <span style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.08em;">
+          3D ÇAP FAYLLARI (.STL):
+        </span>
+        <a href="/hardware/FIREX_1_Ust_Govde_Korpus.stl" download class="btn-demo" style="
+          background:rgba(0,245,255,0.12); border-color:#00F5FF; color:#00F5FF;
+          padding:6px 12px; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.74rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;
+        ">
+          ⬇ Üst Qapaq (.STL)
+        </a>
+        <a href="/hardware/FIREX_2_Alt_Baza_ESP32_Yuvasi.stl" download class="btn-demo" style="
+          background:rgba(0,230,118,0.12); border-color:#00E676; color:#00E676;
+          padding:6px 12px; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.74rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;
+        ">
+          ⬇ Alt Baza (.STL)
+        </a>
+        <a href="/hardware/FIREX_Tam_Yigilmish_Korpus.stl" download class="btn-demo" style="
+          background:rgba(255,107,53,0.12); border-color:#FF6B35; color:#FF6B35;
+          padding:6px 12px; border-radius:6px; font-family:'JetBrains Mono',monospace; font-size:0.74rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:5px;
+        ">
+          ⬇ Tam Korpus (.STL)
+        </a>
+      </div>
+      <div>
+        <a href="https://github.com/Hekimovraiz/Fire-X_Prototype" target="_blank" style="
+          font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:rgba(255,255,255,0.6);
+          text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+        " onmouseover="this.style.color='#00F5FF'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub Prototip Reposu ↗
+        </a>
+      </div>
+    </div>
+
+    <!-- 4-Feature Engineering Anatomy Grid -->
+    <div class="hw-features-grid" style="grid-template-columns: repeat(4, 1fr); margin-top:20px;">
+      <div class="hw-feature-card">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#00F5FF; font-weight:700; margin-bottom:8px;">01 // YAPIŞQANSIZ MONTAJ</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:8px;">100% Snap-Fit Beşik Sistemi</h3>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Heç bir yapışqandan istifadə edilmir. ESP32, MQ-2, Buzzer və LED-lər alt bazanın daxilindəki 0.4mm dözümlülük yuvalarına birbaşa kliklənərək bərkidilir.
+        </p>
+      </div>
+
+      <div class="hw-feature-card">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#FF6B35; font-weight:700; margin-bottom:8px;">02 // SENSOR QÜLLƏSİ</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:8px;">Koaksial MQ-2 Qüllə Baza</h3>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          MQ-2 lövhəsi 34mm hündürlükdə qülləyə oturur. Sensorun Ø 19.8 mm metal qübbəsi üst qapağın Ø 21.2 mm silindrik qülləsi ilə 100% eynioxlu (koaksial) birləşir.
+        </p>
+      </div>
+
+      <div class="hw-feature-card">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#00E676; font-weight:700; margin-bottom:8px;">03 // MÜNSİF NÜMAYİŞİ</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:8px;">Lift-Off Çıxarılan Qapaq</h3>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Münsiflər heyətinə cihazın daxili elektronikasını göstərmək üçün üst qapaq naqillərə toxunmadan 1 saniyədə qaldırılıb çıxarılır.
+        </p>
+      </div>
+
+      <div class="hw-feature-card">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#9B59B6; font-weight:700; margin-bottom:8px;">04 // HAVA VƏ SƏS ÇIXIŞI</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:8px;">Akustik Louverlər &amp; Portlar</h3>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Aktiv Buzzer üçün yan akustik çıxış yarıqları, ESP32 üçün soyutma pəncərələri və sol divarda standart Micro-USB kabel yuvası açılmışdır.
+        </p>
+      </div>
+    </div>
+
+    <!-- 4-View CAD Blueprint Preview Card -->
+    <div style="
+      margin-top:20px; background:rgba(7, 13, 26, 0.75); border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px; padding:20px; overflow:hidden;
+    ">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#00F5FF; font-weight:700;">
+          📐 4-GÖRÜNÜŞLÜ CAD TEXNİKİ ÇERTYOJ (128 × 58 × 46 MM)
+        </div>
+        <span style="font-size:0.72rem; color:rgba(255,255,255,0.45); font-family:'JetBrains Mono',monospace;">
+          Partladılmış Sxem &amp; Bütün Baza Yuvaları
+        </span>
+      </div>
+      <img src="/images/FIREX_STL_3D_CAD_Baxis.png" alt="FIRE-X 3D CAD Blueprint" style="
+        width:100%; border-radius:12px; border:1px solid rgba(0,245,255,0.2); box-shadow:0 8px 30px rgba(0,0,0,0.7); display:block;
+      " loading="lazy">
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <!-- 3. NƏ ETMİŞİK? (HOW IT WORKS - 4-STEP PIPELINE)                          -->
   <!-- ════════════════════════════════════════════════════════════════════════ -->
   <section class="hw-section" style="border-top:1px solid rgba(255,255,255,0.08); padding-top:40px;">
     <div class="hw-section-title">
@@ -1343,7 +1485,57 @@ const HW_EN = {
   'ESP32 + MQ-2 Arxitekturası': 'ESP32 + MQ-2 Architecture',
   'Sənədləşmə': 'Documentation',
   '© 2026 NASA FIRE-X · NASA Space Apps Challenge üçün hazırlanıb': '© 2026 NASA FIRE-X · Built for NASA Space Apps Challenge',
+  // ── 3D CAD Enclosure translations ──
+  '3D MODULAR CAD ENCLOSURE // v3.1 GLUELESS SNAP-FIT SYSTEM': '3D MODULAR CAD ENCLOSURE // v3.1 GLUELESS SNAP-FIT SYSTEM',
+  'İnteraktiv 3D Korpus & Tam Elektronika Baxışı': 'Interactive 3D Enclosure & Full Electronics CAD',
+  'Tam Ekran (Fullscreen)': 'Fullscreen',
+  'Ayrı Pəncərədə Aç ↗': 'Open Standalone ↗',
+  '100% Yapışqansız, Taxıb-Çıxarılan Korpus Dizaynı: Bütün komponentlər (ESP32 DevKit V1, MQ-2 Qaz Sensoru Qülləsi, Aktiv Buzzer və 2× Status LED-ləri) alt bazanın daxilindəki dəqiq yuvalara birbaşa kliklənərək oturur. Modeli siçan və ya barmaqla fırladın, yaxınlaşdırın, partladılmış və ya şəffaf (X-Ray) rejimdə daxili mexanizmi araşdırın:': '100% Glueless Snap-Fit Enclosure: All electronics (ESP32 DevKit V1, MQ-2 Coaxial Turret, Active Buzzer, and 2× Status LEDs) click directly into precision bottom-base cradles. Rotate, zoom, inspect exploded view or X-Ray transparency:',
+  '3D ÇAP FAYLLARI (.STL):': '3D PRINT FILES (.STL):',
+  '⬇ Üst Qapaq (.STL)': '⬇ Top Shell (.STL)',
+  '⬇ Alt Baza (.STL)': '⬇ Bottom Base (.STL)',
+  '⬇ Tam Korpus (.STL)': '⬇ Assembled Enclosure (.STL)',
+  'GitHub Prototip Reposu ↗': 'GitHub Prototype Repo ↗',
+  '01 // YAPIŞQANSIZ MONTAJ': '01 // GLUELESS ASSEMBLY',
+  '100% Snap-Fit Beşik Sistemi': '100% Snap-Fit Cradle System',
+  'Heç bir yapışqandan istifadə edilmir. ESP32, MQ-2, Buzzer və LED-lər alt bazanın daxilindəki 0.4mm dözümlülük yuvalarına birbaşa kliklənərək bərkidilir.': 'Zero glue or screws required. The ESP32, MQ-2, Buzzer, and LEDs snap directly into 0.4mm tolerance bottom-base sockets.',
+  '02 // SENSOR QÜLLƏSİ': '02 // SENSOR TURRET',
+  'Koaksial MQ-2 Qüllə Baza': 'Coaxial MQ-2 Turret Pedestal',
+  'MQ-2 lövhəsi 34mm hündürlükdə qülləyə oturur. Sensorun Ø 19.8 mm metal qübbəsi üst qapağın Ø 21.2 mm silindrik qülləsi ilə 100% eynioxlu (koaksial) birləşir.': 'The MQ-2 PCB rests at Z = 34mm. Its Ø 19.8 mm metal mesh dome aligns coaxially with the top cover Ø 21.2 mm turret bore.',
+  '03 // MÜNSİF NÜMAYİŞİ': '03 // JURY INSPECTION',
+  'Lift-Off Çıxarılan Qapaq': 'Lift-Off Quick-Release Shell',
+  'Münsiflər heyətinə cihazın daxili elektronikasını göstərmək üçün üst qapaq naqillərə toxunmadan 1 saniyədə qaldırılıb çıxarılır.': 'For seamless jury inspection, the top cover lifts off in 1 second without touching any internal wiring.',
+  '04 // HAVA VƏ SƏS ÇIXIŞI': '04 // ACOUSTIC & THERMAL PORTS',
+  'Akustik Louverlər & Portlar': 'Acoustic Louvers & Ports',
+  'Aktiv Buzzer üçün yan akustik çıxış yarıqları, ESP32 üçün soyutma pəncərələri və sol divarda standart Micro-USB kabel yuvası açılmışdır.': 'Side louvers provide 85dB acoustic escape for the buzzer, cooling for the ESP32, and an accessible left Micro-USB port.',
+  '📐 4-GÖRÜNÜŞLÜ CAD TEXNİKİ ÇERTYOJ (128 × 58 × 46 MM)': '📐 4-VIEW CAD TECHNICAL SCHEMATIC (128 × 58 × 46 MM)',
+  'Partladılmış Sxem & Bütün Baza Yuvaları': 'Exploded View & All Modular Sockets',
+  '🔬 3D Korpus Baxışı ↓': '🔬 3D CAD Enclosure ↓',
 };
+
+function toggleCadFullscreen() {
+  const container = document.getElementById('cad-viewer-container');
+  if (!container) return;
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.webkitRequestFullscreen) {
+      container.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+}
+
+// Support offline file:/// opening
+if (window.location.protocol === 'file:') {
+  const cadIframe = document.getElementById('cad-iframe');
+  if (cadIframe) cadIframe.src = '../hardware/3d_viewer.html';
+}
 
 function translateStaticPage() {
   if (getLang() !== 'en') return;
