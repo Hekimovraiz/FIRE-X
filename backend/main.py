@@ -470,11 +470,21 @@ def simulator(): return serve_page('simulator.html')
 @app.get('/hardware')
 def hardware_page(): return serve_page('hardware.html')
 
+@app.get('/hardware/3d-viewer')
+@app.get('/hardware/3d_viewer.html')
+def serve_hardware_3d_viewer():
+    fpath = os.path.join(HARDWARE_DIR, '3d_viewer.html')
+    if os.path.exists(fpath):
+        return FileResponse(fpath, media_type='text/html', headers={'Cache-Control': 'no-cache, no-store, must-revalidate', 'Content-Disposition': 'inline'})
+    raise HTTPException(status_code=404, detail='3D Viewer not found')
+
 @app.get('/hardware/{filename}')
 def hardware_file_download(filename: str):
     safe_name = os.path.basename(filename)
     fpath = os.path.join(HARDWARE_DIR, safe_name)
     if os.path.exists(fpath):
+        if safe_name.endswith('.html'):
+            return FileResponse(fpath, media_type='text/html', headers={'Cache-Control': 'no-cache', 'Content-Disposition': 'inline'})
         return FileResponse(fpath, filename=safe_name)
     raise HTTPException(status_code=404, detail='Hardware file not found')
 
