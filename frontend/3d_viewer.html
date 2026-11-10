@@ -58,11 +58,29 @@
   }
 
   #hint {
-    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
-    background: rgba(7,13,26,0.9); border: 1px solid rgba(255,255,255,0.12);
-    padding: 8px 22px; border-radius: 100px; font-size: 0.78rem; color: #94A3B8; z-index: 90;
+    position: fixed; bottom: 68px; left: 50%; transform: translateX(-50%);
+    background: rgba(7,13,26,0.88); border: 1px solid rgba(255,255,255,0.12);
+    padding: 5px 16px; border-radius: 100px; font-size: 0.72rem; color: #94A3B8; z-index: 90;
     font-family: "JetBrains Mono", monospace; backdrop-filter: blur(10px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.7); pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  #cam-dock {
+    position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+    background: rgba(7, 13, 26, 0.94); border: 1px solid rgba(0, 245, 255, 0.35);
+    padding: 6px 14px; border-radius: 14px; display: flex; gap: 6px; align-items: center;
+    z-index: 100; backdrop-filter: blur(16px);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.8), 0 0 20px rgba(0,245,255,0.14);
+    flex-wrap: wrap; justify-content: center; max-width: 96vw;
+  }
+  #cam-dock button {
+    padding: 6px 10px; font-size: 0.74rem; font-weight: 700;
+  }
+  @media (max-width: 900px) {
+    #topbar { top: 6px; padding: 6px 10px; gap: 4px; font-size: 0.7rem; }
+    #hud-info { display: none; }
+    #hint { display: none; }
+    #cam-dock { bottom: 8px; padding: 5px 8px; gap: 4px; }
   }
 </style>
 </head>
@@ -91,7 +109,19 @@
   <div>• <b>Korpus:</b> 128 × 58 × 46 mm (FDM Snap-Fit)</div>
 </div>
 
-<div id="hint">🖱️ Sol düymə: 360° Fırlat &nbsp;|&nbsp; Təkər: Yaxınlaşdır &nbsp;|&nbsp; Sağ düymə: Sürüşdür</div>
+<div id="hint">🖱️ Sol: 360° Fırlat &nbsp;|&nbsp; Təkər: Yaxınlaşdır &nbsp;|&nbsp; Sağ: Sürüşdür &nbsp;|&nbsp; Toxunuş: 1 barmaq fırlat, 2 barmaq pan/zoom</div>
+
+<div id="cam-dock">
+  <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:rgba(0,245,255,0.8); font-weight:700; margin-right:4px;">🎯 KAMERA:</span>
+  <button onclick="setCameraView('iso')" title="Standart 3D İzometrik Baxış">🏠 İzo (Sıfırla)</button>
+  <button onclick="setCameraView('top')" title="Yuxarıdan Baxış (MQ-2 və LED-lər)">⬆ Üst</button>
+  <button onclick="setCameraView('front')" title="Ön Baxış (FIRE-X Loqo)">👁️ Ön</button>
+  <button onclick="setCameraView('side')" title="Sol Yan Baxış (ESP32 USB & Louverlər)">↔ Sol</button>
+  <button onclick="setCameraView('right')" title="Sağ Yan Baxış (Buzzer Louverləri)">↔ Sağ</button>
+  <button id="btn-autorotate" onclick="toggleAutoRotate()" class="btn-accent" title="Modeli avtomatik 360° səlis fırlat">🔄 Avto-Fırlanma</button>
+  <button onclick="zoomCamera(-25)" title="Yaxınlaşdır">🔍 +</button>
+  <button onclick="zoomCamera(25)" title="Uzaqlaşdır">🔍 −</button>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -112,8 +142,10 @@ function b64ToArrayBuffer(b64) {
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x02050B, 0.0035);
 
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1500);
-camera.position.set(-110, -140, 110);
+const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.5, 1500);
+// CRITICAL: Set true Z-up coordinate system so mouse rotation is a stable turntable around vertical pole!
+camera.up.set(0, 0, 1);
+camera.position.set(-100, -145, 95);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -127,8 +159,21 @@ document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 0, 22);
 controls.enableDamping = true;
-controls.dampingFactor = 0.05;
+controls.dampingFactor = 0.08;
+controls.rotateSpeed = 0.85;
+controls.zoomSpeed = 1.0;
+controls.panSpeed = 0.8;
+controls.minDistance = 45;
+controls.maxDistance = 320;
+controls.maxPolarAngle = Math.PI * 0.52; // Keep camera above grid floor, preventing inverted tumble
+controls.autoRotate = false;
+controls.autoRotateSpeed = 1.4;
 controls.update();
+
+controls.addEventListener("start", () => {
+  targetCamPos = null;
+  targetLookAt = null;
+});
 
 // Space environment grid
 const grid = new THREE.GridHelper(300, 30, 0x00F5FF, 0x0B1B33);
@@ -559,11 +604,65 @@ function toggleWire() {
   document.getElementById("btn-wire").classList.toggle("active", matTopNormal.wireframe);
 }
 
+// Camera Presets & Smooth Glide System
+let targetCamPos = null;
+let targetLookAt = null;
+
+function setCameraView(viewName) {
+  controls.autoRotate = false;
+  const autoBtn = document.getElementById("btn-autorotate");
+  if (autoBtn) autoBtn.classList.remove("active");
+
+  if (viewName === "iso") {
+    targetCamPos = new THREE.Vector3(-100, -145, 95);
+    targetLookAt = new THREE.Vector3(0, 0, 22);
+  } else if (viewName === "top") {
+    targetCamPos = new THREE.Vector3(0, -1.0, 185);
+    targetLookAt = new THREE.Vector3(0, 0, 22);
+  } else if (viewName === "front") {
+    targetCamPos = new THREE.Vector3(0, -170, 23);
+    targetLookAt = new THREE.Vector3(0, 0, 23);
+  } else if (viewName === "side") {
+    targetCamPos = new THREE.Vector3(-170, 0, 23);
+    targetLookAt = new THREE.Vector3(0, 0, 23);
+  } else if (viewName === "right") {
+    targetCamPos = new THREE.Vector3(170, 0, 23);
+    targetLookAt = new THREE.Vector3(0, 0, 23);
+  }
+}
+
+function zoomCamera(delta) {
+  const dir = new THREE.Vector3().subVectors(camera.position, controls.target);
+  const len = dir.length();
+  const newLen = Math.max(50, Math.min(300, len + delta));
+  dir.setLength(newLen);
+  targetCamPos = new THREE.Vector3().addVectors(controls.target, dir);
+  targetLookAt = controls.target.clone();
+}
+
+function toggleAutoRotate() {
+  controls.autoRotate = !controls.autoRotate;
+  const btn = document.getElementById("btn-autorotate");
+  if (btn) btn.classList.toggle("active", controls.autoRotate);
+}
+
 // Animation loop
 let clock = new THREE.Clock();
 function animate() {
   requestAnimationFrame(animate);
   const elapsed = clock.getElapsedTime();
+
+  // Smooth camera glide towards target preset
+  if (targetCamPos && targetLookAt) {
+    camera.position.lerp(targetCamPos, 0.09);
+    controls.target.lerp(targetLookAt, 0.09);
+    if (camera.position.distanceTo(targetCamPos) < 0.2 && controls.target.distanceTo(targetLookAt) < 0.2) {
+      camera.position.copy(targetCamPos);
+      controls.target.copy(targetLookAt);
+      targetCamPos = null;
+      targetLookAt = null;
+    }
+  }
 
   // Smooth top cover vertical movement
   meshTop.position.z += (targetZ - meshTop.position.z) * 0.12;
