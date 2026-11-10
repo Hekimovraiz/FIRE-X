@@ -316,7 +316,7 @@ Your mission:
    - Scope Exclusion: Rocket engine propellants/thrusters are excluded because high-pressure turbulent atomization (>50 bar) is buoyancy-independent, unlike low-velocity cabin fires (0–30 cm/s).
 2. Rank investigations by relevance for Spacecraft, Space Station (ISS), Lunar Base (0.16g), Martian Base (0.38g), Pressurized Rover (>=30% O2, <=10.2 psi), and EVA Spacesuit (85–100% O2).
 3. Explain how findings improve 3-tier fire safety equipment (Prevention, Detection, Suppression) in space and on Earth (fine-water-mist extinguishers, dust-immune smoke detectors, firefighter gear).
-4. Always cite the live SQL-RAG telemetry rows provided below. Answer in English.
+4. Synthesize live SQL-RAG telemetry naturally into your prose. Do NOT append a raw database dump or tabular list at the end of your response unless explicitly requested. Answer in English.
 """
 
     base_instructions_az = """Siz rəsmi NASA Mikroyerçəkim Yanma və Yanğın Təhlükəsizliyi Layihə Köməkçisisiniz (FIRE-X Platforması).
@@ -332,7 +332,7 @@ Sizin missiyanız:
    - Qismən Cazibə Hüdudlanması (0.16g Ay, 0.38g Mars): PSI bazasında hazırda birbaşa qismən cazibə uçuş datası YOXDUR (gələcəkdə LUCI və FM2-dən əlavə ediləcək); FIRE-X aralıq cazibəni 0g BKS məcburi axın datası ilə 1.0g NASA-STD-6001 arasında hüdudlayır (bounding).
    - Raket Yanacaqlarının İstisnası: Raket mühərriki yanacaqları yüksək təzyiqli (>50 bar) turbulent rejimdə işlədiyi üçün kabin yanğın təhlükəsizliyi əhatə dairəsinə daxil deyil.
 2. Tədqiqatları Kosmik Gəmi, Kosmik Stansiya (BKS), Ay Bazası (0.16g), Mars Bazası (0.38g), Təzyiqli Rover (>=30% O2, <=10.2 psi) və EVA Skafandrı (85–100% O2) üçün uyğunluq dərəcəsinə görə sıralamaq.
-3. Aşağıda verilmiş canlı SQLite (`fire_safety.db`) SQL-RAG sətirlərinə istinad etmək və cavabı Azərbaycan dilində təqdim etmək.
+3. Canlı SQLite (`fire_safety.db`) SQL-RAG telemetriya məlumatlarını cavabınızın mətninə səlis daxil edin. İstifadəçi xüsusi olaraq cədvəl tələb etmədikdə cavabın sonuna xam telemetriya cədvəli əlavə etməyin. Cavabı Azərbaycan dilində təqdim edin.
 """
 
     prompt = base_instructions_az if is_az else base_instructions_en
@@ -358,7 +358,7 @@ def generate_scientific_fallback(user_message: str, language: str = "en", page_c
     """
     q = user_message.lower()
     is_az = language.lower().startswith("az")
-    rag_md = format_sql_rag_markdown(rag_context, is_az=is_az) if rag_context else ""
+    rag_md = ""  # Raw tabular dump omitted for a clean response format
 
     # 1. Investigation Ranking / Relevance / Partial-Gravity Bounding / Rover / EVA / Mars / Moon
     if any(k in q for k in ["rank", "reytinq", "sırala", "relevan", "rover", "eva", "suit", "skafandr", "partial", "qismən", "luci", "fm2", "bound", "0.16", "0.38"]):
@@ -591,8 +591,6 @@ def query_ai_assistant(
                 temperature=0.1
             )
             response_text = response.choices[0].message.content
-            if rag_context and "fire_safety.db" not in response_text:
-                response_text += format_sql_rag_markdown(rag_context, is_az=language.lower().startswith("az"))
             return {
                 "success": True,
                 "response": response_text,
