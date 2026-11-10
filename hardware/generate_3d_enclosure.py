@@ -1,17 +1,18 @@
 """
-NASA FIRE-X 3D-Printable Enclosure CAD Generator (.STL) — v2.0 Precision Fit
-Verified against physical datasheets + FDM 3D printing tolerances (+0.4 to +0.8 mm):
-1. MQ-2 Gas Sensor Module:
-   - Metal mesh dome + bakelite base: Ø 19.8 mm, height 16.0 mm above PCB
-   - Turret bore: Ø 20.8 mm (0.5 mm radial clearance)
-   - Turret ceiling thickness above MQ-2 PCB seat: 4.8 mm -> 11.2 mm of mesh dome protrudes above turret!
-   - Internal MQ-2 rectangular PCB holder pocket: 34.0 × 22.0 mm (fits 32.0 × 20.0 mm PCB + tolerances)
-2. ESP32 30-Pin DevKit V1 (ESP-WROOM-32, CP2102):
-   - Physical PCB: 51.5 × 28.5 mm -> Cradle slot: 53.6 × 30.2 mm
-   - Downward soldered pin clearance trench: 9.5 mm deep (fits 8.5 mm male pins)
-   - Overhead cavity above cradle: 27.0 mm (fits 14 mm Female Dupont connectors with room to spare)
-3. Micro-USB Cable Port:
-   - Inner through-opening: 14.5 × 10.0 mm (outer chamfer: 18.5 × 13.0 mm) so any Micro-USB plug clicks 100% in.
+NASA FIRE-X 3D-Printable Enclosure CAD Generator (.STL) — v3.1 Coaxial Glueless Modular Edition
+100% GLUELESS (Yapışqansız, Taxıb-Çıxarılan) — All components snap into the Bottom Base (Alt Baza):
+1. Left Cradle (X = -33.6, Y = 0): ESP32 30-Pin DevKit V1 (53.2 × 29.6 mm slot + 4 corner clips
+   + 9.5 mm under-board pin trench + Left-Wall USB port).
+2. Center-Right Coaxial Pedestal Tower (X = +5.2 to +38.4, Y = -10.5 to +10.5):
+   - Holds the asymmetric 32.0 × 20.0 mm MQ-2 PCB at Z = 34.0 mm so its Ø 19.8 mm metal mesh dome
+     (centered 10.0 mm from the right edge of the PCB) sits at EXACTLY (X = +28.0, Y = 0.0),
+     100% coaxial with the Top Cover's Ø 21.2 mm Turret bore!
+   - The 4-pin header end of the MQ-2 PCB (X = +6.0) faces the ESP32 with an open 31 mm tall under-arch
+     for the potentiometer and Female Dupont connectors.
+3. Far-Right Acoustic Chamber (X = +50.0, Y = 0.0):
+   - Ø 12.4 mm Active Buzzer friction-fit C-clip socket right beside the acoustic louvers.
+4. Front/Rear Status LED Sockets (X = +1.0, Y = ±16.5):
+   - 2× Ø 5.3 mm friction-fit sockets for 5mm Green & Red LEDs + top viewing ports.
 """
 
 import os
@@ -194,38 +195,27 @@ def build_enclosure_parts():
 
     shell = outer - cavity
 
-    # ── 1. PRECISION MQ-2 SENSOR MOUNTING AT TOP TURRET (X = +28, Y = 0) ──
-    # Turret top is at Z = H + 6.0 = 52.0 mm.
-    # MQ-2 cylinder height above its rectangular PCB is 16.0 mm.
-    # We place the rectangular MQ-2 PCB ceiling seat at Z = 47.2 mm -> leaving exactly 4.8 mm turret lip!
-    # So 16.0 - 4.8 = 11.2 mm of the MQ-2 stainless steel mesh dome protrudes out of the top turret!
-    mq2_pcb_recess = Manifold.cube((34.2, 22.2, 8.0), True).translate((tx, ty, 43.2))
-    shell = shell - mq2_pcb_recess
-
-    # Circular through-bore Ø 20.8 mm (radius 10.4 mm) for MQ-2 metal dome & black base (Ø 19.8 mm)
-    mq2_dome_hole = Manifold.cylinder(30.0, 10.4, 10.4, 64).translate((tx, ty, H - 10.0))
+    # ── 1. TOP TURRET PASS-THROUGH BORE (Ø 21.2 mm) SO TOP COVER LIFTS OFF FREELY ──
+    mq2_dome_hole = Manifold.cylinder(30.0, 10.6, 10.6, 64).translate((tx, ty, H - 12.0))
     shell = shell - mq2_dome_hole
 
-    # Internal rectangular guide frame (inner 34.2 x 22.2 mm, outer 38.2 x 26.2 mm) on ceiling
-    # Holds the 32 x 20 mm MQ-2 PCB straight so it cannot twist or slide
-    mq2_guide_frame = (
-        Manifold.cube((38.2, 26.2, 5.5), True)
-        - Manifold.cube((34.2, 22.2, 7.0), True)
-        - Manifold.cube((20.0, 30.0, 7.0), True)  # side wire cutout
-    ).translate((tx, ty, H - wall - 1.5))
-    shell = shell + mq2_guide_frame
+    # Dual 5mm LED top viewing ports at X = +1.0, Y = -16.5 and Y = +16.5
+    led1_top_hole = Manifold.cylinder(12.0, 2.8, 2.8, 32).translate((1.0, -16.5, H - 6.0))
+    led2_top_hole = Manifold.cylinder(12.0, 2.8, 2.8, 32).translate((1.0,  16.5, H - 6.0))
+    shell = shell - led1_top_hole - led2_top_hole
 
-    # ── 2. Right Side Cooling Louvers (4 horizontal ventilation slots above USB port) ──
+    # ── 2. Acoustic & Cooling Louvers on Both Ends ──
     for sz in [23.0, 28.0, 33.0, 38.0]:
-        slot = Manifold.cube((12.0, 20.0, 2.4), True).translate((L/2.0 - 2.0, 0.0, sz))
-        shell = shell - slot
+        slot_r = Manifold.cube((12.0, 20.0, 2.4), True).translate((L/2.0 - 2.0, 0.0, sz))
+        slot_l = Manifold.cube((12.0, 20.0, 2.4), True).translate((-L/2.0 + 2.0, 0.0, sz))
+        shell = shell - slot_r - slot_l
 
-    # ── 3. Generous Micro-USB Cable Port Cutout (Right Wall, aligned with ESP32 cradle) ──
-    # Inner through-hole: 14.5 mm wide (Y) x 10.0 mm tall (Z), centered at Z = 13.0 mm
-    # Outer plug bevel recess: 18.5 mm wide x 13.0 mm tall
-    usb_hole = Manifold.cube((18.0, 14.5, 10.0), True).translate((L/2.0 - 2.0, 0.0, 13.0))
-    usb_recess = Manifold.cube((5.0, 18.5, 13.0), True).translate((L/2.0 + 0.5, 0.0, 13.0))
-    shell = shell - usb_hole - usb_recess
+    # ── 3. USB Cable Port Cutouts (Left Wall for ESP32 + Right Wall auxiliary port) ──
+    usb_hole_l = Manifold.cube((18.0, 14.5, 10.0), True).translate((-L/2.0 + 2.0, 0.0, 13.0))
+    usb_recess_l = Manifold.cube((5.0, 18.5, 13.0), True).translate((-L/2.0 - 0.5, 0.0, 13.0))
+    usb_hole_r = Manifold.cube((18.0, 14.5, 10.0), True).translate((L/2.0 - 2.0, 0.0, 13.0))
+    usb_recess_r = Manifold.cube((5.0, 18.5, 13.0), True).translate((L/2.0 + 0.5, 0.0, 13.0))
+    shell = shell - usb_hole_l - usb_recess_l - usb_hole_r - usb_recess_r
 
     # ── Split into 2 Printable Parts: Bottom Base (Z <= base_h) and Top Shell (Z >= base_h) ──
     big_box_bot = Manifold.cube((220.0, 140.0, base_h), True).translate((0.0, 0.0, base_h / 2.0))
@@ -234,42 +224,79 @@ def build_enclosure_parts():
     bottom_part = shell ^ big_box_bot
     top_part = shell ^ big_box_top
 
-    # Interlocking snap-fit lip on Bottom Base (0.35 mm radial clearance for smooth FDM fit)
+    # Easy-open alignment lip on Bottom Base (0.45 mm radial clearance for smooth hand lift-off)
     lip_outer = make_chamfered_octagon_prism(
-        L - 2 * wall - 0.7, W - 2 * wall - 0.7, 4.0,
-        corner_x=13.2, corner_y=11.2, z0=base_h - 1.0
+        L - 2 * wall - 0.9, W - 2 * wall - 0.9, 3.2,
+        corner_x=13.2, corner_y=11.2, z0=base_h - 0.8
     )
     lip_inner = make_chamfered_octagon_prism(
-        L - 2 * wall - 4.3, W - 2 * wall - 4.3, 5.0,
-        corner_x=12.0, corner_y=10.0, z0=base_h - 1.5
+        L - 2 * wall - 4.3, W - 2 * wall - 4.3, 4.5,
+        corner_x=12.0, corner_y=10.0, z0=base_h - 1.2
     )
-    lip = (lip_outer - lip_inner) - usb_hole
+    lip = (lip_outer - lip_inner) - usb_hole_l - usb_hole_r
     bottom_part = bottom_part + lip
 
-    # ── 4. PRECISION ESP32 30-PIN DEVKIT V1 CRADLE ON BOTTOM BASE ──
-    # Physical 30-pin ESP32 PCB: 51.5 x 28.5 mm
-    # Cradle PCB slot: 53.6 x 30.2 mm (+1.7 mm width / +2.1 mm length clearance for easy drop-in)
-    # PCB rests on ledge at Z = 11.8 mm -> gives 9.0 mm vertical clearance underneath for 8.5 mm male pins!
-    esp_cx = L/2.0 - wall - 53.6/2.0 - 0.5
+    # ══════════════════════════════════════════════════════════════════════════
+    # 4. GLUELESS MODULAR COMPONENT CRADLES ON BOTTOM BASE (ALT BAZA)
+    # ══════════════════════════════════════════════════════════════════════════
+
+    # ── (A) LEFT CRADLE: ESP32 30-PIN DEVKIT V1 (X = -33.9, Y = 0.0) ──
+    esp_cx = -L/2.0 + wall + 53.6/2.0 + 0.5  # X = -33.9 mm
     esp_cy = 0.0
-    cradle_block = Manifold.cube((57.6, 34.6, 11.5), True).translate((esp_cx, esp_cy, 2.0 + 5.75))
-    # Central trench underneath PCB (46.0 x 23.0 mm) + pin row clearance channels so pins sit freely
-    under_pocket = Manifold.cube((50.5, 29.0, 10.0), True).translate((esp_cx, esp_cy, 2.8 + 4.2))
-    # Upper board slot (53.6 x 30.2 mm) above Z = 10.5 mm holding the 4 corners of the ESP32 PCB
-    board_slot = Manifold.cube((53.6, 30.2, 6.0), True).translate((esp_cx, esp_cy, 10.2 + 3.0))
-    wire_cut_x = Manifold.cube((38.0, 42.0, 12.0), True).translate((esp_cx, esp_cy, 8.5))
-    wire_cut_y = Manifold.cube((64.0, 19.0, 12.0), True).translate((esp_cx, esp_cy, 8.5))
+    cradle_block = Manifold.cube((57.6, 34.4, 12.2), True).translate((esp_cx, esp_cy, 2.0 + 6.1))
+    under_pocket = Manifold.cube((50.2, 28.6, 10.0), True).translate((esp_cx, esp_cy, 2.8 + 4.2))
+    board_slot = Manifold.cube((53.0, 29.6, 6.5), True).translate((esp_cx, esp_cy, 10.2 + 3.25))
+    wire_cut_x = Manifold.cube((34.0, 42.0, 13.0), True).translate((esp_cx, esp_cy, 8.8))
+    wire_cut_y = Manifold.cube((64.0, 18.0, 13.0), True).translate((esp_cx, esp_cy, 8.8))
+    esp_cradle = (cradle_block - under_pocket - board_slot - wire_cut_x - wire_cut_y) - usb_hole_l
 
-    cradle = (cradle_block - under_pocket - board_slot - wire_cut_x - wire_cut_y) - usb_hole
-    bottom_part = bottom_part + cradle
+    # ── (B) CENTER-RIGHT COAXIAL PEDESTAL TOWER FOR MQ-2 SENSOR (GLUELESS!) ──
+    # Standard MQ-2 PCB is 32.0 mm long × 20.0 mm wide.
+    # Its Ø 19.8 mm metal dome is centered 10.0 mm from the right edge of the PCB and 22.0 mm from the 4-pin left edge.
+    # To keep the metal dome coaxial with the Top Turret at (tx = +28.0, ty = 0.0):
+    # - PCB right edge sits at X = +28.0 + 10.4 = +38.4 mm
+    # - PCB left (4-pin) edge sits at X = +28.0 - 22.4 = +5.6 mm
+    # - PCB center is at p_cx = (+38.4 + 5.6) / 2 = +22.0 mm, p_cy = 0.0 mm!
+    p_cx, p_cy = 22.0, 0.0
+    tower_outer = Manifold.cube((37.6, 25.6, 36.7), True).translate((p_cx, p_cy, 2.8 + 36.7 / 2.0))
+    # Upper PCB friction-fit pocket (Z = 34.0 to 40.0 mm): inner 32.8 × 20.8 mm
+    pcb_pocket = Manifold.cube((32.8, 20.8, 7.0), True).translate((p_cx, p_cy, 34.0 + 3.5))
+    # Under-PCB hollow chamber (Z = 2.8 to 34.0 mm): inner 29.2 × 17.6 mm (leaves 1.8 mm support ledge on all 4 sides)
+    under_tower = Manifold.cube((29.2, 17.6, 32.0), True).translate((p_cx, p_cy, 2.8 + 16.0))
+    # Wide arch cutouts on all 4 sides so the 4 MQ-2 pins, potentiometer, and Female Dupont wires pass freely
+    arch_x = Manifold.cube((42.0, 12.6, 28.0), True).translate((p_cx, p_cy, 2.8 + 14.0))
+    arch_y = Manifold.cube((20.0, 30.0, 28.0), True).translate((p_cx, p_cy, 2.8 + 14.0))
+    # Finger grab cutouts on top walls so MQ-2 can be lifted out or pressed in by hand
+    grip_slot_x = Manifold.cube((40.0, 10.0, 8.0), True).translate((p_cx, p_cy, 37.0))
+    grip_slot_y = Manifold.cube((14.0, 28.0, 8.0), True).translate((p_cx, p_cy, 37.0))
 
-    assembled = (
-        outer - cavity - mq2_pcb_recess - mq2_dome_hole + mq2_guide_frame
-        - usb_hole - usb_recess + cradle
-    )
-    for sz in [23.0, 28.0, 33.0, 38.0]:
-        slot = Manifold.cube((12.0, 20.0, 2.4), True).translate((L/2.0 - 2.0, 0.0, sz))
-        assembled = assembled - slot
+    mq2_tower = (
+        tower_outer - pcb_pocket - under_tower - arch_x - arch_y - grip_slot_x - grip_slot_y
+    ) - usb_hole_r
+
+    # ── (C) FAR-RIGHT SOCKET: 12MM ACTIVE BUZZER C-CLIP HOLDER (X = +50.0, Y = 0.0) ──
+    buz_x, buz_y = 50.0, 0.0
+    buzzer_holder = (
+        Manifold.cylinder(10.5, 8.2, 8.2, 48)
+        - Manifold.cylinder(9.0, 6.2, 6.2, 48).translate((0.0, 0.0, 2.0))
+        - Manifold.cylinder(12.0, 4.5, 4.5, 36)
+        - Manifold.cube((18.0, 6.0, 12.0), True).translate((-5.0, 0.0, 6.0))  # C-clip wire slot facing center
+    ).translate((buz_x, buz_y, 2.8))
+
+    # ── (D) FRONT & REAR SOCKETS: 2× 5MM LED FRICTION HOLDERS (X = +1.0, Y = ±16.5) ──
+    led_holders = Manifold()
+    for ly in [-16.5, 16.5]:
+        lh = (
+            Manifold.cylinder(11.0, 4.4, 4.4, 36)
+            - Manifold.cylinder(9.5, 2.65, 2.65, 36).translate((0.0, 0.0, 2.0))
+            - Manifold.cylinder(12.0, 1.9, 1.9, 24)
+            - Manifold.cube((10.0, 3.2, 12.0), True).translate((0.0, -3.0 if ly > 0 else 3.0, 6.0))
+        ).translate((1.0, ly, 2.8))
+        led_holders = led_holders + lh
+
+    bottom_part = bottom_part + esp_cradle + mq2_tower + buzzer_holder + led_holders
+
+    assembled = bottom_part + top_part
 
     return bottom_part, top_part, assembled
 
@@ -282,14 +309,14 @@ def manifold_to_trimesh(m: Manifold) -> trimesh.Trimesh:
 
 
 if __name__ == "__main__":
-    print("Building v2.0 Precision-Fit 3D CAD enclosure meshes...")
+    print("Building v3.1 Coaxial Glueless Modular 3D CAD enclosure meshes...")
     bot_m, top_m, asm_m = build_enclosure_parts()
 
     tm_bot = manifold_to_trimesh(bot_m)
     tm_top = manifold_to_trimesh(top_m)
     tm_asm = manifold_to_trimesh(asm_m)
 
-    for name, tm in [("Bottom Base", tm_bot), ("Top Shell", tm_top), ("Assembled", tm_asm)]:
+    for name, tm in [("Bottom Base (All Cradles)", tm_bot), ("Top Shell (Lift-Off Cover)", tm_top), ("Assembled", tm_asm)]:
         print(f"  {name}: vertices={len(tm.vertices)}, faces={len(tm.faces)}, "
               f"watertight={tm.is_watertight}, bounds_mm={np.round(tm.extents, 1).tolist()}")
 
@@ -300,7 +327,6 @@ if __name__ == "__main__":
     os.makedirs(desk_dir, exist_ok=True)
     os.makedirs(proto_dir, exist_ok=True)
 
-    # Save clean names to prototip/ and legacy names to hardware/ + desk_dir/
     tm_top.export(os.path.join(proto_dir, "firex-top-shell.stl"))
     tm_bot.export(os.path.join(proto_dir, "firex-bottom-base.stl"))
     tm_asm.export(os.path.join(proto_dir, "firex-assembled.stl"))
@@ -312,4 +338,4 @@ if __name__ == "__main__":
     tm_top.export(os.path.join(hw_dir, "FIREX_1_Ust_Govde_Korpus.stl"))
     tm_bot.export(os.path.join(hw_dir, "FIREX_2_Alt_Baza_ESP32_Yuvasi.stl"))
     tm_asm.export(os.path.join(hw_dir, "FIREX_Tam_Yigilmish_Korpus.stl"))
-    print("All STL files exported successfully!")
+    print("All v3.1 Coaxial Glueless Modular STL files exported successfully!")
