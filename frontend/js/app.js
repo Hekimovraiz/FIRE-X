@@ -135,7 +135,7 @@ class FireXApp {
       const contextMap = {
         'dashboard': { section: 'Mission Control Dashboard' },
         'visualizations': { section: 'Analytics Hub — Combustion Telemetry Charts' },
-        'explorer': { section: 'Data Explorer — 879 NASA Experiments' },
+        'explorer': { section: 'Data Explorer — 892 NASA Experiments' },
         'simulator': { section: 'Planetary Mission Fire Hazard Simulator' },
         'compare': { section: 'Multi-Experiment Comparison Tool' }
       };
@@ -149,8 +149,8 @@ class FireXApp {
       if (el) el.textContent = val;
     };
 
-    setKPI('kpi-total-experiments', stats.total_experiments?.toLocaleString() || '879');
-    setKPI('kpi-total-families', stats.total_families || '16');
+    setKPI('kpi-total-experiments', stats.total_experiments?.toLocaleString() || '892');
+    setKPI('kpi-total-families', stats.total_families || '29');
     setKPI('kpi-avg-o2', stats.averages ? stats.averages.avg_oxygen_pct.toFixed(1) + '%' : '—');
     setKPI('kpi-avg-de', stats.averages ? stats.averages.avg_extinction_diameter_mm.toFixed(2) + ' mm' : '—');
   }

@@ -547,6 +547,7 @@ body {
       <li><a href="/analytics" class="nav-link active">Analytics</a></li>
       <li><a href="/explorer" class="nav-link">Data Explorer</a></li>
       <li><a href="/simulator" class="nav-link">Simulator</a></li>
+      <li><a href="/hardware" class="nav-link">Hardware</a></li>
       <li><a href="/ai" class="nav-link">AI Assistant</a></li>
       <li><a href="/about" class="nav-link">About</a></li>
     </ul>
@@ -571,21 +572,21 @@ body {
   <div class="container-wide">
     <div class="holo-tag">
       <div class="holo-tag-dot"></div>
-      NASA PHYSICAL SCIENCE INFORMATICS // 879 ORBITAL TEST CAMPAIGNS
+      NASA PHYSICAL SCIENCE INFORMATICS // 892 ORBITAL &amp; BOUNDING TEST CAMPAIGNS
     </div>
     <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.4rem, 5vw, 3.8rem);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-0.03em;">
       Scientific Telemetry &amp; <span class="text-gradient">Combustion Analytics</span>
     </h1>
     <p style="font-size:1.1rem;color:rgba(255,255,255,0.65);max-width:850px;margin-top:12px;line-height:1.7;">
-      Empirical parameter correlations across microgravity droplet and solid fuel combustion in low-Earth orbit. Real-time multidimensional data analysis derived from the ISS Combustion Integrated Rack (CIR).
+      Empirical parameter correlations across microgravity droplet, gaseous burner, and solid fuel combustion in low-Earth orbit. Real-time multidimensional data analysis derived from ISS CIR (MDCA/ACME/MIST), ISS MSG (SPICE/SAME/DAFT), and Cygnus (SAFFIRE).
     </p>
 
     <!-- METRIC STRIP -->
     <div class="hero-stats-strip">
       <div class="hud-stat-box" style="--stat-accent:#00F5FF">
         <div class="hud-stat-label">Canonical Experiments</div>
-        <div class="hud-stat-value" id="kpi-total">879</div>
-        <div class="hud-stat-sub">NASA PSI verified flight records</div>
+        <div class="hud-stat-value" id="kpi-total">892</div>
+        <div class="hud-stat-sub">NASA PSI &amp; 1g-bound verified records</div>
       </div>
       <div class="hud-stat-box" style="--stat-accent:#FF6B35">
         <div class="hud-stat-label">Mean Extinction Diameter (de)</div>
@@ -594,13 +595,13 @@ body {
       </div>
       <div class="hud-stat-box" style="--stat-accent:#2979FF">
         <div class="hud-stat-label">Average O₂ Mole Fraction</div>
-        <div class="hud-stat-value" id="kpi-o2">23.8%</div>
-        <div class="hud-stat-sub">Tested range: 14.0% – 50.0%</div>
+        <div class="hud-stat-value" id="kpi-o2">22.3%</div>
+        <div class="hud-stat-sub">Tested range: 12.0% – 85.0% (CFI-G)</div>
       </div>
       <div class="hud-stat-box" style="--stat-accent:#00E676">
         <div class="hud-stat-label">Flight Investigations</div>
-        <div class="hud-stat-value">16 Families</div>
-        <div class="hud-stat-sub">FLEX · BASS · SAFFIRE · SOFIE · ACME</div>
+        <div class="hud-stat-value">29 Suites</div>
+        <div class="hud-stat-sub">FLEX · BASS · SAFFIRE · ACME · SPICE · DAFT</div>
       </div>
     </div>
   </div>
@@ -755,7 +756,7 @@ body {
           <div class="module-badge" style="color:var(--hud-purple)">MATERIAL SCIENCE // CHEMICAL HIERARCHY</div>
           <h2 class="module-title">Fuel Flammability Matrix &amp; Sample Distribution</h2>
           <p class="module-desc">
-            Comprehensive breakdown of 879 flight experiments by material category and chemical composition. Compares liquid hydrocarbons, alcohols, solid thermoplastics, fabrics, and space-grade polymers.
+            Comprehensive breakdown of 892 flight experiments by material category and chemical composition. Compares liquid hydrocarbons, alcohols, solid thermoplastics, fabrics, and space-grade polymers.
           </p>
         </div>
         <div class="module-actions">
@@ -845,7 +846,7 @@ body {
       <div class="module-footer-telemetry">
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <span class="meta-chip">Primary Extinguishment Mode: Radiative</span>
-          <span class="meta-chip">Sample Count: N=879</span>
+          <span class="meta-chip">Sample Count: N=892</span>
         </div>
         <a href="/ai" class="ask-ai-chip">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -881,9 +882,43 @@ body {
       </div>
       <div class="insight-card">
         <div class="insight-num" style="color:var(--hud-purple)">LAW 03 // VENTILATION FLAMMABILITY</div>
-        <h4>Forced Convection Paradox</h4>
+        <h4>Forced Convection &amp; Partial-Gravity Paradox</h4>
         <p>
-          Extinguishing a fire by shutting down cabin ventilation can actually worsen flammability for small airflow regimes (2–6 cm/s), where convective oxygen feed maximizes burning rate before radiative losses can quench the reaction.
+          Shutting down cabin ventilation quenches flames in 0g stagnant air, yet low airflow (5–15 cm/s) or Lunar partial gravity (0.16g ≈ 12.2 cm/s buoyant draft) feeds fresh oxygen faster than convective cooling can remove heat — making materials MORE flammable than at 1.0g!
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CROSS-INVESTIGATION SIMILARITY/DIFFERENCE & 3-TIER EQUIPMENT IMPACT ═══ -->
+  <section class="insights-banner" style="margin-top:32px;background:rgba(7,13,26,0.85);border-color:rgba(0,245,255,0.18);">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <span class="holo-tag" style="margin-bottom:0;">CROSS-INVESTIGATION HARDWARE MATRIX // CIR vs MSG vs CYGNUS vs WSTF 1g BOUND</span>
+      <a href="/simulator" class="ask-ai-chip">Open SI Investigation Ranking Engine →</a>
+    </div>
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.65rem;font-weight:800;color:#fff;margin-top:14px;">
+      Facility Hardware, Diagnostic Sensors &amp; 3-Tier Fire Safety Equipment Impact
+    </h3>
+    <div class="insights-grid" style="margin-top:20px;">
+      <div class="insight-card">
+        <div class="insight-num">FACILITY 01 // ISS CIR (MDCA / ACME / MIST)</div>
+        <h4>Droplets, Porous Burners &amp; 85% O₂ Inside-Out Flames</h4>
+        <p>
+          <strong>FLEX / FLEX-2</strong> (MDCA) tested spherical droplets with up to <strong>70% CO₂ and 45% He</strong> inert suppressants. <strong>ACME</strong> (BRE, CFI, <strong>CFI-G up to 85% O₂ inside-out flames</strong>, CLD, and <strong>E-FIELD +5 kV partial-g mimic</strong>) and <strong>SOFIE</strong> (MIST) used intensified CCD, OH*/CH* chemiluminescence, and IR radiometers.
+        </p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num" style="color:var(--hud-orange)">FACILITY 02 // ISS MSG (SPICE DUCT &amp; SAME/DAFT)</div>
+        <h4>Forced-Flow Solids &amp; Lunar Dust Discrimination</h4>
+        <p>
+          <strong>SPICE, SLICE, BASS-I, and BASS-II</strong> shared the fan-driven flow duct (0–55 cm/s) inside the Microgravity Science Glovebox (MSG). <strong>SAME, SAME-R, and DAFT / DAFT-2</strong> used MSG aerosol monitors to distinguish resuspended Lunar/Martian regolith dust (&gt;1 µm) from sub-micron fire smoke (&lt;0.5 µm).
+        </p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num" style="color:#00E676">IMPACT // PREVENTION · DETECTION · SUPPRESSION</div>
+        <h4>Spacecraft Equipment &amp; Earth Spin-Offs</h4>
+        <p>
+          <strong>Prevention:</strong> 0g forced-flow + 1g WSTF Test 1 bounding (pending <strong>LUCI &amp; FM2</strong>) &amp; PBI/Nomex firefighter gear. <strong>Detection:</strong> DAFT dust-immune multi-wavelength smoke detectors for Lunar Rovers &amp; mines. <strong>Suppression:</strong> He/CO₂ thermal-diffusivity quenching &amp; Fine Water Mist extinguishers for ISS and Earth server rooms.
         </p>
       </div>
     </div>
@@ -904,13 +939,13 @@ body {
     </div>
     <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
 <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:rgba(255,255,255,0.35);">
-        NASA Space Apps Challenge 2026 · Data: NASA PSI · 879 Flight Tests
+        NASA Space Apps Challenge 2026 · Data: NASA PSI · 892 Flight Tests
       </div>
     </div>
   </div>
 </footer>
 
-<script src="/static/js/nav.js?v=5.4"></script>
+<script src="/static/js/nav.js?v=6.0"></script>
 
 <!-- JAVASCRIPT: 3D/4D THREE.JS ENGINE + REAL-TIME CHARTS -->
 <script>
@@ -1000,8 +1035,8 @@ function build3DScatter() {
   const axes = new THREE.LineSegments(axesGeo, axesMaterial);
   scatterGroup.add(axes);
 
-  // Generate 879 experimental nodes
-  const nodeCount = 879;
+  // Generate 892 experimental nodes
+  const nodeCount = 892;
   const positions = new Float32Array(nodeCount * 3);
   const colors = new Float32Array(nodeCount * 3);
 

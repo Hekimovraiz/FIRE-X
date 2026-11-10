@@ -434,6 +434,7 @@ body {
       <li><a href="/analytics" class="nav-link">Analytics</a></li>
       <li><a href="/explorer" class="nav-link active">Data Explorer</a></li>
       <li><a href="/simulator" class="nav-link">Simulator</a></li>
+      <li><a href="/hardware" class="nav-link">Hardware</a></li>
       <li><a href="/ai" class="nav-link">AI Assistant</a></li>
       <li><a href="/about" class="nav-link">About</a></li>
     </ul>
@@ -494,43 +495,52 @@ body {
 
       <!-- FAMILY SELECT -->
       <div class="filter-group">
-        <label class="filter-label">Flight & Research Family (24 Total)</label>
+        <label class="filter-label">Flight & Research Family (29 Total)</label>
         <select class="custom-select" id="filter-family" onchange="applyFilters()">
-          <option value="">All Flight Investigations</option>
-          <option value="FLEX">FLEX (Droplet Extinction - 274)</option>
-          <option value="BASS-II">BASS-II (Convective Suppression - 129)</option>
+          <option value="">All Flight &amp; Bounding Investigations (892)</option>
+          <option value="FLEX">FLEX (ISS CIR/MDCA Droplets + CO₂/He - 274)</option>
+          <option value="BASS-II">BASS-II (ISS MSG Forced Flow - 129)</option>
           <option value="GRC Drop Tower">GRC Drop Tower (Zero-G Freefall - 95)</option>
-          <option value="FLARE">FLARE (JAXA / Kibo Reduced-g - 80)</option>
           <option value="MGM">MGM (Smoldering Combustion - 65)</option>
-          <option value="NASA-STD-6001">NASA-STD-6001 (Flight Certification - 59)</option>
-          <option value="SAME">SAME (Smoke & Aerosol Precursor - 50)</option>
-          <option value="ACME">ACME (CIR Microgravity Burn - 68)</option>
-          <option value="SAFFIRE">SAFFIRE (Cygnus Spacecraft Fires - 19)</option>
-          <option value="SOFIE">SOFIE (Solid Fuel Ignition - 12)</option>
-          <option value="FLEX-2">FLEX-2 (Cool Flame Dynamics - 10)</option>
-          <option value="SLICE">SLICE (Structure & Liftoff - 8)</option>
-          <option value="BASS-I">BASS-I (Initial BASS Program - 8)</option>
+          <option value="NASA-STD-6001">NASA-STD-6001 (1.0g WSTF Upper Bound - 59)</option>
+          <option value="Partial-g Bounded">Partial-g Bounded (0g PSI + 1g WSTF + E-FIELD - 50)</option>
+          <option value="SAME">SAME I &amp; II (ISS MSG Smoke Detector - 50)</option>
+          <option value="FLARE">FLARE (ISS Kibo 0g Forced Flow - 30)</option>
+          <option value="ACME">ACME Suite (BRE / CFI / CLD / E-FIELD - 68)</option>
+          <option value="ACME-CFI-G">ACME CFI-G (Up to 85% O₂ Inside-Out Flames - 4)</option>
+          <option value="SAFFIRE">SAFFIRE I–VI (Cygnus Large-Scale Burns - 19)</option>
+          <option value="SOFIE">SOFIE (ISS CIR/MIST Solid Ignition - 12)</option>
+          <option value="FLEX-2">FLEX-2 (ISS CIR Cool Flame Droplets - 10)</option>
+          <option value="SLICE">SLICE (ISS MSG Co-flow Jet Flames - 8)</option>
+          <option value="BASS-I">BASS-I (ISS MSG Solid Fuel Baseline - 8)</option>
+          <option value="SPICE">SPICE (ISS MSG Smoke-Point Co-flow - 3)</option>
+          <option value="SAME-R">SAME-R (ISS MSG Smoke Aging Reflight - 2)</option>
+          <option value="DAFT">DAFT / DAFT-2 (ISS MSG Lunar Dust vs Smoke - 2)</option>
+          <option value="LUCI">LUCI / FM2 (Future Partial-g Reference - 2)</option>
         </select>
       </div>
 
       <!-- FUEL MATERIAL SELECT -->
       <div class="filter-group">
-        <label class="filter-label">Fuel / Material (106 Types)</label>
+        <label class="filter-label">Fuel / Material (119 Types)</label>
         <select class="custom-select" id="filter-fuel" onchange="applyFilters()">
           <option value="">All Materials &amp; Fuels</option>
           <option value="Heptane">n-Heptane / n-Octane</option>
           <option value="Decane">n-Decane</option>
           <option value="Methanol">Methanol / Ethanol</option>
+          <option value="Butane">n-Butane / Methane (CFI-G)</option>
+          <option value="Ethylene">Ethylene / Propane (SPICE/SLICE)</option>
           <option value="PMMA">PMMA (Cast Acrylic)</option>
           <option value="Nomex">Nomex Fabric (Aramid)</option>
           <option value="Polyurethane">Polyurethane Foam (Smoldering)</option>
           <option value="Kapton">Kapton / Polyimide Wire</option>
           <option value="PEEK">PEEK (High-Temp Aerospace)</option>
-          <option value="Cotton">Cotton Fabric / Precursor</option>
+          <option value="Cotton">Cotton / SIBAL Fabric</option>
           <option value="Delrin">Delrin (Polyacetal)</option>
           <option value="Polyethylene">Polyethylene (LDPE)</option>
           <option value="Silicone">Silicone Rubber / Cable</option>
-          <option value="Beta Cloth">Beta Cloth (Thermal Protection)</option>
+          <option value="Beta Cloth">Beta Cloth (PTFE / Glass)</option>
+          <option value="Simulant">Lunar Regolith Dust Simulant (DAFT)</option>
         </select>
       </div>
 
@@ -540,23 +550,24 @@ body {
         <select class="custom-select" id="filter-outcome" onchange="applyFilters()">
           <option value="">All Extinction Outcomes</option>
           <option value="Radiative">Radiative Quenching / Extinction</option>
+          <option value="Cool Flame">Cool Flame Transition / Quenching</option>
           <option value="Blowoff">Convective Blowoff</option>
           <option value="Smolder">Smolder (Sustained / Quenched)</option>
           <option value="Flaming">Transition to Flaming</option>
-          <option value="Detector">Smoke Detector Alarm Triggered</option>
-          <option value="Pass">NASA-STD-6001 Pass</option>
-          <option value="Fail">NASA-STD-6001 Fail</option>
+          <option value="Aerosol">Smoke / Dust Aerosol Verified</option>
+          <option value="Pass">NASA-STD-6001 Pass (1g Bound)</option>
+          <option value="Fail">NASA-STD-6001 Fail (1g Bound)</option>
           <option value="Sustained">Sustained Flame</option>
         </select>
       </div>
 
-      <!-- O2 MIN SLIDER -->
+      <!-- O2 MIN SLIDER (UP TO 85% FOR ACME CFI-G) -->
       <div class="filter-group">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-          <label class="filter-label" style="margin-bottom:0">Minimum O₂ Mole %</label>
-          <span class="range-val" id="val-o2-min">14%</span>
+          <label class="filter-label" style="margin-bottom:0">Minimum O₂ Mole % (12–85%)</label>
+          <span class="range-val" id="val-o2-min">12%</span>
         </div>
-        <input type="range" min="14" max="45" value="14" step="0.5" id="slider-o2-min" oninput="handleO2Min(this.value)">
+        <input type="range" min="12" max="85" value="12" step="0.5" id="slider-o2-min" oninput="handleO2Min(this.value)">
       </div>
 
       <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
@@ -571,7 +582,7 @@ body {
     <section class="table-console">
       <div class="table-toolbar">
         <div class="results-counter">
-          SHOWING <span id="count-displayed">0</span> OF <span id="count-total">879</span> FLIGHT EXPERIMENTS
+          SHOWING <span id="count-displayed">0</span> OF <span id="count-total">892</span> CANONICAL EXPERIMENTS
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:rgba(255,255,255,0.4);">PAGE SIZE:</span>
@@ -659,7 +670,7 @@ body {
   <div style="margin-top:auto;display:flex;gap:12px;">
     <button class="btn btn-solid-cyan" style="flex:1;justify-content:center;" id="insp-ai-btn">
       <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Analyze with GPT-6-luna
+      Analyze with GPT-4o-mini + SQL-RAG
     </button>
     <button class="btn btn-ghost" onclick="closeInspector()">Dismiss</button>
   </div>
@@ -676,12 +687,12 @@ body {
         </div>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-<span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:rgba(255,255,255,0.3);">© 2026 NASA FIRE-X · NASA Space Apps Challenge 2026 · Data: NASA PSI · 879 Canonical Tests</span>
+<span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:rgba(255,255,255,0.3);">© 2026 NASA FIRE-X · NASA Space Apps Challenge 2026 · Data: NASA PSI · 892 Canonical Tests</span>
     </div>
   </div>
 </footer>
 
-<script src="/static/js/nav.js?v=5.4"></script>
+<script src="/static/js/nav.js?v=6.0"></script>
 <script>
 let currentPage = 1;
 let pageSize = 50;
@@ -703,7 +714,7 @@ async function fetchExperiments() {
   if (family) url += `&family=${encodeURIComponent(family)}`;
   if (fuel) url += `&fuel=${encodeURIComponent(fuel)}`;
   if (outcome) url += `&outcome=${encodeURIComponent(outcome)}`;
-  if (minO2 && minO2 > 14) url += `&min_o2=${minO2}`;
+  if (minO2 && minO2 > 12) url += `&min_o2=${minO2}`;
 
   const tbody = document.getElementById('table-body');
   tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:36px;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;">Querying NASA PSI Telemetry Records...</td></tr>`;
@@ -715,8 +726,8 @@ async function fetchExperiments() {
 
     renderTable(data.experiments || []);
     document.getElementById('count-displayed').textContent = data.experiments ? data.experiments.length : 0;
-    document.getElementById('count-total').textContent = data.total || 879;
-    totalPages = data.total_pages || Math.ceil((data.total || 879) / pageSize);
+    document.getElementById('count-total').textContent = data.total || 892;
+    totalPages = data.total_pages || Math.ceil((data.total || 892) / pageSize);
     updatePaginationUI();
   } catch (e) {
     console.error('Fetch error:', e);
@@ -766,6 +777,7 @@ function getBadgeHtml(outcome) {
   const isAz = (localStorage.getItem('firex_lang') === 'az');
   const o = (outcome || '').toLowerCase();
   if (o.includes('rad')) return `<span class="outcome-badge badge-rad">${isAz ? 'Radiativ Sönmə' : 'Radiative'}</span>`;
+  if (o.includes('cool')) return `<span class="outcome-badge badge-blow">${isAz ? 'Soyuq Alov' : 'Cool Flame'}</span>`;
   if (o.includes('blow') || o.includes('flow')) return `<span class="outcome-badge badge-blow">${isAz ? 'Üfürmə' : 'Blowoff'}</span>`;
   if (o.includes('deplet') || o.includes('burnout')) return `<span class="outcome-badge badge-dep">${isAz ? 'Tükəndi' : 'Depleted'}</span>`;
   if (o.includes('sustain')) return `<span class="outcome-badge badge-sus">${isAz ? 'Davamlı' : 'Sustained'}</span>`;
@@ -797,8 +809,8 @@ function resetFilters() {
   document.getElementById('filter-family').value = '';
   document.getElementById('filter-fuel').value = '';
   document.getElementById('filter-outcome').value = '';
-  document.getElementById('slider-o2-min').value = 14;
-  document.getElementById('val-o2-min').textContent = '14%';
+  document.getElementById('slider-o2-min').value = 12;
+  document.getElementById('val-o2-min').textContent = '12%';
   currentPage = 1;
   fetchExperiments();
 }
@@ -852,15 +864,19 @@ async function inspectExperiment(id) {
     const exp = json.data || json;
 
     const isAz = (localStorage.getItem('firex_lang') === 'az');
+    const co2Str = (exp.co2_pct != null && exp.co2_pct > 0) ? `${exp.co2_pct.toFixed(1)}% CO₂` : '0% CO₂';
+    const heStr = (exp.he_pct != null && exp.he_pct > 0) ? `${exp.he_pct.toFixed(1)}% He` : '0% He';
     const fields = [
       [isAz ? 'Uçuş Tədqiqatı' : 'Investigation', exp.dataset_family],
+      [isAz ? 'Aparat / Qurğu' : 'Facility Hardware', exp.facility_hardware || 'ISS Orbital Facility'],
       [isAz ? 'Yanacaq / Material' : 'Fuel / Material', exp.fuel_material],
+      [isAz ? 'Cazibə / Rejim' : 'Gravity / Bound', exp.gravity_condition || 'Microgravity (~0g)'],
       [isAz ? 'Oksigen Mol Payı' : 'Oxygen Fraction', (exp.oxygen_pct != null ? exp.oxygen_pct.toFixed(1) + '%' : '—')],
       [isAz ? 'Kamera Təzyiqi' : 'Pressure', (exp.pressure_kpa != null ? exp.pressure_kpa.toFixed(1) + ' kPa' : '—')],
+      [isAz ? 'Diluent Qazlar (CO₂/He)' : 'Diluent Gases (CO₂/He)', `${co2Str} / ${heStr}`],
       [isAz ? 'Sönmə Diametri (de)' : 'Extinction Diam (de)', (exp.extinction_diameter_mm != null ? exp.extinction_diameter_mm.toFixed(3) + ' mm' : '—')],
       [isAz ? 'Yanma Müddəti' : 'Burn Duration', (exp.burn_time_s != null ? exp.burn_time_s.toFixed(1) + ' s' : '—')],
       [isAz ? 'Hava Axınının Sürəti' : 'Airflow Velocity', (exp.airflow_velocity_cms != null ? exp.airflow_velocity_cms.toFixed(2) + ' cm/s' : '—')],
-      [isAz ? 'Alov Temperaturu' : 'Flame Temperature', (exp.flame_temp_k != null ? exp.flame_temp_k.toFixed(0) + ' K' : '—')],
       [isAz ? 'Sönmə Nəticəsi' : 'Extinction Outcome', exp.extinction_outcome || '—'],
       [isAz ? 'Məlumat Mənbəyi' : 'Source Archive', exp.source_name || 'NASA PSI']
     ];

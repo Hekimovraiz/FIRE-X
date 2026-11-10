@@ -341,6 +341,7 @@ body {
       <li><a href="/analytics" class="nav-link">Analytics</a></li>
       <li><a href="/explorer" class="nav-link">Data Explorer</a></li>
       <li><a href="/simulator" class="nav-link active">Simulator</a></li>
+      <li><a href="/hardware" class="nav-link">Hardware</a></li>
       <li><a href="/ai" class="nav-link">AI Assistant</a></li>
       <li><a href="/about" class="nav-link">About</a></li>
     </ul>
@@ -379,38 +380,74 @@ body {
       </div>
 
       <div class="scenario-cards-stack">
-        <!-- ISS -->
-        <button class="scenario-card-btn active" style="--card-color:#2979FF" onclick="selectScenario('iss')">
+        <!-- ISS / SPACE STATION -->
+        <button class="scenario-card-btn active" data-scenario="iss" style="--card-color:#2979FF" onclick="selectScenario('iss', this)">
           <div>
-            <div class="scenario-name">ISS Standard Atmosphere</div>
-            <div class="scenario-specs">21.0% O₂ · 101.3 kPa · Sea-Level Norm</div>
+            <div class="scenario-name">ISS / Space Station (0g)</div>
+            <div class="scenario-specs">21.0% O₂ · 101.3 kPa (14.7 psi) · Orbital Norm</div>
           </div>
           <span class="scenario-fhi-tag">FHI 5.1</span>
         </button>
 
-        <!-- ARTEMIS LUNAR -->
-        <button class="scenario-card-btn" style="--card-color:#FF6B35" onclick="selectScenario('lunar_habitat')">
+        <!-- CREW SPACECRAFT -->
+        <button class="scenario-card-btn" data-scenario="spacecraft" style="--card-color:#00F5FF" onclick="selectScenario('spacecraft', this)">
           <div>
-            <div class="scenario-name">Artemis Lunar Habitat</div>
-            <div class="scenario-specs">34.0% O₂ · 56.5 kPa · Low Pressure EVA</div>
+            <div class="scenario-name">Orion / Crew Spacecraft (0g)</div>
+            <div class="scenario-specs">26.5% O₂ · 70.3 kPa (10.2 psi) · Transit Cabin</div>
+          </div>
+          <span class="scenario-fhi-tag" style="background:rgba(0,245,255,0.1);color:#00F5FF;border-color:#00F5FF;">FHI 6.2</span>
+        </button>
+
+        <!-- ARTEMIS LUNAR BASE -->
+        <button class="scenario-card-btn" data-scenario="lunar_habitat" style="--card-color:#FF6B35" onclick="selectScenario('lunar_habitat', this)">
+          <div>
+            <div class="scenario-name">Artemis Lunar Base (0.16g)</div>
+            <div class="scenario-specs">34.0% O₂ · 56.5 kPa (8.2 psi) · Lunar Surface</div>
           </div>
           <span class="scenario-fhi-tag" style="background:rgba(255,107,53,0.1);color:#FF6B35;border-color:#FF6B35;">FHI 8.3</span>
         </button>
 
+        <!-- MARTIAN SURFACE HABITAT -->
+        <button class="scenario-card-btn" data-scenario="mars_habitat" style="--card-color:#F59E0B" onclick="selectScenario('mars_habitat', this)">
+          <div>
+            <div class="scenario-name">Martian Surface Base (0.38g)</div>
+            <div class="scenario-specs">34.0% O₂ · 56.5 kPa (8.2 psi) · Mars Gravity</div>
+          </div>
+          <span class="scenario-fhi-tag" style="background:rgba(245,158,11,0.1);color:#F59E0B;border-color:#F59E0B;">FHI 8.3</span>
+        </button>
+
+        <!-- PRESSURIZED ROVER -->
+        <button class="scenario-card-btn" data-scenario="rover" style="--card-color:#FF9800" onclick="selectScenario('rover', this)">
+          <div>
+            <div class="scenario-name">Pressurized Rover (≥30% O₂, ≤10.2 psi)</div>
+            <div class="scenario-specs">32.0% O₂ · 70.3 kPa (10.2 psi) · Dust/EVA</div>
+          </div>
+          <span class="scenario-fhi-tag" style="background:rgba(255,152,0,0.1);color:#FF9800;border-color:#FF9800;">FHI 8.3</span>
+        </button>
+
+        <!-- EVA SPACESUIT -->
+        <button class="scenario-card-btn" data-scenario="eva_suit" style="--card-color:#FF1744" onclick="selectScenario('eva_suit', this)">
+          <div>
+            <div class="scenario-name">EVA Spacesuit (85–100% O₂, 4.3 psi)</div>
+            <div class="scenario-specs">85.0% O₂ · 29.6 kPa (4.3 psi) · ACME CFI-G Bound</div>
+          </div>
+          <span class="scenario-fhi-tag" style="background:rgba(255,23,68,0.12);color:#FF5252;border-color:#FF5252;">FHI 10.0</span>
+        </button>
+
         <!-- HYPOXIC HAVEN -->
-        <button class="scenario-card-btn" style="--card-color:#00E676" onclick="selectScenario('lunar_hypoxic')">
+        <button class="scenario-card-btn" data-scenario="lunar_hypoxic" style="--card-color:#00E676" onclick="selectScenario('lunar_hypoxic', this)">
           <div>
             <div class="scenario-name">Deep Space Hypoxic Safe-Haven</div>
-            <div class="scenario-specs">15.0% O₂ · 70.3 kPa · Fire Suppression</div>
+            <div class="scenario-specs">15.0% O₂ · 70.3 kPa (10.2 psi) · Fire Suppression</div>
           </div>
-          <span class="scenario-fhi-tag" style="background:rgba(0,230,118,0.1);color:#00E676;border-color:#00E676;">FHI 2.1</span>
+          <span class="scenario-fhi-tag" style="background:rgba(0,230,118,0.1);color:#00E676;border-color:#00E676;">FHI 2.6</span>
         </button>
 
         <!-- CUSTOM -->
-        <button class="scenario-card-btn" style="--card-color:#9B59B6" onclick="selectScenario('custom')">
+        <button class="scenario-card-btn" data-scenario="custom" style="--card-color:#9B59B6" onclick="selectScenario('custom', this)">
           <div>
             <div class="scenario-name">Custom Atmosphere Lab</div>
-            <div class="scenario-specs">Parametric Oxidizer &amp; Pressure Sweep</div>
+            <div class="scenario-specs">Parametric Oxidizer (10–100% O₂) &amp; Pressure Sweep</div>
           </div>
           <span class="scenario-fhi-tag" style="color:#9B59B6;border-color:#9B59B6;">USER SWEEP</span>
         </button>
@@ -419,14 +456,14 @@ body {
       <!-- CUSTOM SLIDERS -->
       <div class="custom-sliders-box" id="custom-sliders-box">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;color:var(--neon-cyan);margin-bottom:14px;">
-          Adjust Custom Atmospheric Parameters
+          Adjust Custom Atmospheric Parameters (Up to 100% O₂)
         </div>
         <div class="slider-group">
           <div class="slider-header">
             <span style="color:rgba(255,255,255,0.6)">Oxygen Fraction (O₂ %)</span>
             <span style="color:var(--neon-cyan);font-weight:700;" id="val-custom-o2">21.0%</span>
           </div>
-          <input type="range" min="10" max="60" value="21" step="0.5" id="slider-custom-o2" oninput="updateCustomSim()">
+          <input type="range" min="10" max="100" value="21" step="0.5" id="slider-custom-o2" oninput="updateCustomSim()">
         </div>
         <div class="slider-group">
           <div class="slider-header">
@@ -495,7 +532,7 @@ body {
         <div class="sim-metric-card">
           <div class="metric-card-label">Suppressant Required</div>
           <div class="metric-card-val" id="met-purge" style="color:#00E676;">28.5 %</div>
-          <div class="metric-card-sub">N₂/CO₂ flood concentration</div>
+          <div class="metric-card-sub">N₂/CO₂/He flood concentration</div>
         </div>
       </div>
 
@@ -523,7 +560,6 @@ body {
           <span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;color:#00F5FF;letter-spacing:0.05em;">FIRE-X FHI FORMULA — SCIENTIFIC BASIS</span>
         </div>
 
-        <!-- Main formula display -->
         <div style="
           background:rgba(0,0,0,0.4);
           border-radius:12px;
@@ -548,70 +584,21 @@ body {
           </div>
         </div>
 
-        <!-- Factor breakdown -->
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
           <div style="background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.2);border-radius:10px;padding:12px;">
             <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#FF6B35;font-weight:700;margin-bottom:6px;">OEF — Oxygen Enhancement</div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:#fff;">(X<sub>O₂</sub> / 0.21)<sup>1.5</sup></div>
-            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">Yanma kinetikası: alov sürəti ∝ [O₂]<sup>1.5</sup></div>
+            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">Combustion kinetics: flame speed ∝ [O₂]<sup>1.5</sup></div>
           </div>
           <div style="background:rgba(155,89,182,0.08);border:1px solid rgba(155,89,182,0.2);border-radius:10px;padding:12px;">
             <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#9B59B6;font-weight:700;margin-bottom:6px;">PF — Pressure Factor</div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:#fff;">(P / 101.3)<sup>0.4</sup></div>
-            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">SAFFIRE məlumatlarından çıxarılmış eksponent</div>
+            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">SAFFIRE pressure sensitivity exponent</div>
           </div>
           <div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:12px;">
             <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#00E676;font-weight:700;margin-bottom:6px;">M<sub>f</sub> — Material Index</div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:#fff;">0.4 – 1.3</div>
-            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">NASA-STD-6001 material sınaq sinifindən</div>
-          </div>
-        </div>
-
-        <!-- Material table -->
-        <div style="margin-bottom:14px;">
-          <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.08em;">MATERIAL FLAMMABILITY INDEX (Mf)</div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
-            <div style="background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.15);border-radius:8px;padding:8px;text-align:center;">
-              <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#00E676;font-weight:700;">0.4</div>
-              <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:3px;">Nomex</div>
-            </div>
-            <div style="background:rgba(0,245,255,0.06);border:1px solid rgba(0,245,255,0.15);border-radius:8px;padding:8px;text-align:center;">
-              <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#00F5FF;font-weight:700;">0.7</div>
-              <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:3px;">PMMA</div>
-            </div>
-            <div style="background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.15);border-radius:8px;padding:8px;text-align:center;">
-              <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#FF6B35;font-weight:700;">1.0</div>
-              <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:3px;">Cotton</div>
-            </div>
-            <div style="background:rgba(255,23,68,0.06);border:1px solid rgba(255,23,68,0.15);border-radius:8px;padding:8px;text-align:center;">
-              <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#FF5252;font-weight:700;">1.3</div>
-              <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:3px;">n-Heptane</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Calibration verification -->
-        <div style="background:rgba(0,0,0,0.3);border-radius:10px;padding:12px 14px;">
-          <div style="font-size:0.68rem;color:rgba(255,255,255,0.35);font-family:'JetBrains Mono',monospace;margin-bottom:8px;letter-spacing:0.08em;">CALIBRATION VERIFICATION</div>
-          <div style="display:flex;gap:16px;flex-wrap:wrap;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;">
-              <span style="color:#2979FF;">ISS</span>
-              <span style="color:rgba(255,255,255,0.4);"> 21% · 101.3 kPa → </span>
-              <span style="color:#00F5FF;font-weight:700;">FHI 5.1</span>
-              <span style="color:#00E676;"> ✓</span>
-            </div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;">
-              <span style="color:#FF6B35;">Artemis</span>
-              <span style="color:rgba(255,255,255,0.4);"> 34% · 56.5 kPa → </span>
-              <span style="color:#00F5FF;font-weight:700;">FHI 8.3</span>
-              <span style="color:#00E676;"> ✓</span>
-            </div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;">
-              <span style="color:#9B59B6;">Hypoxic</span>
-              <span style="color:rgba(255,255,255,0.4);"> 15% · 70.3 kPa → </span>
-              <span style="color:#00F5FF;font-weight:700;">FHI 2.6</span>
-              <span style="color:#00E676;"> ✓</span>
-            </div>
+            <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:6px;">NASA-STD-6001 material screening class</div>
           </div>
         </div>
 
@@ -622,6 +609,82 @@ body {
 
     </div>
   </div>
+
+  <!-- ═══ MODULE 1: SI INVESTIGATION RELEVANCE RANKING & 0g–1g PARTIAL-GRAVITY BOUNDING ENGINE ═══ -->
+  <section style="margin-bottom:64px;">
+    <div style="background:var(--bg-surface-1);border:1px solid rgba(0,245,255,0.18);border-radius:20px;padding:32px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--neon-cyan);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">
+            SI-POWERED INVESTIGATION RANKING ENGINE // 0g vs 1g PARTIAL-GRAVITY BOUNDING
+          </div>
+          <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.75rem;font-weight:800;color:#fff;" id="ranking-sec-title">
+            NASA PSI Investigation Relevance Ranking &amp; Partial-Gravity Bounds
+          </h2>
+          <p style="font-size:0.9rem;color:rgba(255,255,255,0.6);max-width:880px;margin-top:6px;" id="ranking-sec-sub">
+            Automatically ranks all NASA PSI microgravity and 1.0g WSTF screening investigations by scientific applicability to the selected spacecraft, space station, lunar/Martian habitat, rover, or EVA suit environment.
+          </p>
+        </div>
+        <span class="badge badge-cyan" style="font-size:0.75rem;padding:8px 14px;" id="ranking-env-pill">TARGET: ISS (0g)</span>
+      </div>
+
+      <!-- PARTIAL GRAVITY BOUNDING BOX (0g PSI + ACME E-FIELD + 1g STD-6001 + LUCI/FM2) -->
+      <div style="background:rgba(255,107,53,0.06);border:1px solid rgba(255,107,53,0.25);border-radius:14px;padding:20px 24px;margin-bottom:28px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:10px;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:#FF6B35;">
+            ⚖️ Partial-Gravity Bounding Model (0g ISS PSI + ACME E-FIELD ↔ 1.0g NASA-STD-6001 — Pre-LUCI &amp; FM2)
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#fff;background:rgba(0,0,0,0.4);padding:4px 12px;border-radius:100px;" id="pg-target-badge">
+            Equiv. Buoyant Draft: 0.0 cm/s
+          </div>
+        </div>
+        <p style="font-size:0.84rem;color:rgba(255,255,255,0.75);line-height:1.65;margin-bottom:14px;" id="pg-status-note">
+          Official NASA PSI Note: There is currently no raw partial-gravity combustion flight data in PSI (expected in future from LUCI and FM2). Partial gravity was mimicked in ACME E-FIELD Flames via electric body forces. FIRE-X bounds intermediate gravity (0.16g Moon, 0.38g Mars) between 0g ISS forced-flow PSI data and 1.0g NASA-STD-6001 upward screening.
+        </p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+          <div style="background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:rgba(255,255,255,0.45);">0g STAGNANT BOUND (ISS)</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:700;color:#2979FF;margin-top:4px;" id="pg-moc-0g-stag">21.0% O₂</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:2px;">Radiative self-quenching limit</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.35);border:1px solid rgba(0,245,255,0.2);border-radius:10px;padding:12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--neon-cyan);">0g FORCED-FLOW (BASS-II / SOFIE)</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:700;color:var(--neon-cyan);margin-top:4px;" id="pg-moc-0g-flow">14.8% O₂</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:2px;">5–15 cm/s ventilation minimum MOC</div>
+          </div>
+          <div style="background:rgba(255,107,53,0.12);border:1px solid rgba(255,107,53,0.35);border-radius:10px;padding:12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:#FF6B35;">PARTIAL-g BOUNDED MOC (LUCI/FM2)</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:700;color:#FF6B35;margin-top:4px;" id="pg-moc-partial">14.8% O₂</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.55);margin-top:2px;">0.16g Moon (~12.2 cm/s buoyant flow)</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.35);border:1px solid rgba(0,230,118,0.2);border-radius:10px;padding:12px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:#00E676;">1.0g UPPER BOUND (NASA-STD-6001)</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:700;color:#00E676;margin-top:4px;" id="pg-moc-1g">16.8% O₂</div>
+            <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:2px;">WSTF Test 1 upward screening</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RANKED INVESTIGATIONS TABLE -->
+      <div class="data-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>NASA Investigation</th>
+              <th>Relevance Score</th>
+              <th>Facility &amp; Hardware</th>
+              <th>Fuel Geometry &amp; Diagnostics</th>
+              <th>Mission Ranking Rationale</th>
+            </tr>
+          </thead>
+          <tbody id="ranking-table-body">
+            <!-- Populated dynamically via applyScenarioData -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
 </main>
 
 
@@ -635,12 +698,12 @@ body {
         </div>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-<span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:rgba(255,255,255,0.3);">© 2026 NASA FIRE-X · NASA Space Apps Challenge 2026 · Data: NASA PSI · 879 Canonical Tests</span>
+<span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:rgba(255,255,255,0.3);">© 2026 NASA FIRE-X · NASA Space Apps Challenge 2026 · Data: NASA PSI · 892 Canonical Tests</span>
     </div>
   </div>
 </footer>
 
-<script src="/static/js/nav.js?v=5.4"></script>
+<script src="/static/js/nav.js?v=6.0"></script>
 <script>
 let currentScenarioId = 'iss';
 let hazardSphere, hazardRenderer, hazardScene, hazardCamera;
@@ -657,14 +720,12 @@ function init3DHazardSphere() {
   hazardRenderer.setSize(170, 170);
   hazardRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // Outer wireframe ring
   const ringGeo = new THREE.TorusGeometry(1.6, 0.04, 16, 64);
   const ringMat = new THREE.MeshBasicMaterial({ color: 0x00F5FF, transparent: true, opacity: 0.3 });
   const ring = new THREE.Mesh(ringGeo, ringMat);
   ring.name = 'ring';
   hazardScene.add(ring);
 
-  // Inner pulsing hazard sphere
   const sphereGeo = new THREE.SphereGeometry(1.2, 24, 24);
   const sphereMat = new THREE.MeshBasicMaterial({
     color: 0x00F5FF,
@@ -691,11 +752,12 @@ function animateHazard() {
   hazardRenderer.render(hazardScene, hazardCamera);
 }
 
-async function selectScenario(id) {
+async function selectScenario(id, btnEl) {
   currentScenarioId = id;
 
-  document.querySelectorAll('.scenario-card-btn').forEach(btn => btn.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  document.querySelectorAll('.scenario-card-btn').forEach(btn => {
+    btn.classList.toggle('active', btn === btnEl || btn.getAttribute('data-scenario') === id);
+  });
 
   const customBox = document.getElementById('custom-sliders-box');
   if (id === 'custom') {
@@ -732,7 +794,8 @@ function applyScenarioData(data) {
   badge.style.borderColor = color;
   badge.style.background = `${color}20`;
 
-  document.getElementById('scenario-title-display').textContent = isAz ? (data.scenario.name_az || data.scenario.name_en) : data.scenario.name_en;
+  const scenName = isAz ? (data.scenario.name_az || data.scenario.name_en) : data.scenario.name_en;
+  document.getElementById('scenario-title-display').textContent = scenName;
   document.getElementById('scenario-desc-display').textContent = isAz ? (data.scenario.description_az || data.scenario.description_en) : data.scenario.description_en;
 
   document.getElementById('met-o2').textContent = (m.oxygen_pct != null ? m.oxygen_pct.toFixed(1) + '%' : '21.0%');
@@ -744,7 +807,54 @@ function applyScenarioData(data) {
 
   document.getElementById('advisory-content').textContent = isAz ? (data.advisory_az || data.advisory_en || '') : (data.advisory_en || '');
 
-  // Update 3D sphere color
+  // Render Partial-Gravity Bounding & SI Investigation Rankings
+  const envPill = document.getElementById('ranking-env-pill');
+  if (envPill) envPill.textContent = (isAz ? 'HƏDƏF: ' : 'TARGET: ') + scenName;
+
+  const pg = data.partial_gravity_bounding;
+  if (pg) {
+    const noteEl = document.getElementById('pg-status-note');
+    if (noteEl) noteEl.textContent = isAz ? pg.psi_status_note_az : pg.psi_status_note_en;
+    const tbEl = document.getElementById('pg-target-badge');
+    if (tbEl) tbEl.textContent = `${pg.target_gravity} · u_buoyancy ≈ ${pg.equivalent_buoyant_velocity_cms} cm/s`;
+    if (pg.bounds) {
+      document.getElementById('pg-moc-0g-stag').textContent = pg.bounds.lower_0g_stagnant_moc_pct + '% O₂';
+      document.getElementById('pg-moc-0g-flow').textContent = pg.bounds.lower_0g_forced_flow_5_15cms_moc_pct + '% O₂';
+      document.getElementById('pg-moc-partial').textContent = pg.bounds.partial_g_bounded_moc_pct + '% O₂';
+      document.getElementById('pg-moc-1g').textContent = pg.bounds.upper_1g_normal_gravity_moc_pct + '% O₂';
+    }
+  }
+
+  const rankBody = document.getElementById('ranking-table-body');
+  if (rankBody && Array.isArray(data.investigation_rankings)) {
+    rankBody.innerHTML = data.investigation_rankings.map(r => {
+      const scoreColor = r.relevance_score >= 93 ? '#00E676' : (r.relevance_score >= 85 ? '#00F5FF' : '#FF6B35');
+      return `
+        <tr>
+          <td class="td-id">#${r.rank}</td>
+          <td style="white-space:normal;min-width:180px;">
+            <div style="font-weight:700;color:#fff;">${r.investigation}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--neon-cyan);">${r.psi_id}</div>
+          </td>
+          <td style="min-width:140px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:${scoreColor};margin-bottom:4px;">${r.relevance_score}%</div>
+            <div style="height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
+              <div style="width:${r.relevance_score}%;height:100%;background:${scoreColor};"></div>
+            </div>
+          </td>
+          <td style="white-space:normal;min-width:190px;font-size:0.8rem;color:rgba(255,255,255,0.85);">${r.facility}</td>
+          <td style="white-space:normal;min-width:220px;font-size:0.78rem;color:rgba(255,255,255,0.65);">
+            <div><strong style="color:#fff;">Fuel:</strong> ${r.fuel_geometry}</div>
+            <div style="margin-top:3px;"><strong style="color:var(--neon-cyan);">Sensors:</strong> ${r.diagnostics}</div>
+          </td>
+          <td style="white-space:normal;min-width:260px;font-size:0.8rem;color:rgba(255,255,255,0.8);line-height:1.5;">
+            ${isAz ? r.rationale_az : r.rationale_en}
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
   if (hazardSphere) {
     hazardSphere.material.color.set(color);
     const ring = hazardScene.getObjectByName('ring');
@@ -774,7 +884,7 @@ function askAIAboutHabitat() {
   const press = document.getElementById('met-press').textContent;
   const fhi = document.getElementById('fhi-score-val').textContent;
   const name = document.getElementById('scenario-title-display').textContent;
-  const prompt = `Evaluate spacecraft fire safety for ${name} (O2: ${o2}, Pressure: ${press}, Fire Hazard Index: ${fhi}/10). What extinguishing protocols are recommended under NASA-STD-6001?`;
+  const prompt = `Rank NASA PSI investigations and evaluate spacecraft fire safety for ${name} (O2: ${o2}, Pressure: ${press}, Fire Hazard Index: ${fhi}/10). How do 0g ISS data and 1g NASA-STD-6001 bound partial gravity?`;
   window.location.href = `/ai?prompt=${encodeURIComponent(prompt)}`;
 }
 

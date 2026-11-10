@@ -14,8 +14,8 @@
   },
   "hero": {
     "badge": "NASA PHYSICAL SCIENCE INFORMATICS PLATFORM",
-    "title": "Flame in Freefall: AI Fire Safety Insights",
-    "description": "Scientific analysis and machine learning intelligence derived from 879 real NASA microgravity combustion experiments across 24 flight & research investigations on the ISS and orbital spacecraft.",
+    "title": "Flame in Freefall: SI-Powered (Super Intelligence / AI) Fire Safety Insights",
+    "description": "Scientific analysis and machine learning intelligence derived from 892 real NASA microgravity combustion experiments across 29 flight & research investigations on the ISS and orbital spacecraft.",
     "kpi_experiments": "Verified Experiments",
     "kpi_families": "Flight Families",
     "kpi_integrity": "Canonical Integrity",
@@ -32,13 +32,13 @@
     "chart2_title": "Burn Duration vs. Forced Convective Airflow",
     "chart2_desc": "Analyzes the transition between radiative quenching at low flow and convective blowoff at high flow",
     "chart3_title": "Fuel Flammability Matrix & Sample Distribution",
-    "chart3_desc": "Breakdown of 879 flight experiments by material category and chemical composition",
+    "chart3_desc": "Breakdown of 892 flight experiments by material category and chemical composition",
     "chart4_title": "Extinction Outcome Frequencies",
     "chart4_desc": "Categorization of quenching regimes observed across orbital test campaigns"
   },
   "explorer": {
     "section_title": "NASA Microgravity Experiment Explorer",
-    "section_subtitle": "Filter, search, and inspect 879 flight records with complete physical telemetry",
+    "section_subtitle": "Filter, search, and inspect 892 flight records with complete physical telemetry",
     "search_placeholder": "Search by Experiment ID, Fuel (e.g. Heptane, PMMA), Family, or Notes...",
     "filter_family": "Flight Family",
     "filter_fuel": "Fuel Material",
@@ -141,7 +141,7 @@
   },
   "footer": {
     "developed_for": "Developed for NASA Space Apps Challenge 2026",
-    "challenge_name": "Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data",
+    "challenge_name": "Flame in Freefall: SI-Powered (Super Intelligence / AI) Fire Safety Insights from Microgravity Combustion Data",
     "provenance": "Data Provenance: NASA Physical Science Informatics (PSI) & NASA Technical Reports Server (NTRS)"
   }
 }

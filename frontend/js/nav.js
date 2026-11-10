@@ -22,7 +22,7 @@
 
     // === COMMON FOOTER ===
     footer: {
-      desc: 'Mikroyerçəkim Yanma Datalarından Süni İntellektlə Yanğın Təhlükəsizliyi İntellekti. NASA Space Apps Challenge 2026.',
+      desc: 'SI-Powered (Super Intelligence / AI) Mikroyerçəkim Yanma Datalarından Yanğın Təhlükəsizliyi İntellekti. NASA Space Apps Challenge 2026.',
       colPlatform: 'Platforma',
       colData: 'Məlumat Mənbələri',
       analytics: 'Analitika Mərkəzi',
@@ -31,38 +31,38 @@
       ai: 'AI Köməkçi',
       about: 'Sənədləşmə & Haqqında',
       copyright: '© 2026 NASA FIRE-X · NASA Space Apps Challenge üçün hazırlanıb',
-      dataCount: 'Məlumat: NASA Physical Science Informatics (PSI) · 879 kanonik eksperiment'
+      dataCount: 'Məlumat: NASA Physical Science Informatics (PSI) · 892 kanonik eksperiment'
     },
 
     // === 1. HOME PAGE (index.html) ===
     home: {
       badge: 'NASA SPACE APPS CHALLENGE 2026 \u00a0·\u00a0 KOSMOSDA YANĞIN TƏHLÜKƏSİZLİYİ',
       title: 'ALOV SƏRBƏST DÜŞMƏDƏ',
-      subtitle: 'FIRE-X İntellekt Platforması',
-      desc: 'AI tərəfindən təhlil edilmiş 879 yoxlanılmış mikroqravitasiya yanma eksperimenti — BKS, Artemis Ay Yaşayış Modulu və gələcək kosmik missiyalarda yanğın təhlükəsizliyini təmin edir.',
+      subtitle: 'SI-Powered: Mikroyerçəkim Yanma Datalarından Yanğın Təhlükəsizliyi İntellekti',
+      desc: 'AI və SQL-RAG tərəfindən təhlil edilmiş 892 yoxlanılmış mikroqravitasiya və yerüstü sərhəd yanma eksperimenti — BKS, Artemis Ay Bazası, Mars Bazası, Təzyiqli Rover və EVA Skafandrında yanğın təhlükəsizliyini təmin edir.',
       btnExplore: 'Məlumatları Kəşf Et',
       btnSimulator: 'Simulyatoru Başlat',
       clockLabel: 'MİSSİYA VAXTI (UTC):',
       scroll: 'Aşağı',
       statExp: 'Kanonik Eksperimentlər',
-      statFam: 'Uçuş Ailələri',
-      statScen: 'Missiya Ssenariləri',
+      statFam: 'Tədqiqat Ailələri',
+      statScen: 'Missiya Mühitləri',
       statInt: 'Məlumat Dəqiqliyi',
 
       aboutEyebrow: 'Layihə Haqqında',
       aboutTitle: 'Orbitdə <span class="text-gradient">Yanğın Təhlükəsizliyi Elmi</span>',
       aboutDesc: 'FIRE-X NASA-nın ən əhatəli mikroyerçəkim yanma məlumat bazasını toplayır və təhlil edir. Qravitasiya olmadan alov tamamilə fərqli davranır — alov kürəvi forma alır, soyuq alovlar davam edir və ənənəvi yanğın təhlükəsizliyi qaydaları artıq tətbiq olunmur.',
-      feat1Title: '879 Yoxlanılmış Eksperiment',
-      feat1Desc: 'FLEX damcı alovlarından SAFFIRE böyük miqyaslı kosmik yanğın sınaqlarına qədər — hamısı NASA PSI rəsmi datalarıdır.',
-      feat2Title: 'Süni İntellekt Analitikası',
-      feat2Desc: 'Hallüsinasiyasız elmi cavablar üçün deterministik NASA datası ilə inteqrasiya edilmiş GPT-6-luna.',
-      feat3Title: 'Missiya Ssenari Simulyatoru',
-      feat3Desc: 'BKS, Artemis Ay Modulu (34% O₂) və Dərin Kosmos mühitlərində yanğın təhlükələrini modelləşdirin.',
+      feat1Title: '892 Yoxlanılmış Eksperiment',
+      feat1Desc: 'FLEX damcı alovlarından (He/CO₂) və ACME CFI-G (85% O₂) sınaqlarından SAFFIRE və DAFT Ay tozu/tüstü təcrübələrinə qədər.',
+      feat2Title: 'AI + Canlı SQLite SQL-RAG',
+      feat2Desc: 'Hallüsinasiyasız elmi cavablar üçün canlı SQLite NASA PSI sorğuları ilə inteqrasiya edilmiş OpenAI GPT-4o-mini.',
+      feat3Title: 'SI Tədqiqat Reytinqi & Simulyator',
+      feat3Desc: 'BKS, Ay Bazası (0.16g), Mars Bazası (0.38g), Təzyiqli Rover və EVA Skafandrında 0g–1g sərhədli yanğın risklərini modelləşdirin.',
       issBadgeTitle: 'Beynəlxalq Kosmik Stansiya',
       issBadgeSub: 'Orbit: 408 km | Sürət: 27,600 km/s',
 
       famEyebrow: 'Uçuş Tədqiqatları',
-      famTitle: '24 <span class="text-gradient">Eksperiment Ailəsi</span>',
+      famTitle: '29 <span class="text-gradient">Tədqiqat Ailəsi</span>',
       famViewAll: 'Bütün Datalara Bax →',
 
       envEyebrow: 'Planetar Yanğın Riski',
@@ -77,17 +77,17 @@
     analytics: {
       heroTag: 'ORBİTAL MAYE VƏ YANMA TELEMETRİYASI MƏRKƏZİ',
       pageTitle: 'Mikroyerçəkim Yanma Analitikası Mühərriki',
-      pageDesc: '879 NASA uçuş testindən real-vaxt 3D telemetriya, sönmə hədləri analizi və məcburi hava axını dinamikası',
+      pageDesc: '892 NASA uçuş və yerüstü sərhəd testindən real-vaxt 3D telemetriya, sönmə hədləri analizi və məcburi hava axını dinamikası',
       
       stat1Label: 'Kanonik Eksperimentlər',
       stat1Sub: 'NASA PSI təsdiqlənmiş uçuş qeydləri',
       stat2Label: 'Orta Sönmə Diametri (de)',
       stat2Sub: 'Mikroyerçəkimdə sönmə həddi',
       stat3Label: 'Orta O₂ Mol Hissəsi',
-      stat3Sub: 'Sınaq diapazonu: 14.0% – 50.0%',
+      stat3Sub: 'Sınaq diapazonu: 12.0% – 85.0% (CFI-G)',
       stat4Label: 'Uçuş Tədqiqatları',
-      stat4Val: '24 Ailə',
-      stat4Sub: 'FLEX · BASS · SAFFIRE · SOFIE · ACME · FLARE · MGM',
+      stat4Val: '29 Ailə',
+      stat4Sub: 'FLEX · BASS · SAFFIRE · SOFIE · ACME · SPICE · DAFT',
 
       holoTitle: 'İnteraktiv 3D/4D Yanma Holo-Laboratoriyası',
       holoSub: 'WebGL 3D Telemetriya Simulyasiyası // Fırlatmaq üçün çəkin, Miqyası dəyişmək üçün sürüşdürün',
@@ -113,14 +113,14 @@
       mod1Desc: 'O₂ mol hissəsindən asılı olaraq damcı və yanacaq nümunələrinin kritik sönmə sərhədlərini qiymətləndirir. Oksidləşdirici artdıqca sönmə diametrinin eksponensial azalmasını göstərir.',
       mod1Btn: 'Sönmə Dinamikasını Təhlil Et',
 
-      mod2Badge: 'HİDROAERODİNAMİKA // CIR KANALI TELEMETRİYASI',
+      mod2Badge: 'HİDROAERODİNAMİKA // CIR & MSG KANALI TELEMETRİYASI',
       mod2Title: 'Yanma Müddəti vs. Məcburi Konvektiv Hava Axını',
       mod2Desc: 'Aşağı axında (<2 sm/s) radiativ soyuma ilə yüksək axında (>18 sm/s) konvektiv üfürmə arasındakı keçidi təhlil edir. Mikroyerçəkimdə optimal yanma sabitliyi dəhlizini müəyyən edir.',
       mod2Btn: 'Üfürmə Sürətini Qiymətləndir',
 
       mod3Badge: 'MATERİALŞÜNASLIQ // KİMYƏVİ TƏSNİFAT',
       mod3Title: 'Yanacaq Alovlanma Matrisi və Nümunə Bölgüsü',
-      mod3Desc: '879 uçuş testinin material kateqoriyası və kimyəvi tərkibinə görə ətraflı bölgüsü. Maye karbohidrogenlər, spirtlər, bərk termoplastlar, parçalar və kosmik polimerləri müqayisə edir.',
+      mod3Desc: '892 sınağın material kateqoriyası və kimyəvi tərkibinə görə ətraflı bölgüsü. Maye karbohidrogenlər, spirtlər, bərk termoplastlar, parçalar və kosmik polimerləri müqayisə edir.',
       mod3Btn: 'Material Riskini Sorğula',
 
       mod4Badge: 'SINAQ REJİMLƏRİ // NƏTİCƏ TAKSONOMİYASI',
@@ -156,10 +156,10 @@
       sidebarTitle: 'FİLTRLƏR VƏ AXTARIŞ',
       btnReset: 'Hamısını Sıfırla',
       searchLabel: 'Sürətli Axtarış',
-      searchPlaceholder: 'ID, yanacaq və ya nəticə...',
-      familyLabel: 'Uçuş və Tədqiqat Ailəsi (Cəmi 24)',
+      searchPlaceholder: 'ID, yanacaq, qurğu (CIR/MSG) və ya nəticə...',
+      familyLabel: 'Uçuş və Tədqiqat Ailəsi (Cəmi 29)',
       familyDefault: 'Bütün Uçuş Tədqiqatları',
-      fuelLabel: 'Yanacaq / Material (106 Növ)',
+      fuelLabel: 'Yanacaq / Material (112 Növ)',
       fuelDefault: 'Bütün Materiallar və Yanacaqlar',
       outcomeLabel: 'Sönmə Nəticəsi',
       outcomeDefault: 'Bütün Sönmə Nəticələri',
@@ -202,16 +202,16 @@
     simulator: {
       subBadge: 'UÇUŞ RİSKİNİN PROQNOZLAŞDIRILMASI VƏ SÖNDÜRMƏ MODELİ',
       pageTitle: 'Planetar Missiya Yanğın Riski Simulyatoru',
-      pageDesc: 'NASA-STD-6001 həssaslıq metrikləri əsasında müxtəlif kosmik kabin mühitlərində alovlanma potensialını, sönmə diametrlərini və tələb olunan boğucu qaz miqdarını hesablayır.',
+      pageDesc: 'NASA-STD-6001 həssaslıq metrikləri əsasında müxtəlif kosmik kabin mühitlərində alovlanma potensialını, sönmə diametrlərini və SI Tədqiqat Uyğunluq Reytinqlərini hesablayır.',
 
       scenIssTitle: 'BKS Standart Atmosferi',
-      scenIssSub: '21.0% O₂ · 101.3 kPa · Dəniz Səviyyəsi Standartı',
-      scenLunarTitle: 'Artemis Ay Yaşayış Modulu',
-      scenLunarSub: '34.0% O₂ · 56.5 kPa · Aşağı Təzyiqli EVA Rejimi',
+      scenIssSub: '21.0% O₂ · 101.3 kPa · 14.7 psi · 0g Mikroyerçəkim',
+      scenLunarTitle: 'Artemis Ay Yaşayış Bazası (0.16g)',
+      scenLunarSub: '34.0% O₂ · 56.5 kPa · 8.2 psi · 0g–1g Sərhədlənmiş',
       scenHypoxicTitle: 'Dərin Kosmos Hipoqsik Sığınacaq',
       scenHypoxicSub: '15.0% O₂ · 70.3 kPa · Yanğın Boğma Rejimi',
       scenCustomTitle: 'Fərdi Atmosfer Laboratoriyası',
-      scenCustomSub: 'Parametrik Oksidləşdirici və Təzyiq Sınağı',
+      scenCustomSub: 'Parametrik Oksidləşdirici (10–100% O₂) və Təzyiq Sınağı',
 
       sliderO2: 'Oksigen Qatılığı (O₂ %)',
       sliderPressure: 'Ümumi Təzyiq (kPa)',
@@ -230,7 +230,7 @@
       metMultTitle: 'Alov Sürəti Əmsalı',
       metMultSub: '21% O₂-yə görə normallaşdırılıb',
       metPurgeTitle: 'Tələb Olunan Söndürücü',
-      metPurgeSub: 'N₂/CO₂ qaz doldurma qatılığı',
+      metPurgeSub: 'N₂/CO₂/He qaz doldurma qatılığı',
 
       advisoryHeader: 'AVTOMATLAŞDIRILMIŞ NASA EKİPAJ TƏHLÜKƏSİZLİYİ MƏSLƏHƏTİ',
 
@@ -247,8 +247,8 @@
     ai: {
       heading: 'TÖVSİYƏ OLUNAN ELMİ SUALLAR',
       welcomeTitle: 'FIRE-X Elmi Tədqiqat Köməkçisi Onlayndır',
-      welcomeDesc: 'NASA Mikroyerçəkim Yanma İntellekt Konsoluna xoş gəlmisiniz. <strong>OpenAI GPT-6-luna</strong> ilə təchiz olunub və Beynəlxalq Kosmik Stansiya ilə Cygnus orbital sınaqlarından <strong>879 yoxlanılmış uçuş eksperimentinə</strong> əsaslanır.<br><br>Damcı sönməsi (FLEX), bərk yanacaqların alovlanması (BASS/SOFIE), kosmik gəmi yanğınlarının yayılması (SAFFIRE) və ya planetar yaşayış modullarının atmosfer təhlükəsizliyi (Artemis / BKS) haqqında ətraflı suallar verə bilərsiniz.',
-      typingText: 'OpenAI gpt-6-luna və NASA PSI Telemetriyası sorğulanır...',
+      welcomeDesc: 'NASA Mikroyerçəkim Yanma İntellekt Konsoluna xoş gəlmisiniz. <strong>OpenAI GPT-4o-mini + Canlı SQLite SQL-RAG</strong> ilə təchiz olunub və 29 tədqiqat ailəsi üzrə <strong>892 yoxlanılmış uçuş və yerüstü sərhəd eksperimentinə</strong> əsaslanır.<br><br>SI Tədqiqat Uyğunluq Reytinqi (Kosmik Gəmi, BKS, Ay Bazası, Mars Bazası, Rover, EVA Skafandrı), 0g–1g Qismən Qravitasiya Sərhədləməsi (ACME E-FIELD / LUCI &amp; FM2), FLEX He/CO₂ qazları, ACME CFI-G (85% O₂) və ya 3 Səviyyəli Yanğın Təhlükəsizliyi Avadanlığı haqqında ətraflı suallar verə bilərsiniz.',
+      typingText: 'OpenAI gpt-4o-mini və Canlı SQLite NASA PSI Telemetriyası sorğulanır...',
       placeholder: 'Mikroyerçəkimdə yanma, alov dinamikası və ya eksperiment ID-ləri haqqında soruşun...',
       btnSend: 'Sorğunu Göndər',
       btnClear: 'Sessiyanı Təmizlə',
@@ -266,11 +266,11 @@
       card1Title: 'Niyə Mikroyerçəkim?',
       card1Desc: 'Mikroyerçəkimdə qravitasiya qaldırma qüvvəsi (buoyancy) yoxdur. Alovlar kürəvi forma alır. Soyuq alovlar davam edir. Standart yanğın təhlükəsizliyi modelləri işləmir. FIRE-X kosmik yaşayış modulları üçün yeni təhlükəsizlik modelləri hazırlamaq məqsədilə NASA-nın ən əhatəli mikroyerçəkim yanma bazasını təhlil edir.',
       card2Title: 'Məlumat Bazası',
-      card2Desc: 'NASA Physical Science Informatics (PSI) repozitoriyasından 24 uçuş və tədqiqat ailəsi üzrə 879 kanonik eksperiment: FLEX-1/2 (damcı yanması), BASS-I/II (bərk materiallar), SAFFIRE I-VI (böyük miqyaslı gəmi yanğınları), ACME/CIR, SOFIE, SLICE və NASA-STD-6001 material sınaqları.',
+      card2Desc: 'NASA Physical Science Informatics (PSI) repozitoriyasından 29 uçuş və tədqiqat ailəsi üzrə 892 kanonik eksperiment: FLEX-1/2 (damcı yanması + He/CO₂), BASS-I/II (MSG bərk materiallar), SAFFIRE I-VI (Cygnus gəmi yanğınları), ACME (BRE, CFI, CFI-G 85% O₂, E-FIELD, CLD), SOFIE, SLICE, SPICE, SAME/SAME-R, DAFT/DAFT-2 və NASA-STD-6001 (1.0g WSTF sərhəd sınaqları).',
       card3Title: 'Süni İntellekt İnteqrasiyası',
-      card3Desc: 'Platforma ixtisaslaşdırılmış NASA yanma sistemi göstərişi ilə Responses API vasitəsilə OpenAI GPT-6-luna modelindən istifadə edir. Bütün AI çağırışları yalnız server tərəfində həyata keçirilir — API açarı heç vaxt brauzerə ötürülmür. Deterministik SQL+RAG ehtiyat sistemi cavabların həmişə real eksperimental datalara əsaslanmasını təmin edir.',
-      card4Title: 'Missiya Simulyatoru',
-      card4Desc: 'Yanğın Təhlükəsi İndeksi (FHI) formulu NASA-STD-6001 oksigen qismən təzyiqi və mol fraksiyası həssaslıq əyrilərindən əldə edilmişdir: FHI = 1 + (O₂/21) × 3.5 + (pO₂/21.3) × 1.8. BKS Standartı (FHI≈5.1), Artemis Kəşfiyyat Atmosferi (FHI≈8.3) və Hipoqsik Sığınacaq (FHI≈2.1) profillərinə qarşı təsdiqlənmişdir.',
+      card3Desc: 'Platforma ixtisaslaşdırılmış NASA yanma sistemi göstərişi ilə OpenAI GPT-4o-mini + Canlı SQLite SQL-RAG mühərrikindən istifadə edir. Hər bir istifadəçi sorğusunda fire_safety.db bazasından uyğun eksperiment sətirləri birbaşa SQL ilə çəkilir və cavaba daxil edilir.',
+      card4Title: 'Missiya Simulyatoru & SI Reytinqi',
+      card4Desc: 'Yanğın Təhlükəsi İndeksi (FHI) və SI Tədqiqat Uyğunluq Reytinqi mühərriki bütün NASA PSI tədqiqatlarını Kosmik Gəmi, BKS, Ay Bazası (0.16g), Mars Bazası (0.38g), Təzyiqli Rover (≥30% O₂, ≤10.2 psi) və EVA Skafandrı (85–100% O₂, 4.3 psi) üçün 0g–1g sərhədləməsi ilə qiymətləndirir.',
       sec2Eyebrow: 'Məlumat Mənbələri',
       sec2Title: 'NASA <span class="text-gradient">Məlumat Mənbəyi</span>'
     }
@@ -284,14 +284,16 @@
 
     // 1. Navbar Translation
     const navLinks = document.querySelectorAll('.nav-links .nav-link');
-    if (navLinks.length >= 6) {
-      navLinks[0].textContent = isAz ? TRANSLATIONS_AZ.nav.home : 'Home';
-      navLinks[1].textContent = isAz ? TRANSLATIONS_AZ.nav.analytics : 'Analytics';
-      navLinks[2].textContent = isAz ? TRANSLATIONS_AZ.nav.explorer : 'Data Explorer';
-      navLinks[3].textContent = isAz ? TRANSLATIONS_AZ.nav.simulator : 'Simulator';
-      navLinks[4].textContent = isAz ? TRANSLATIONS_AZ.nav.ai : 'AI Assistant';
-      navLinks[5].textContent = isAz ? TRANSLATIONS_AZ.nav.about : 'About';
-    }
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === '/') link.textContent = isAz ? TRANSLATIONS_AZ.nav.home : 'Home';
+      else if (href === '/analytics') link.textContent = isAz ? TRANSLATIONS_AZ.nav.analytics : 'Analytics';
+      else if (href === '/explorer') link.textContent = isAz ? TRANSLATIONS_AZ.nav.explorer : 'Data Explorer';
+      else if (href === '/simulator') link.textContent = isAz ? TRANSLATIONS_AZ.nav.simulator : 'Simulator';
+      else if (href === '/hardware') link.textContent = isAz ? 'Hardware' : 'Hardware';
+      else if (href === '/ai') link.textContent = isAz ? TRANSLATIONS_AZ.nav.ai : 'AI Assistant';
+      else if (href === '/about') link.textContent = isAz ? TRANSLATIONS_AZ.nav.about : 'About';
+    });
 
     const brandSub = document.querySelector('.nav-brand-sub');
     if (brandSub) brandSub.textContent = isAz ? TRANSLATIONS_AZ.nav.brandSub : 'MICROGRAVITY COMBUSTION INTEL';
@@ -349,7 +351,7 @@
     if (footerCopyright) footerCopyright.textContent = isAz ? TRANSLATIONS_AZ.footer.copyright : '© 2026 NASA FIRE-X · Built for NASA Space Apps Challenge';
 
     const footerDataCount = document.getElementById('footer-data-count');
-    if (footerDataCount) footerDataCount.textContent = isAz ? TRANSLATIONS_AZ.footer.dataCount : 'Data: NASA Physical Science Informatics (PSI) · 879 canonical';
+    if (footerDataCount) footerDataCount.textContent = isAz ? TRANSLATIONS_AZ.footer.dataCount : 'Data: NASA Physical Science Informatics (PSI) · 892 canonical';
 
     // 4. Page-Specific Deep Translations
     const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
@@ -471,13 +473,13 @@
           navCards[0].querySelector('.nav-card-desc').textContent = 'İnteraktiv 3D qrafiklər — sönmə paylanması, hava axını korrelyasiyası, yanacaq bölgüsü və nəticə analizi.';
 
           navCards[1].querySelector('.nav-card-title').textContent = 'Məlumat Kəşfiyyatı';
-          navCards[1].querySelector('.nav-card-desc').textContent = 'Bütün 879 NASA uçuş eksperimentini tam telemetriya baxışı ilə araşdırın, filtrləyin və müqayisə edin.';
+          navCards[1].querySelector('.nav-card-desc').textContent = 'Bütün 892 NASA uçuş və yerüstü sərhəd eksperimentini tam telemetriya baxışı ilə araşdırın, filtrləyin və müqayisə edin.';
 
           navCards[2].querySelector('.nav-card-title').textContent = 'Missiya Simulyatoru';
-          navCards[2].querySelector('.nav-card-desc').textContent = 'BKS, Artemis Ay Modulu və fərdi kosmik kabin atmosferlərində yanğın təhlükəsi indeksini simulyasiya edin.';
+          navCards[2].querySelector('.nav-card-desc').textContent = 'BKS, Ay Bazası, Mars Bazası, Rover və EVA Skafandrında yanğın təhlükəsi indeksini və SI Tədqiqat Reytinqini simulyasiya edin.';
 
           navCards[3].querySelector('.nav-card-title').textContent = 'AI Tədqiqat Köməkçisi';
-          navCards[3].querySelector('.nav-card-desc').textContent = 'GPT-6-luna modelinə kontekstə uyğun elmi cavablar almaq üçün xüsusi NASA yanma sualları verin.';
+          navCards[3].querySelector('.nav-card-desc').textContent = 'GPT-4o-mini + Canlı SQLite SQL-RAG modelinə kontekstə uyğun elmi cavablar almaq üçün xüsusi NASA yanma sualları verin.';
         }
 
         const modSection = document.querySelectorAll('.section')[3];
@@ -767,22 +769,6 @@
         const simP = document.querySelector('.sim-header p');
         if (simP) simP.textContent = TRANSLATIONS_AZ.simulator.pageDesc;
 
-        // 4 Preset cards
-        const scenBtns = document.querySelectorAll('.scenario-card-btn');
-        if (scenBtns.length >= 4) {
-          scenBtns[0].querySelector('.scenario-name').textContent = TRANSLATIONS_AZ.simulator.scenIssTitle;
-          scenBtns[0].querySelector('.scenario-specs').textContent = TRANSLATIONS_AZ.simulator.scenIssSub;
-
-          scenBtns[1].querySelector('.scenario-name').textContent = TRANSLATIONS_AZ.simulator.scenLunarTitle;
-          scenBtns[1].querySelector('.scenario-specs').textContent = TRANSLATIONS_AZ.simulator.scenLunarSub;
-
-          scenBtns[2].querySelector('.scenario-name').textContent = TRANSLATIONS_AZ.simulator.scenHypoxicTitle;
-          scenBtns[2].querySelector('.scenario-specs').textContent = TRANSLATIONS_AZ.simulator.scenHypoxicSub;
-
-          scenBtns[3].querySelector('.scenario-name').textContent = TRANSLATIONS_AZ.simulator.scenCustomTitle;
-          scenBtns[3].querySelector('.scenario-specs').textContent = TRANSLATIONS_AZ.simulator.scenCustomSub;
-        }
-
         // Custom sliders headers
         const sliderHeaders = document.querySelectorAll('.slider-header span:first-child');
         if (sliderHeaders.length >= 2) {
@@ -851,30 +837,6 @@
       const headEl = document.getElementById('ai-sidebar-heading') || document.querySelector('.sidebar-heading');
       if (headEl) headEl.textContent = isAz ? TRANSLATIONS_AZ.ai.heading : 'RECOMMENDED SCIENTIFIC INQUIRIES';
 
-      const chips = document.querySelectorAll('.prompt-chip-btn');
-      const azChips = [
-        { text: 'FLEX-2 Soyuq Alov (Cool Flame) Kinetikası →', prompt: 'NASA FLEX-2 təcrübəsində müşahidə olunan soyuq alov (cool flame) fizikasını izah edin.' },
-        { text: 'Artemis 34% O₂ Yanğın Riski →', prompt: 'Artemis Ay Yaşayış Modulunun atmosferi (34% O2, 56.5 kPa) nəyə görə BKS-dən daha təhlükəlidir?' },
-        { text: 'Məcburi Hava Axını və Sönmə Hədləri →', prompt: 'Mikroyerçəkimdə hava axınının sürəti radiativ sönmə ilə konvektiv üfürməyə necə təsir edir?' },
-        { text: 'SAFFIRE Kosmik Gəmi Yanğınları →', prompt: 'SAFFIRE təcrübələri Cygnus kosmik gəmisində böyük miqyaslı alov yayılması haqqında nəyi aşkar etdi?' },
-        { text: 'NASA-STD-6001 Söndürmə Qaydaları →', prompt: 'NASA-STD-6001 standartı üzrə hipoqsik sığınacaqlar üçün hansı yanğın söndürmə protokolları tövsiyə olunur?' }
-      ];
-      const enChips = [
-        { text: 'Explain FLEX-2 Cool Flame Kinetics →', prompt: 'Explain the physics of cool-flame droplet combustion observed in NASA FLEX-2.' },
-        { text: 'Artemis 34% O₂ Combustion Risk →', prompt: 'Why is the Artemis Lunar Habitat atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?' },
-        { text: 'Forced Airflow Quenching Limits →', prompt: 'How does forced airflow velocity influence radiative quenching vs convective blowoff in microgravity?' },
-        { text: 'SAFFIRE Large-Scale Spacecraft Fires →', prompt: 'What did the SAFFIRE experiments reveal about large-scale flame spread aboard Cygnus spacecraft?' },
-        { text: 'NASA-STD-6001 Extinguishment Specs →', prompt: 'What are the recommended fire suppression protocols under NASA-STD-6001 for hypoxic havens?' }
-      ];
-
-      chips.forEach((chip, i) => {
-        const item = isAz ? azChips[i] : enChips[i];
-        if (item) {
-          chip.textContent = item.text;
-          chip.setAttribute('onclick', `sendPrompt('${item.prompt.replace(/'/g, "\\'")}')`);
-        }
-      });
-
       const welcomeBubble = document.querySelector('.message-row.assistant .msg-bubble');
       if (welcomeBubble) {
         welcomeBubble.innerHTML = isAz ? `
@@ -883,18 +845,18 @@
           </div>
           ${TRANSLATIONS_AZ.ai.welcomeDesc}
           <div class="msg-meta-bar">
-            <span>NASA FİZİKİ ELMLƏR İNFORMATİKASI // GROUND TRUTH</span>
+            <span>NASA FİZİKİ ELMLƏR İNFORMATİKASI // CANLI SQL-RAG GROUND TRUTH</span>
             <span>SİSTEM HAZIRDIR</span>
           </div>
         ` : `
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
             FIRE-X Scientific Research Assistant Online
           </div>
-          Welcome to the NASA Microgravity Combustion Intelligence Console. Powered by <strong>OpenAI GPT-6-luna</strong> and grounded in <strong>879 verified flight experiments</strong> from the International Space Station and Cygnus orbital campaigns.
+          Welcome to the NASA Microgravity Combustion Intelligence Console. Powered by <strong>OpenAI GPT-4o-mini + Live SQLite SQL-RAG</strong> and grounded in <strong>892 verified flight &amp; ground-bound experiments</strong> across 29 investigation suites (CIR, MSG, Cygnus, ZGF, WSTF).
           <br><br>
-          You can ask detailed questions regarding droplet extinction (FLEX), solid fuel flammability (BASS/SOFIE), spacecraft fire propagation (SAFFIRE), or planetary habitat atmospheric safety (Artemis / ISS).
+          Ask about SI Investigation Relevance Rankings (Spacecraft, ISS, Lunar Base, Martian Base, Rover, EVA Suit), 0g–1g Partial-Gravity Bounding (ACME E-FIELD / pre-LUCI &amp; FM2), FLEX He/CO₂ diluents, ACME CFI-G 85% O₂ flames, or 3-Tier Fire Safety Equipment (Prevention, Detection, Suppression).
           <div class="msg-meta-bar">
-            <span>NASA PHYSICAL SCIENCE INFORMATICS // GROUND TRUTH</span>
+            <span>NASA PHYSICAL SCIENCE INFORMATICS // LIVE SQL-RAG GROUND TRUTH</span>
             <span>SYSTEM READY</span>
           </div>
         `;
@@ -916,7 +878,7 @@
       if (enterNote) enterNote.textContent = isAz ? TRANSLATIONS_AZ.ai.enterNote : 'PRESS ENTER TO SEND';
 
       const typingSpan = document.querySelector('#typing-indicator span');
-      if (typingSpan) typingSpan.textContent = isAz ? TRANSLATIONS_AZ.ai.typingText : 'Querying OpenAI gpt-6-luna & NASA PSI Telemetry...';
+      if (typingSpan) typingSpan.textContent = isAz ? TRANSLATIONS_AZ.ai.typingText : 'Querying OpenAI gpt-4o-mini & Live SQLite NASA PSI Telemetry...';
 
       if (typeof syncAiPageLanguage === 'function') {
         syncAiPageLanguage(lang);
@@ -1011,11 +973,17 @@
       }
     });
 
-    // 4. Smooth page transition
+    // 4. Smooth page transition (ignore anchor jumps, new-tab links, and file downloads)
     document.querySelectorAll('a[href^="/"]').forEach(link => {
       link.addEventListener('click', e => {
         const href = link.getAttribute('href');
-        if (href && !href.startsWith('#') && !link.target) {
+        if (
+          href &&
+          !href.startsWith('#') &&
+          !link.target &&
+          !link.hasAttribute('download') &&
+          !/\.(ino|pdf|csv|zip|png|jpg|jpeg)$/i.test(href)
+        ) {
           e.preventDefault();
           document.body.style.opacity = '0';
           document.body.style.transition = 'opacity 0.2s ease';
@@ -1024,10 +992,13 @@
       });
     });
 
-    // 5. Fade in
+    // 5. Fade in & bfcache restore
     document.body.style.opacity = '0';
     requestAnimationFrame(() => {
       document.body.style.transition = 'opacity 0.35s ease';
+      document.body.style.opacity = '1';
+    });
+    window.addEventListener('pageshow', () => {
       document.body.style.opacity = '1';
     });
 

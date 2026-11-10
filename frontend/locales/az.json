@@ -14,8 +14,8 @@
   },
   "hero": {
     "badge": "NASA FİZİKİ ELMLƏR İNFORMATİKASI PLATFORMASI",
-    "title": "Alov Sərbəst Düşmədə: AI Yanğın Təhlükəsizliyi Analitikası",
-    "description": "BKS və kosmik gəmilərdə həyata keçirilmiş 24 uçuş və tədqiqat ailəsi üzrə 879 real NASA mikroqravitasiya yanma eksperimentinin elmi analizi və maşın öyrənməsi intellekti.",
+    "title": "Alov Sərbəst Düşmədə: SI-Powered (Super Intelligence / AI) Yanğın Təhlükəsizliyi Analitikası",
+    "description": "BKS və kosmik gəmilərdə həyata keçirilmiş 29 uçuş və tədqiqat ailəsi üzrə 892 real NASA mikroqravitasiya yanma eksperimentinin elmi analizi və maşın öyrənməsi intellekti.",
     "kpi_experiments": "Yoxlanılmış Eksperiment",
     "kpi_families": "Uçuş Ailəsi",
     "kpi_integrity": "Kanonik Dəqiqlik",
@@ -32,13 +32,13 @@
     "chart2_title": "Yanma Müddəti vs. Məcburi Konvektiv Hava Axını",
     "chart2_desc": "Aşağı axında radiativ sönmə ilə yüksək axında konvektiv üfürülmə arasındakı keçidi təhlil edir",
     "chart3_title": "Yanacaqların Alovlanma Matrisi və Nümunə Bölgüsü",
-    "chart3_desc": "879 uçuş eksperimentinin material kateqoriyası və kimyəvi tərkibinə görə bölgüsü",
+    "chart3_desc": "892 uçuş eksperimentinin material kateqoriyası və kimyəvi tərkibinə görə bölgüsü",
     "chart4_title": "Sönmə Nəticələrinin Paylanması",
     "chart4_desc": "Orbital sınaq kampaniyalarında müşahidə olunan sönmə rejimlərinin təsnifatı"
   },
   "explorer": {
     "section_title": "NASA Mikroqravitasiya Eksperiment Tədqiqatçısı",
-    "section_subtitle": "Tam fiziki telemetriyaya malik 879 uçuş qeydini filtrasiya edin, axtarın və təhlil edin",
+    "section_subtitle": "Tam fiziki telemetriyaya malik 892 uçuş qeydini filtrasiya edin, axtarın və təhlil edin",
     "search_placeholder": "Eksperiment ID, Yanacaq (məs. Heptan, PMMA), Ailə və ya Qeydlər üzrə axtarış...",
     "filter_family": "Uçuş Ailəsi",
     "filter_fuel": "Yanacaq Materialı",
@@ -141,7 +141,7 @@
   },
   "footer": {
     "developed_for": "NASA Space Apps Challenge 2026 üçün hazırlanmışdır",
-    "challenge_name": "Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data",
+    "challenge_name": "Flame in Freefall: SI-Powered (Super Intelligence / AI) Fire Safety Insights from Microgravity Combustion Data",
     "provenance": "Məlumat Mənbəyi: NASA Fiziki Elmlər İnformatikası (PSI) və NASA Texniki Hesabatlar Serveri (NTRS)"
   }
 }

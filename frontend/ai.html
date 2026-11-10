@@ -414,6 +414,7 @@ body {
       <li><a href="/analytics" class="nav-link">Analytics</a></li>
       <li><a href="/explorer" class="nav-link">Data Explorer</a></li>
       <li><a href="/simulator" class="nav-link">Simulator</a></li>
+      <li><a href="/hardware" class="nav-link">Hardware</a></li>
       <li><a href="/ai" class="nav-link active">AI Assistant</a></li>
       <li><a href="/about" class="nav-link">About</a></li>
     </ul>
@@ -435,7 +436,7 @@ body {
         <div style="font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;">FIRE-X AI</div>
         <div class="ai-model-tag">
           <div class="status-pulse"></div>
-          LIVE // GPT-6-LUNA
+          LIVE // GPT-4O-MINI + SQL-RAG
         </div>
       </div>
     </div>
@@ -444,30 +445,33 @@ body {
 
     <div class="sidebar-heading" id="ai-sidebar-heading">RECOMMENDED SCIENTIFIC INQUIRIES</div>
     <div class="prompt-chips-grid" id="ai-prompt-chips">
+      <button class="prompt-chip-btn" data-en-text="SI Investigation Ranking (Lunar/Rover/EVA) →" data-en-prompt="Rank the NASA PSI investigations by relevance for a Lunar Base (0.16g), Pressurized Rover, and EVA Spacesuit (85% O2)." data-az-text="SI Tədqiqat Reytinqi (Ay Bazası / Rover / EVA) →" data-az-prompt="NASA PSI tədqiqatlarını Ay Bazası (0.16g), Təzyiqli Rover və EVA Skafandrı (85% O2) üçün uyğunluq dərəcəsinə görə sıralayın." onclick="sendPrompt('Rank the NASA PSI investigations by relevance for a Lunar Base (0.16g), Pressurized Rover, and EVA Spacesuit (85% O2).')">
+        SI Investigation Ranking (Lunar/Rover/EVA) →
+      </button>
+      <button class="prompt-chip-btn" data-en-text="0g–1g Partial-Gravity Bounding (LUCI/FM2) →" data-en-prompt="How do 0g and 1g combustion results bound partial gravity (0.16g Moon, 0.38g Mars) before LUCI and FM2 fly, and what did ACME E-FIELD show?" data-az-text="0g–1g Qismən Qravitasiya Sərhədləməsi (LUCI/FM2) →" data-az-prompt="LUCI və FM2 uçuşlarından əvvəl 0g və 1g nəticələri qismən cazibəni (0.16g Ay, 0.38g Mars) necə sərhədləyir və ACME E-FIELD nə göstərdi?" onclick="sendPrompt('How do 0g and 1g combustion results bound partial gravity (0.16g Moon, 0.38g Mars) before LUCI and FM2 fly, and what did ACME E-FIELD show?')">
+        0g–1g Partial-Gravity Bounding (LUCI/FM2) →
+      </button>
+      <button class="prompt-chip-btn" data-en-text="CIR vs MSG Facility & Diagnostic Sensors →" data-en-prompt="Compare the ISS Combustion Integrated Rack (CIR) vs Microgravity Science Glovebox (MSG) facilities, controlled parameters, and diagnostic sensors." data-az-text="CIR vs MSG Qurğuları və Diaqnostik Sensorlar →" data-az-prompt="BKS-dəki CIR və MSG yanma qurğularını, idarə olunan parametrləri və diaqnostik sensorları müqayisə edin." onclick="sendPrompt('Compare the ISS Combustion Integrated Rack (CIR) vs Microgravity Science Glovebox (MSG) facilities, controlled parameters, and diagnostic sensors.')">
+        CIR vs MSG Facility & Diagnostic Sensors →
+      </button>
+      <button class="prompt-chip-btn" data-en-text="3-Tier Fire Safety & Earth Spin-offs →" data-en-prompt="How do FLEX He/CO2 diluents, DAFT lunar dust vs smoke, and SAFFIRE improve fire prevention, detection, suppression, and Earth safety?" data-az-text="3 Səviyyəli Yanğın Avadanlığı və Yer Tətbiqləri →" data-az-prompt="FLEX He/CO2 qazları, DAFT Ay tozu/tüstü ayrı-seçkiliyi və SAFFIRE yanğının qarşısının alınması, aşkarlanması, söndürülməsi və Yer təhlükəsizliyini necə yaxşılaşdırır?" onclick="sendPrompt('How do FLEX He/CO2 diluents, DAFT lunar dust vs smoke, and SAFFIRE improve fire prevention, detection, suppression, and Earth safety?')">
+        3-Tier Fire Safety & Earth Spin-offs →
+      </button>
       <button class="prompt-chip-btn" data-en-text="Explain FLEX-2 Cool Flame Kinetics →" data-en-prompt="Explain the physics of cool-flame droplet combustion observed in NASA FLEX-2." data-az-text="FLEX-2 Soyuq Alov (Cool Flame) Kinetikası →" data-az-prompt="NASA FLEX-2 təcrübəsində müşahidə olunan soyuq alov (cool flame) fizikasını izah edin." onclick="sendPrompt('Explain the physics of cool-flame droplet combustion observed in NASA FLEX-2.')">
         Explain FLEX-2 Cool Flame Kinetics →
       </button>
-      <button class="prompt-chip-btn" data-en-text="Artemis 34% O₂ Combustion Risk →" data-en-prompt="Why is the Artemis Lunar Habitat atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?" data-az-text="Artemis 34% O₂ Yanğın Riski →" data-az-prompt="Artemis Ay Yaşayış Modulunun atmosferi (34% O2, 56.5 kPa) nəyə görə BKS-dən daha təhlükəlidir?" onclick="sendPrompt('Why is the Artemis Lunar Habitat atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?')">
-        Artemis 34% O₂ Combustion Risk →
-      </button>
-      <button class="prompt-chip-btn" data-en-text="Forced Airflow Quenching Limits →" data-en-prompt="How does forced airflow velocity influence radiative quenching vs convective blowoff in microgravity?" data-az-text="Məcburi Hava Axını və Sönmə Hədləri →" data-az-prompt="Mikroyerçəkimdə hava axınının sürəti radiativ sönmə ilə konvektiv üfürməyə necə təsir edir?" onclick="sendPrompt('How does forced airflow velocity influence radiative quenching vs convective blowoff in microgravity?')">
-        Forced Airflow Quenching Limits →
-      </button>
-      <button class="prompt-chip-btn" data-en-text="SAFFIRE Large-Scale Spacecraft Fires →" data-en-prompt="What did the SAFFIRE experiments reveal about large-scale flame spread aboard Cygnus spacecraft?" data-az-text="SAFFIRE Kosmik Gəmi Yanğınları →" data-az-prompt="SAFFIRE təcrübələri Cygnus kosmik gəmisində böyük miqyaslı alov yayılması haqqında nəyi aşkar etdi?" onclick="sendPrompt('What did the SAFFIRE experiments reveal about large-scale flame spread aboard Cygnus spacecraft?')">
-        SAFFIRE Large-Scale Spacecraft Fires →
-      </button>
-      <button class="prompt-chip-btn" data-en-text="NASA-STD-6001 Extinguishment Specs →" data-en-prompt="What are the recommended fire suppression protocols under NASA-STD-6001 for hypoxic havens?" data-az-text="NASA-STD-6001 Söndürmə Qaydaları →" data-az-prompt="NASA-STD-6001 standartı üzrə hipoqsik sığınacaqlar üçün hansı yanğın söndürmə protokolları tövsiyə olunur?" onclick="sendPrompt('What are the recommended fire suppression protocols under NASA-STD-6001 for hypoxic havens?')">
-        NASA-STD-6001 Extinguishment Specs →
+      <button class="prompt-chip-btn" data-en-text="Artemis 34% O₂ & Rover Combustion Risk →" data-en-prompt="Why is the Artemis Lunar Habitat and Pressurized Rover atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?" data-az-text="Artemis 34% O₂ və Rover Yanğın Riski →" data-az-prompt="Artemis Ay Yaşayış Modulu və Təzyiqli Rover atmosferi (34% O2, 56.5 kPa) nəyə görə BKS-dən daha təhlükəlidir?" onclick="sendPrompt('Why is the Artemis Lunar Habitat and Pressurized Rover atmosphere (34% O2, 56.5 kPa) significantly more hazardous than the ISS?')">
+        Artemis 34% O₂ & Rover Combustion Risk →
       </button>
     </div>
 
     <div class="sidebar-divider"></div>
 
     <div class="ai-specs-card">
-      <div>AI ENGINE: OpenAI Responses API</div>
-      <div>CORE MODEL: gpt-6-luna</div>
-      <div>CONTEXT: 879 Canonical Flight Tests</div>
-      <div>LATENCY: Real-time High Throughput</div>
+      <div>AI ENGINE: OpenAI + Live SQLite SQL-RAG</div>
+      <div>CORE MODEL: gpt-4o-mini</div>
+      <div>CONTEXT: 892 Canonical Flight Tests (29 Suites)</div>
+      <div>LATENCY: Real-time SQL Grounded</div>
     </div>
   </aside>
 
@@ -484,11 +488,11 @@ body {
           <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
             FIRE-X Scientific Research Assistant Online
           </div>
-          Welcome to the NASA Microgravity Combustion Intelligence Console. Powered by <strong>OpenAI GPT-6-luna</strong> and grounded in <strong>879 verified flight experiments</strong> from the International Space Station and Cygnus orbital campaigns.
+          Welcome to the NASA Microgravity Combustion Intelligence Console. Powered by <strong>OpenAI GPT-4o-mini + Live SQLite SQL-RAG</strong> and grounded in <strong>892 verified flight &amp; ground-bound experiments</strong> across 29 investigation suites (CIR, MSG, Cygnus, ZGF, WSTF).
           <br><br>
-          You can ask detailed questions regarding droplet extinction (FLEX), solid fuel flammability (BASS/SOFIE), spacecraft fire propagation (SAFFIRE), or planetary habitat atmospheric safety (Artemis / ISS).
+          Ask about SI Investigation Relevance Rankings (Spacecraft, ISS, Lunar Base, Martian Base, Rover, EVA Suit), 0g–1g Partial-Gravity Bounding (ACME E-FIELD / pre-LUCI &amp; FM2), FLEX He/CO₂ diluents, ACME CFI-G 85% O₂ flames, or 3-Tier Fire Safety Equipment (Prevention, Detection, Suppression).
           <div class="msg-meta-bar">
-            <span>NASA PHYSICAL SCIENCE INFORMATICS // GROUND TRUTH</span>
+            <span>NASA PHYSICAL SCIENCE INFORMATICS // LIVE SQL-RAG GROUND TRUTH</span>
             <span>SYSTEM READY</span>
           </div>
         </div>
@@ -503,7 +507,7 @@ body {
           <div class="typing-dot"></div>
           <div class="typing-dot"></div>
         </div>
-        <span>Querying OpenAI gpt-6-luna &amp; NASA PSI Telemetry...</span>
+        <span>Querying OpenAI gpt-4o-mini &amp; Live SQLite NASA PSI Telemetry...</span>
       </div>
     </div>
 
@@ -531,7 +535,7 @@ body {
 
 
 
-<script src="/static/js/nav.js?v=5.4"></script>
+<script src="/static/js/nav.js?v=6.0"></script>
 <script>
 let currentLang = localStorage.getItem('firex_lang') || 'en';
 
@@ -564,22 +568,22 @@ function syncAiPageLanguage(lang) {
       <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
         FIRE-X Elmi Tədqiqat Köməkçisi Onlayndır
       </div>
-      NASA Mikroyerçəkim Yanma İntellekt Konsoluna xoş gəlmisiniz. <strong>OpenAI GPT-6-luna</strong> ilə təchiz olunub və Beynəlxalq Kosmik Stansiya ilə Cygnus orbital sınaqlarından <strong>879 yoxlanılmış uçuş eksperimentinə</strong> əsaslanır.
+      NASA Mikroyerçəkim Yanma İntellekt Konsoluna xoş gəlmisiniz. <strong>OpenAI GPT-4o-mini + Canlı SQLite SQL-RAG</strong> ilə təchiz olunub və 29 tədqiqat ailəsi üzrə <strong>892 yoxlanılmış uçuş və yerüstü sərhəd eksperimentinə</strong> əsaslanır.
       <br><br>
-      Damcı sönməsi (FLEX), bərk yanacaqların alovlanması (BASS/SOFIE), kosmik gəmi yanğınlarının yayılması (SAFFIRE) və ya planetar yaşayış modullarının atmosfer təhlükəsizliyi (Artemis / BKS) haqqında ətraflı suallar verə bilərsiniz.
+      SI Tədqiqat Uyğunluq Reytinqi (Kosmik Gəmi, BKS, Ay Bazası, Mars Bazası, Rover, EVA Skafandrı), 0g–1g Qismən Qravitasiya Sərhədləməsi (ACME E-FIELD / LUCI &amp; FM2), FLEX He/CO₂ qazları, ACME CFI-G (85% O₂) və ya 3 Səviyyəli Yanğın Təhlükəsizliyi Avadanlığı haqqında ətraflı suallar verə bilərsiniz.
       <div class="msg-meta-bar">
-        <span>NASA FİZİKİ ELMLƏR İNFORMATİKASI // GROUND TRUTH</span>
+        <span>NASA FİZİKİ ELMLƏR İNFORMATİKASI // CANLI SQL-RAG GROUND TRUTH</span>
         <span>SİSTEM HAZIRDIR</span>
       </div>
     ` : `
       <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--neon-cyan);margin-bottom:8px;">
         FIRE-X Scientific Research Assistant Online
       </div>
-      Welcome to the NASA Microgravity Combustion Intelligence Console. Powered by <strong>OpenAI GPT-6-luna</strong> and grounded in <strong>879 verified flight experiments</strong> from the International Space Station and Cygnus orbital campaigns.
+      Welcome to the NASA Microgravity Combustion Intelligence Console. Powered by <strong>OpenAI GPT-4o-mini + Live SQLite SQL-RAG</strong> and grounded in <strong>892 verified flight &amp; ground-bound experiments</strong> across 29 investigation suites (CIR, MSG, Cygnus, ZGF, WSTF).
       <br><br>
-      You can ask detailed questions regarding droplet extinction (FLEX), solid fuel flammability (BASS/SOFIE), spacecraft fire propagation (SAFFIRE), or planetary habitat atmospheric safety (Artemis / ISS).
+      Ask about SI Investigation Relevance Rankings (Spacecraft, ISS, Lunar Base, Martian Base, Rover, EVA Suit), 0g–1g Partial-Gravity Bounding (ACME E-FIELD / pre-LUCI &amp; FM2), FLEX He/CO₂ diluents, ACME CFI-G 85% O₂ flames, or 3-Tier Fire Safety Equipment (Prevention, Detection, Suppression).
       <div class="msg-meta-bar">
-        <span>NASA PHYSICAL SCIENCE INFORMATICS // GROUND TRUTH</span>
+        <span>NASA PHYSICAL SCIENCE INFORMATICS // LIVE SQL-RAG GROUND TRUTH</span>
         <span>SYSTEM READY</span>
       </div>
     `;
@@ -602,7 +606,7 @@ function syncAiPageLanguage(lang) {
   if (enterNote) enterNote.textContent = isAz ? 'GÖNDƏRMƏK ÜÇÜN ENTER BASIN' : 'PRESS ENTER TO SEND';
 
   const typingSpan = document.querySelector('#typing-indicator span');
-  if (typingSpan) typingSpan.textContent = isAz ? 'OpenAI gpt-6-luna və NASA PSI Telemetriyası sorğulanır...' : 'Querying OpenAI gpt-6-luna & NASA PSI Telemetry...';
+  if (typingSpan) typingSpan.textContent = isAz ? 'OpenAI gpt-4o-mini və Canlı SQLite NASA PSI Telemetriyası sorğulanır...' : 'Querying OpenAI gpt-4o-mini & Live SQLite NASA PSI Telemetry...';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -648,8 +652,8 @@ async function sendMessage() {
         language: currentLang,
         page_context: {
           platform: 'NASA FIRE-X',
-          facility: 'ISS CIR / DECLIC',
-          canonical_records: 879
+          facility: 'ISS CIR / MSG / Cygnus / ZGF / WSTF',
+          canonical_records: 892
         }
       })
     });
@@ -701,7 +705,7 @@ function appendMessage(role, text, provider) {
   if (role === 'assistant') {
     const meta = document.createElement('div');
     meta.className = 'msg-meta-bar';
-    meta.innerHTML = `<span>ENGINE: ${provider || 'OpenAI gpt-6-luna'}</span><span>TRANSMISSION COMPLETE</span>`;
+    meta.innerHTML = `<span>ENGINE: ${provider || 'OpenAI gpt-4o-mini + SQL-RAG'}</span><span>TRANSMISSION COMPLETE</span>`;
     bubble.appendChild(meta);
   }
 

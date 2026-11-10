@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/jpeg" href="/images/Fire-X.jpeg">
+<link rel="apple-touch-icon" href="/images/Fire-X.jpeg">
+<title>Fiziki IoT Avadanlıq &amp; Telemetriya Stansiyası // NASA FIRE-X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/ds.css">
+<link rel="stylesheet" href="/static/css/nav.css">
+<style>
+/* ─── HUMAN-CRAFTED DARK SPACE ENGINEERING THEME ─── */
+body {
+  background-color: #020409;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 245, 255, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #020409 0%, #060B16 100%);
+  color: #E2E8F0;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* HEADER */
+.hw-hero {
+  padding: 105px 0 35px;
+  background: rgba(4, 8, 16, 0.9);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.hw-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  background: rgba(0, 245, 255, 0.08);
+  border: 1px solid rgba(0, 245, 255, 0.22);
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.hw-tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00E676;
+  box-shadow: 0 0 8px #00E676;
+}
+
+/* KPI STRIP */
+.hw-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.hw-kpi-card {
+  background: rgba(7, 13, 26, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 18px 20px;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.hw-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 245, 255, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.hw-kpi-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.hw-kpi-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.hw-kpi-sub {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 4px;
+}
+
+/* SECTION CONTAINER */
+.hw-section {
+  padding: 36px 0;
+}
+
+.hw-section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hw-section-desc {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 820px;
+  margin-bottom: 24px;
+}
+
+/* LIVE TELEMETRY STATION BOX */
+.live-station-box {
+  background: radial-gradient(circle at 10% 20%, rgba(0, 245, 255, 0.05) 0%, rgba(7, 13, 26, 0.95) 70%);
+  border: 1px solid rgba(0, 245, 255, 0.25);
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+  margin-bottom: 36px;
+}
+
+.station-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 22px;
+}
+
+.status-badge-live {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 100px;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+/* DEMO ACTION BUTTONS */
+.btn-demo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.btn-demo-connect {
+  background: rgba(0, 230, 118, 0.12);
+  border-color: rgba(0, 230, 118, 0.35);
+  color: #00E676;
+}
+.btn-demo-connect:hover {
+  background: rgba(0, 230, 118, 0.25);
+}
+
+.btn-demo-trigger {
+  background: rgba(255, 23, 68, 0.15);
+  border-color: rgba(255, 23, 68, 0.45);
+  color: #FF5252;
+}
+.btn-demo-trigger:hover {
+  background: rgba(255, 23, 68, 0.3);
+}
+
+.btn-demo-reset {
+  background: rgba(0, 245, 255, 0.08);
+  border-color: rgba(0, 245, 255, 0.3);
+  color: #00F5FF;
+}
+.btn-demo-reset:hover {
+  background: rgba(0, 245, 255, 0.18);
+}
+
+.btn-demo-search {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+}
+.btn-demo-search:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* 3-COLUMN TELEMETRY GRID */
+.station-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 340px;
+  gap: 20px;
+}
+
+.panel-card {
+  background: rgba(4, 8, 16, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.metric-tile {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.metric-tile-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.metric-tile-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+/* WHAT WE HAVE / WHAT WE DON'T HAVE GRIDS */
+.hw-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.hw-feature-card {
+  background: rgba(7, 13, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 22px;
+  transition: all 0.25s ease;
+}
+
+.hw-feature-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 245, 255, 0.25);
+}
+
+.hw-feature-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.badge-present {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #00E676;
+  background: rgba(0, 230, 118, 0.12);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.badge-missing {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #FFB300;
+  background: rgba(255, 179, 0, 0.12);
+  border: 1px solid rgba(255, 179, 0, 0.3);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* WIRING TABLE */
+.wiring-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-top: 14px;
+}
+
+.wiring-table th {
+  background: rgba(12, 21, 37, 0.8);
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wiring-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+}
+
+/* CODE BLOCK */
+.code-container {
+  background: #040810;
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: #E2E8F0;
+  line-height: 1.6;
+}
+
+/* RADAR ANIMATION */
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.3); }
+}
+
+@keyframes radarWave {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  50% { transform: scale(1.2); opacity: 0.35; }
+  100% { transform: scale(0.6); opacity: 0.9; }
+}
+
+@media (max-width: 1100px) {
+  .station-grid { grid-template-columns: 1fr; }
+  .hw-features-grid { grid-template-columns: 1fr 1fr; }
+  .hw-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+  .hw-features-grid { grid-template-columns: 1fr; }
+  .hw-kpi-grid { grid-template-columns: 1fr; }
+}
+
+/* FOOTER (was missing on this page) */
+.footer { border-top: 1px solid rgba(0,245,255,0.06); background: #020409; padding: 48px 0 32px; margin-top: 0; }
+.footer-inner { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.footer-brand-logo { width: 40px; height: 40px; border-radius: 8px; border: 1px solid rgba(0,245,255,0.2); object-fit: cover; }
+.footer-brand-name { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; letter-spacing: 0.05em; }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; gap: 12px; }
+.footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.3); font-family: 'JetBrains Mono', monospace; }
+
+/* LIVE TELEMETRY CHART */
+.hw-chart-card { margin-top: 20px; }
+.hw-chart-head { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+.hw-legend { display:flex; gap:14px; font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:rgba(255,255,255,0.6); }
+.hw-legend i { display:inline-block; width:10px; height:3px; border-radius:2px; margin-right:6px; vertical-align:middle; }
+#hw-chart { width:100%; height:200px; display:block; }
+.hw-chart-empty { font-family:'JetBrains Mono',monospace; font-size:0.75rem; fill:rgba(255,255,255,0.35); }
+.btn-demo:disabled { opacity:0.5; cursor:wait; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAVIGATION BAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-progress-bar" id="nav-progress"></div>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/images/Fire-X.jpeg" alt="FIRE-X" class="nav-brand-logo">
+      <div class="nav-brand-text">
+        <div class="nav-brand-name">NASA FIRE-X</div>
+        <div class="nav-brand-sub">MICROGRAVITY COMBUSTION INTEL</div>
+      </div>
+    </a>
+    <ul class="nav-links" id="nav-links-list">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/analytics" class="nav-link">Analytics</a></li>
+      <li><a href="/explorer" class="nav-link">Data Explorer</a></li>
+      <li><a href="/simulator" class="nav-link">Simulator</a></li>
+      <li><a href="/hardware" class="nav-link active">Hardware</a></li>
+      <li><a href="/ai" class="nav-link">AI Assistant</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#00E676;border:1px solid rgba(0,230,118,0.25);background:rgba(0,230,118,0.08);padding:5px 12px;border-radius:100px">
+        <div class="nav-status-dot"></div> IOT CANLI
+      </div>
+      <button class="nav-lang-btn" id="nav-lang-btn">AZ</button>
+      <a href="/ai" class="nav-ai-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        AI Köməkçi
+      </a>
+      <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="hw-hero">
+  <div class="container-wide">
+    <div class="hw-tag">
+      <div class="hw-tag-dot"></div>
+      NASA SPACE APPS CHALLENGE // FİZİKİ MÜHƏNDİSLİK &amp; IOT TELEMETRİYA
+    </div>
+    <h1 style="font-family:'Space Grotesk',sans-serif;font-size:clamp(2.1rem, 4vw, 3.2rem);font-weight:800;color:#fff;line-height:1.15;letter-spacing:-0.03em;">
+      Fiziki IoT Avadanlıq &amp; <span class="text-gradient">Sensor Stansiyası</span>
+    </h1>
+    <p style="font-size:1.05rem;color:rgba(255,255,255,0.68);max-width:880px;margin-top:12px;line-height:1.7;">
+      FIRE-X layihəsinin fiziki donanım laboratoriyası. Komandamız tərəfindən quraşdırılmış ESP32 mikrokontrolleri və MQ-2 qaz/tüstü sensoru vasitəsilə masada canlı mühit göstəricilərini oxuyur, Wi-Fi ilə backend-ə ötürür və NASA elmi düsturuna əsasən yanğın təhlükəsi riskini (FHI) ani qiymətləndiririk.
+    </p>
+
+    <!-- KEY TECHNICAL METRICS -->
+    <div class="hw-kpi-grid">
+      <div class="hw-kpi-card" style="border-left: 3px solid #00F5FF;">
+        <div class="hw-kpi-label">Mikrokontroller Platforması</div>
+        <div class="hw-kpi-val">ESP32 NodeMCU</div>
+        <div class="hw-kpi-sub">Xtensa 240MHz · 2.4GHz Wi-Fi</div>
+      </div>
+      <div class="hw-kpi-card" style="border-left: 3px solid #FF6B35;">
+        <div class="hw-kpi-label">İnteqrasiya Edilmiş Sensor</div>
+        <div class="hw-kpi-val">MQ-2 Sniffer</div>
+        <div class="hw-kpi-sub">LPG, Butan, Metan, Tüstü, CO</div>
+      </div>
+      <div class="hw-kpi-card" style="border-left: 3px solid #00E676;">
+        <div class="hw-kpi-label">Məlumat Körpüsü</div>
+        <div class="hw-kpi-val">REST API / JSON</div>
+        <div class="hw-kpi-sub">FastAPI: POST /api/sensor-data</div>
+      </div>
+      <div class="hw-kpi-card" style="border-left: 3px solid #9B59B6;">
+        <div class="hw-kpi-label">Fiziki Hazırlıq Vəziyyəti</div>
+        <div class="hw-kpi-val">İşlək Prototip</div>
+        <div class="hw-kpi-sub">Lehimləməsiz 3-pin montaj</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container-wide" style="padding-bottom: 80px;">
+
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <!-- 1. LIVE HARDWARE TELEMETRY & TESTING STATION                             -->
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <section class="hw-section">
+    <div class="live-station-box">
+
+      <!-- Top bar -->
+      <div class="station-top-bar">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <h2 style="font-family:'Space Grotesk',sans-serif; font-size:1.3rem; font-weight:800; color:#fff; margin:0;">
+              Canlı Cihaz Telemetriyası və Sınaq Masası
+            </h2>
+            <div id="hw-status-badge" class="status-badge-live" style="background:rgba(255,107,53,0.15); border:1px solid rgba(255,107,53,0.4); color:#FF6B35;">
+              <span id="hw-status-dot" style="width:7px; height:7px; border-radius:50%; background:#FF6B35; box-shadow:0 0 8px #FF6B35; animation:pulseDot 1.5s infinite;"></span>
+              <span id="hw-status-text">Cihaz axtarılır...</span>
+            </div>
+          </div>
+          <div style="font-size:0.75rem; color:rgba(255,255,255,0.45); font-family:'JetBrains Mono',monospace; margin-top:4px;">
+            Port dinlənilir: <span style="color:#00F5FF;">http://localhost:8000/api/sensor-data</span> · Hər 1.5 saniyədən bir sinxronizasiya
+          </div>
+        </div>
+
+        <!-- Real-time demo triggers for judges / presentation -->
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <button class="btn-demo btn-demo-connect" onclick="triggerHardwareDemo('connect')" title="ESP32 onlayn vəziyyətini test etmək üçün simulyasiya edir">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Demo: Cihazı Qoş
+          </button>
+          <button class="btn-demo btn-demo-trigger" onclick="triggerHardwareDemo('trigger')" title="Alışqan və ya qaz sızması anında sensorun reaksiyası">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15 8 21 9 17 14 18 20 12 17 6 20 7 14 3 9 9 8 12 2"/></svg>
+            🔥 Demo: Qaz Testi
+          </button>
+          <button class="btn-demo btn-demo-reset" onclick="triggerHardwareDemo('reset')" title="Təmiz otaq havasına qayıdış">
+            Demo: Təmiz Hava
+          </button>
+          <button class="btn-demo btn-demo-search" onclick="triggerHardwareDemo('disconnect')" title="Simulyasiyanı söndür və fiziki cihazı gözləmə rejiminə keçir">
+            Söndür (Axtarış Rejimi)
+          </button>
+        </div>
+      </div>
+
+      <!-- Main live telemetry cards -->
+      <div class="station-grid">
+
+        <!-- Column 1: Connection & Search Visual -->
+        <div class="panel-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px;">
+              CİHAZ ŞƏBƏKƏ STATUSU
+            </div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700; color:#fff;" id="hw-device-title">
+              ESP32 NodeMCU Wi-Fi
+            </div>
+            <div style="font-size:0.75rem; color:rgba(255,255,255,0.5); margin-top:2px;">
+              Sensor: MQ-2 Qalay Oksid (SnO₂)
+            </div>
+
+            <!-- Radar Graphic Box -->
+            <div id="hw-radar-box" style="
+              margin: 18px 0; height: 100px; border-radius: 10px;
+              background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, rgba(2,4,9,0.85) 75%);
+              border: 1px dashed rgba(255,107,53,0.4);
+              display: flex; flex-direction: column; align-items: center; justify-content: center;
+              transition: all 0.3s ease;
+            ">
+              <div id="hw-radar-circle" style="
+                width: 44px; height: 44px; border-radius: 50%;
+                border: 2px solid #FF6B35; box-shadow: 0 0 12px #FF6B35;
+                animation: radarWave 2s infinite; display:flex; align-items:center; justify-content:center;
+              ">
+                <div style="width: 8px; height: 8px; border-radius: 50%; background: #FF6B35;" id="hw-radar-core"></div>
+              </div>
+              <div id="hw-radar-text" style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#FF6B35; margin-top:8px;">
+                ESP32 Gözlənilir...
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:10px; font-size:0.72rem; font-family:'JetBrains Mono',monospace;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span style="color:rgba(255,255,255,0.4);">Qəbul Edilən Paketlər:</span>
+              <span id="hw-packet-count" style="color:#00F5FF; font-weight:700;">0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:rgba(255,255,255,0.4);">Son Telemetriya Zamanı:</span>
+              <span id="hw-last-sync" style="color:#fff;">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Live Metrics & FHI -->
+        <div class="panel-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.1em;">
+                CANLI FİZİKİ SENSOR ÖLÇÜMLƏRİ
+              </div>
+              <div id="hw-hazard-tag" style="
+                font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700;
+                padding: 3px 10px; border-radius: 100px; background: rgba(0, 230, 118, 0.15);
+                color: #00E676; border: 1px solid rgba(0, 230, 118, 0.3);
+              ">
+                NOMİNAL KOSMİK REJİM
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:16px;">
+              <div class="metric-tile">
+                <div class="metric-tile-title">Qaz Qatılığı (PPM)</div>
+                <div class="metric-tile-num" id="hw-val-gas" style="color:#00F5FF;">0.0</div>
+                <div style="font-size:0.65rem; color:rgba(255,255,255,0.35); margin-top:2px;">MQ-2 elektrokimyəvi</div>
+              </div>
+              <div class="metric-tile">
+                <div class="metric-tile-title">Tüstü Sıxlığı (%)</div>
+                <div class="metric-tile-num" id="hw-val-smoke" style="color:#FF6B35;">0.0 %</div>
+                <div style="font-size:0.65rem; color:rgba(255,255,255,0.35); margin-top:2px;">Hissəcik optikası</div>
+              </div>
+              <div class="metric-tile">
+                <div class="metric-tile-title">12-bit ADC (GPIO 34)</div>
+                <div class="metric-tile-num" id="hw-val-adc" style="color:#9B59B6;">0</div>
+                <div style="font-size:0.65rem; color:rgba(255,255,255,0.35); margin-top:2px;">Xam qiymət: 0 - 4095</div>
+              </div>
+            </div>
+
+            <!-- FHI Progress Bar -->
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:0.74rem; font-family:'JetBrains Mono',monospace; margin-bottom:6px;">
+                <span style="color:rgba(255,255,255,0.6);">FIRE-X Yanğın Təhlükə İndeksi (FHI):</span>
+                <span id="hw-val-fhi" style="color:#00F5FF; font-weight:700;">0.0 / 10.0</span>
+              </div>
+              <div style="height:10px; background:rgba(255,255,255,0.08); border-radius:6px; overflow:hidden;">
+                <div id="hw-bar-fhi" style="
+                  height: 100%; width: 0%; background: linear-gradient(90deg, #00E676 0%, #00F5FF 50%, #FF6B35 85%, #FF1744 100%);
+                  transition: width 0.5s ease;
+                "></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Advisory -->
+          <div id="hw-advisory-box" style="margin-top:14px; background:rgba(0, 245, 255, 0.05); border:1px solid rgba(0, 245, 255, 0.2); border-radius:8px; padding:10px 14px; transition: all 0.3s ease;">
+            <div id="hw-advisory-title" style="font-size:0.7rem; font-family:'JetBrains Mono',monospace; color:#00F5FF; font-weight:700; margin-bottom:3px;">
+              CANLI TƏHLÜKƏ MƏSLƏHƏTİ (LIVE ADVISORY):
+            </div>
+            <div id="hw-advisory-text" style="font-size:0.8rem; color:rgba(255,255,255,0.85); line-height:1.45;">
+              Fiziki ESP32 mikrokontrolleri şəbəkədə axtarılır. Cihazınızı Wi-Fi şəbəkəsinə qoşun.
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 3: Circuit & Quick Wiring -->
+        <div class="panel-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px;">
+              FİZİKİ NAQİL BAĞLANTILARI
+            </div>
+            
+            <div style="display:flex; flex-direction:column; gap:7px; font-family:'JetBrains Mono',monospace; font-size:0.74rem;">
+              <div style="display:flex; justify-content:space-between; background:rgba(0,0,0,0.3); padding:7px 10px; border-radius:6px;">
+                <span style="color:#FF5252; font-weight:700;">MQ-2 VCC (Qırmızı)</span>
+                <span style="color:#fff;">ESP32 VIN (5V)</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; background:rgba(0,0,0,0.3); padding:7px 10px; border-radius:6px;">
+                <span style="color:#94A3B8; font-weight:700;">MQ-2 GND (Qara)</span>
+                <span style="color:#fff;">ESP32 GND</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; background:rgba(0,0,0,0.3); padding:7px 10px; border-radius:6px;">
+                <span style="color:#00F5FF; font-weight:700;">MQ-2 AO (Mavi)</span>
+                <span style="color:#00F5FF; font-weight:700;">ESP32 GPIO 34</span>
+              </div>
+            </div>
+
+            <div style="margin-top:14px; font-size:0.73rem; color:rgba(255,255,255,0.5); line-height:1.5;">
+              <strong style="color:#00E676;">Mühəndis qeydi:</strong> GPIO 34 pini ESP32-nin ADC1 blokuna aiddir. Wi-Fi aktiv olduqda belə analoq ölçmə qabiliyyətini itirmir.
+            </div>
+          </div>
+
+          <div style="margin-top:14px; display:flex; gap:8px;">
+            <a href="#section-wiring" style="
+              flex:1; text-align:center; background:rgba(0,245,255,0.08); border:1px solid rgba(0,245,255,0.25);
+              color:#00F5FF; font-family:'Space Grotesk',sans-serif; font-size:0.75rem; font-weight:700;
+              padding:8px; border-radius:6px; text-decoration:none;
+            ">
+              Şemaya Bax ↓
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live rolling telemetry chart -->
+      <div class="panel-card hw-chart-card">
+        <div class="hw-chart-head">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.1em;">
+            Canlı Telemetriya Tarixçəsi (son 30 paket)
+          </div>
+          <div class="hw-legend">
+            <span><i style="background:#00F5FF"></i>Qaz PPM</span>
+            <span><i style="background:#FF6B35"></i>Tüstü % ×5</span>
+            <span><i style="background:#FF1744"></i>FHI ×50</span>
+          </div>
+        </div>
+        <svg id="hw-chart" viewBox="0 0 800 200"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <!-- 2. NƏ ETMİŞİK? (HOW IT WORKS - 4-STEP PIPELINE)                          -->
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <section class="hw-section" style="border-top:1px solid rgba(255,255,255,0.08); padding-top:40px;">
+    <div class="hw-section-title">
+      <svg width="22" height="22" fill="none" stroke="var(--neon-cyan)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      Nə etmişik? Sistem necə işləyir?
+    </div>
+    <p class="hw-section-desc">
+      Biz sadəcə brauzerdə işləyən veb-sayt yox, masamızdakı fiziki sensoru kosmik yanğın alqoritminə bağlayan canlı bir IoT platforması qurduq:
+    </p>
+
+    <div class="hw-features-grid" style="grid-template-columns: repeat(4, 1fr);">
+      <div class="hw-feature-card">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#00F5FF; font-weight:700; margin-bottom:8px;">01 // SENSOR SƏVİYYƏSİ</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:8px;">Fiziki Qaz və Tüstü Ölçümü</h3>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          MQ-2 sensoru daxili qızdırıcısı və SnO₂ təbəqəsi ilə ətrafdakı tüstü hissəciklərini və alışqan qazları (LPG, metan, butan) hiss edərək müqavimətini dəyişir və analoq gərginlik (0 - 3.3V) hasil edir.
+        </p>
+      </div>
+
+      <div class="hw-feature-card">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#FF6B35; font-weight:700; margin-bottom:8px;">02 // MİKROKONTROLLER</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:8px;">ESP32 Firmware Emalı</h3>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          ESP32-yə yüklədiyimiz C++ proqramı GPIO 34 pinindən 12-bit dəqiqliklə analoq siqnalı oxuyur, qaz qatılığına (PPM) çevirir və Wi-Fi üzərindən JSON paketi halına salır.
+        </p>
+      </div>
+
+      <div class="hw-feature-card">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#00E676; font-weight:700; margin-bottom:8px;">03 // SERVER ŞLÜZÜ</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:8px;">FastAPI &amp; Elmi FHI Hesabı</h3>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Backend-dəki <code>/api/sensor-data</code> endpoint-i sensor datasını qəbul edərək elmi düsturumuz (FHI = 5.1 × OEF × PF × Mf) ilə birləşdirir və alovlanma təhlükəsini dərhal yenidən hesablayır.
+        </p>
+      </div>
+
+      <div class="hw-feature-card">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#9B59B6; font-weight:700; margin-bottom:8px;">04 // AVTOMATLAŞDIRMA</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:8px;">Canlı Həyəcan &amp; AI Reaksiyası</h3>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Qaz və ya tüstü konsentrasiyası kritik həddi keçdikdə dashboard dərhal qırmızı xəbərdarlıq rejiminə keçir və heyət üçün avtomatik boğucu qaz tövsiyəsi çıxarır.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <!-- 3. NƏLƏR VAR? (EXISTING HARDWARE & SOFTWARE COMPONENTS)                  -->
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <section class="hw-section" style="border-top:1px solid rgba(255,255,255,0.08); padding-top:40px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+      <div>
+        <div class="hw-section-title">
+          <svg width="22" height="22" fill="none" stroke="#00E676" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+          Nələr var? (Mövcud Avadanlıq və Komponentlər)
+        </div>
+        <p class="hw-section-desc" style="margin-bottom:0;">
+          Masamızda fiziki olaraq quraşdırdığımız və proqram təminatı ilə tam inteqrasiya olunmuş komponentlərin siyahısı:
+        </p>
+      </div>
+      <span class="badge-present">BÜTÜN 6 KOMPONENT İŞLƏK VƏZİYYƏTDƏDİR</span>
+    </div>
+
+    <div class="hw-features-grid" style="margin-top:20px;">
+      
+      <!-- ITEM 1 -->
+      <div class="hw-feature-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div class="hw-feature-icon" style="background:rgba(0,245,255,0.1); border:1px solid rgba(0,245,255,0.25); color:#00F5FF;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+          </div>
+          <span class="badge-present">MÖVCUDDUR ✓</span>
+        </div>
+        <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:6px;">ESP32 NodeMCU V3 Plata</h4>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Xtensa Dual-Core 32-bit LX6 mikroprosessor (240 MHz). Daxili 802.11 b/g/n Wi-Fi modulu ilə yerli şəbəkəyə qoşulur və REST API ilə məlumat ötürür.
+        </p>
+      </div>
+
+      <!-- ITEM 2 -->
+      <div class="hw-feature-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div class="hw-feature-icon" style="background:rgba(255,107,53,0.1); border:1px solid rgba(255,107,53,0.25); color:#FF6B35;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg>
+          </div>
+          <span class="badge-present">MÖVCUDDUR ✓</span>
+        </div>
+        <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:6px;">MQ-2 Qaz &amp; Tüstü Sensoru</h4>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          SnO₂ elektrokimyəvi sensor təbəqəsi ilə təchiz edilib. LPG, i-butan, propan, metan, spirt və tüstü hissəciklərinə qarşı yüksək həssaslığa malikdir.
+        </p>
+      </div>
+
+      <!-- ITEM 3 -->
+      <div class="hw-feature-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div class="hw-feature-icon" style="background:rgba(0,230,118,0.1); border:1px solid rgba(0,230,118,0.25); color:#00E676;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+          <span class="badge-present">MÖVCUDDUR ✓</span>
+        </div>
+        <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:6px;">USB Güc və UART Şlüzü</h4>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Platanı 5V stabil cərəyanla təmin edir və eyni zamanda 115200 baud sürətində serial monitor diaqnostika konsolu ilə əlaqələndirir.
+        </p>
+      </div>
+
+      <!-- ITEM 4 -->
+      <div class="hw-feature-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div class="hw-feature-icon" style="background:rgba(155,89,182,0.1); border:1px solid rgba(155,89,182,0.25); color:#9B59B6;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+          </div>
+          <span class="badge-present">MÖVCUDDUR ✓</span>
+        </div>
+        <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:6px;">Dupont Naqillər (Female-to-Female)</h4>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Lehimləmə tələb etmədən VCC, GND və AOUT pinlərini birbaşa ESP32-nin VIN, GND və GPIO 34 pinlərinə bərkidən etibarlı montaj naqilləri.
+        </p>
+      </div>
+
+      <!-- ITEM 5 -->
+      <div class="hw-feature-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div class="hw-feature-icon" style="background:rgba(41,121,255,0.1); border:1px solid rgba(41,121,255,0.25); color:#2979FF;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <span class="badge-present">MÖVCUDDUR ✓</span>
+        </div>
+        <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:6px;">C++ Arduino Firmware</h4>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          <code>hardware/esp32_mq2_firex.ino</code> — Wi-Fi itəndə avtomatik yenidən qoşulan, non-blocking göndəriş dövrəsi və LED diaqnostikası olan kod bazası.
+        </p>
+      </div>
+
+      <!-- ITEM 6 -->
+      <div class="hw-feature-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div class="hw-feature-icon" style="background:rgba(0,245,255,0.1); border:1px solid rgba(0,245,255,0.25); color:#00F5FF;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <span class="badge-present">MÖVCUDDUR ✓</span>
+        </div>
+        <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:6px;">FastAPI Real-Time Telemetriya API</h4>
+        <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.5;">
+          Gələn paketləri saniyənin onda birində emal edən <code>POST /api/sensor-data</code> və brauzerə ötürən <code>GET /api/sensor-live</code> endpointləri.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <!-- 4. WIRING SCHEMATIC & PINOUT MAP                                         -->
+  <!-- ════════════════════════════════════════════════════════════════════════ -->
+  <section class="hw-section" id="section-wiring" style="border-top:1px solid rgba(255,255,255,0.08); padding-top:40px;">
+    <div class="hw-section-title">
+      <svg width="22" height="22" fill="none" stroke="var(--neon-cyan)" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Fiziki Bağlantı Şeması və Pin Xəritəsi
+    </div>
+    <p class="hw-section-desc">
+      Aşağıda hazırladığımız yüksək dəqiqlikli dövrə xəritəsi göstərilib. Sistem cəmi 3 Dupont naqili ilə lehimləməsiz quraşdırılır:
+    </p>
+
+    <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:24px; align-items:center;">
+      
+      <!-- Circuit Image Card -->
+      <div style="background:rgba(4,8,16,0.85); border:1px solid rgba(0,245,255,0.2); border-radius:14px; overflow:hidden; padding:12px;">
+        <img src="/images/esp32_mq2_circuit.png" alt="ESP32 və MQ-2 Bağlantı Şeması" style="width:100%; height:auto; border-radius:8px; display:block;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:rgba(255,255,255,0.45); text-align:center; margin-top:8px;">
+          Şəkil 1.1: ESP32 NodeMCU və MQ-2 Modulunun Naqil Arxitekturası
+        </div>
+      </div>
+
+      <!-- Pin Map Details -->
+      <div>
+        <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:12px;">
+          Dövrə Spesifikasiyası və Təhlükəsizlik
+        </h4>
+        <p style="font-size:0.84rem; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:16px;">
+          MQ-2 sensorunun daxili qızdırıcısı təxminən 5V gərginlik tələb edir, buna görə sensorun VCC xətti ESP32-nin <strong>VIN</strong> pininə (USB 5V xətti) qoşulub. Analoq çıxış isə 0–3.3V diapazonunda təhlükəsiz siqnal ötürür.
+        </p>
+
+        <table class="wiring-table">
+          <thead>
+            <tr>
+              <th>MQ-2 PİNİ</th>
+              <th>ESP32 PİNİ</th>
+              <th>FUNKSİYA &amp; GƏRGİNLİK</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:#FF5252; font-weight:700;">VCC (Pin 1)</td>
+              <td style="color:#fff;">VIN</td>
+              <td>+5V DC Sensor Qızdırıcı Qidalanması</td>
+            </tr>
+            <tr>
+              <td style="color:#94A3B8; font-weight:700;">GND (Pin 2)</td>
+              <td style="color:#fff;">GND</td>
+              <td>Ümumi Torpaqlama Referansı</td>
+            </tr>
+            <tr>
+              <td style="color:#00F5FF; font-weight:700;">AOUT (Pin 4)</td>
+              <td style="color:#00F5FF; font-weight:700;">GPIO 34</td>
+              <td>ADC1 Channel 6 (12-bit Analoq Giriş)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top:16px; background:rgba(0,230,118,0.06); border:1px solid rgba(0,230,118,0.2); border-radius:8px; padding:12px 14px; font-size:0.75rem; color:rgba(255,255,255,0.8);">
+          <strong style="color:#00E676;">Vacib mühəndislik arqumenti:</strong> Niyə məhz <strong>GPIO 34</strong>? ESP32-də Wi-Fi modulu işləyərkən ADC2 pinləri (GPIO 0, 2, 4, 12, 13, 14, 15, 25, 26, 27) Wi-Fi drayveri tərəfindən məşğul edilir və analoq oxunuş xəta verir. GPIO 34 isə ADC1 blokuna aiddir və Wi-Fi zamanı fasiləsiz dəqiq analoq ölçmə aparır.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <img src="/images/Fire-X.jpeg" alt="FIRE-X" class="footer-brand-logo">
+          <div class="footer-brand-name">NASA FIRE-X</div>
+        </div>
+        <p style="font-size:0.82rem;color:rgba(255,255,255,0.45);max-width:320px;line-height:1.6">
+          Mikroyerçəkim Yanma Məlumatlarından Süni İntellektlə Yanğın Təhlükəsizliyi İntellekti. NASA Space Apps Challenge 2026.
+        </p>
+      </div>
+      <div style="display:flex;gap:48px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">Platforma</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="/analytics" style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;">Analytics Hub</a>
+            <a href="/explorer" style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;">Data Explorer</a>
+            <a href="/simulator" style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;">Mission Simulator</a>
+            <a href="/hardware" style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;">Hardware Lab</a>
+            <a href="/ai" style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;">AI Assistant</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">Məlumat &amp; Elm</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="color:rgba(255,255,255,0.5);font-size:0.85rem">NASA Physical Science (PSI)</span>
+            <span style="color:rgba(255,255,255,0.5);font-size:0.85rem">NASA-STD-6001B Standartı</span>
+            <span style="color:rgba(255,255,255,0.5);font-size:0.85rem">ESP32 + MQ-2 Arxitekturası</span>
+            <a href="/about" style="color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem">Sənədləşmə</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 NASA FIRE-X · NASA Space Apps Challenge üçün hazırlanıb</p>
+      <p>Hardware: ESP32 NodeMCU + MQ-2 Gas/Smoke Sniffer Module</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/static/js/nav.js?v=6.0"></script>
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// HARDWARE LAB TELEMETRY POLLING & INTERFACE CONTROLLER
+// ─────────────────────────────────────────────────────────────────────────────
+let hwPollInterval = null;
+
+function getLang() {
+  // Must match nav.js default ('en') so navbar and page content stay in sync
+  return localStorage.getItem('firex_lang') || 'en';
+}
+
+// ── Live SVG chart (no external dependency) ──
+function renderTelemetryChart(history) {
+  const svg = document.getElementById('hw-chart');
+  if (!svg) return;
+  const H = 200, P = 24;
+  const W = Math.max(300, Math.round(svg.clientWidth || 800));
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const isAz = getLang() === 'az';
+  if (!history || history.length < 2) {
+    svg.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" class="hw-chart-empty">${
+      isAz ? 'Telemetriya gözlənilir — "Demo: Cihazı Qoş" düyməsini basın və ya ESP32-ni qoşun'
+           : 'Awaiting telemetry — press "Demo: Connect Device" or power on the ESP32'}</text>`;
+    return;
+  }
+  const series = [
+    { key: 'gas_ppm',   color: '#00F5FF', scale: v => v },
+    { key: 'smoke_pct', color: '#FF6B35', scale: v => v * 5 },
+    { key: 'fhi',       color: '#FF1744', scale: v => v * 50 },
+  ];
+  let maxY = 100;
+  history.forEach(h => series.forEach(s => { maxY = Math.max(maxY, s.scale(h[s.key] || 0)); }));
+  maxY *= 1.1;
+  const x = i => P + (i / (history.length - 1)) * (W - 2 * P);
+  const y = v => H - P - (v / maxY) * (H - 2 * P);
+
+  let out = '';
+  for (let g = 0; g <= 4; g++) {
+    const gy = P + g * (H - 2 * P) / 4;
+    out += `<line x1="${P}" y1="${gy}" x2="${W-P}" y2="${gy}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  }
+  series.forEach(s => {
+    const pts = history.map((h, i) => `${x(i).toFixed(1)},${y(s.scale(h[s.key] || 0)).toFixed(1)}`).join(' ');
+    out += `<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
+  });
+  const first = history[0].timestamp, last = history[history.length - 1].timestamp;
+  out += `<text x="${P}" y="${H-6}" class="hw-chart-empty" font-size="11">${first}</text>`;
+  out += `<text x="${W-P}" y="${H-6}" text-anchor="end" class="hw-chart-empty" font-size="11">${last}</text>`;
+  svg.innerHTML = out;
+}
+
+async function pollHardwareTelemetry() {
+  try {
+    const res = await fetch('/api/sensor-live');
+    if (!res.ok) return;
+    const json = await res.json();
+    const data = json.data || {};
+    renderHardwareState(data);
+  } catch (err) {
+    console.warn('Telemetry poll error:', err);
+  }
+}
+
+function renderHardwareState(s) {
+  const isAz = getLang() === 'az';
+
+  const badge = document.getElementById('hw-status-badge');
+  const dot = document.getElementById('hw-status-dot');
+  const text = document.getElementById('hw-status-text');
+  const radarBox = document.getElementById('hw-radar-box');
+  const radarCircle = document.getElementById('hw-radar-circle');
+  const radarCore = document.getElementById('hw-radar-core');
+  const radarText = document.getElementById('hw-radar-text');
+
+  const gasVal = document.getElementById('hw-val-gas');
+  const smokeVal = document.getElementById('hw-val-smoke');
+  const adcVal = document.getElementById('hw-val-adc');
+  const fhiVal = document.getElementById('hw-val-fhi');
+  const fhiBar = document.getElementById('hw-bar-fhi');
+  const hazardTag = document.getElementById('hw-hazard-tag');
+  const advisory = document.getElementById('hw-advisory-text');
+  const advisoryBox = document.getElementById('hw-advisory-box');
+  const advisoryTitle = document.getElementById('hw-advisory-title');
+  const packetCount = document.getElementById('hw-packet-count');
+  const lastSync = document.getElementById('hw-last-sync');
+
+  if (!s.connected || s.status === 'SEARCHING') {
+    // 1. SEARCHING / STANDBY (No device connected)
+    if (gasVal) gasVal.textContent = '0.0';
+    if (smokeVal) smokeVal.textContent = '0.0 %';
+    if (adcVal) adcVal.textContent = '0';
+    if (fhiVal) fhiVal.textContent = '0.0 / 10.0';
+    if (fhiBar) fhiBar.style.width = '0%';
+    if (packetCount) packetCount.textContent = '0';
+    if (lastSync) lastSync.textContent = '—';
+
+    if (badge) {
+      badge.style.background = 'rgba(255, 107, 53, 0.15)';
+      badge.style.borderColor = 'rgba(255, 107, 53, 0.4)';
+      badge.style.color = '#FF6B35';
+    }
+    if (dot) {
+      dot.style.background = '#FF6B35';
+      dot.style.boxShadow = '0 0 10px #FF6B35';
+    }
+    if (text) text.textContent = isAz ? 'Cihaz axtarılır... (Gözlənilir)' : 'Searching for ESP32...';
+
+    if (radarBox) {
+      radarBox.style.background = 'radial-gradient(circle, rgba(255,107,53,0.12) 0%, rgba(2,4,9,0.85) 75%)';
+      radarBox.style.border = '1px dashed rgba(255,107,53,0.4)';
+    }
+    if (radarCircle) {
+      radarCircle.style.borderColor = '#FF6B35';
+      radarCircle.style.boxShadow = '0 0 12px #FF6B35';
+    }
+    if (radarCore) radarCore.style.background = '#FF6B35';
+    if (radarText) {
+      radarText.style.color = '#FF6B35';
+      radarText.textContent = isAz ? 'Fiziki ESP32 Gözlənilir...' : 'Awaiting Physical ESP32...';
+    }
+
+    if (hazardTag) {
+      hazardTag.style.background = 'rgba(255, 255, 255, 0.08)';
+      hazardTag.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+      hazardTag.style.color = 'rgba(255, 255, 255, 0.7)';
+      hazardTag.textContent = isAz ? 'Axtarış Rejimi' : 'Standby Mode';
+    }
+    if (advisoryBox) {
+      advisoryBox.style.background = 'rgba(0, 245, 255, 0.05)';
+      advisoryBox.style.borderColor = 'rgba(0, 245, 255, 0.2)';
+    }
+    if (advisoryTitle) advisoryTitle.style.color = '#00F5FF';
+    if (advisory) {
+      advisory.textContent = isAz
+        ? 'Fiziki ESP32 mikrokontrolleri şəbəkədə axtarılır. Cihazınızı Wi-Fi-a qoşun və ya sınaq üçün yuxarıdakı Demo düymələrindən istifadə edin.'
+        : 'Searching for physical ESP32 on network. Power on your device or use the Demo buttons above to test.';
+    }
+    renderTelemetryChart([]);
+    return;
+  }
+
+  // 2. CONNECTED (Either real physical hardware or demo test)
+  if (packetCount && s.telemetry_packets_received !== undefined) {
+    packetCount.textContent = s.telemetry_packets_received;
+  }
+  if (lastSync) {
+    lastSync.textContent = s.last_seen_epoch ? new Date(s.last_seen_epoch * 1000).toLocaleTimeString() : '—';
+  }
+
+  if (gasVal) gasVal.textContent = (s.gas_ppm || 0.0).toFixed(1);
+  if (smokeVal) smokeVal.textContent = (s.smoke_density_pct || 0.0).toFixed(1) + ' %';
+  if (adcVal) adcVal.textContent = s.raw_smoke_adc || 0;
+
+  const fhi = Number(s.fire_hazard_index || 0.0);
+  if (fhiVal) fhiVal.textContent = fhi.toFixed(1) + ' / 10.0';
+  if (fhiBar) fhiBar.style.width = Math.min(100, Math.max(5, (fhi / 10) * 100)) + '%';
+
+  const isSim = Boolean(s.is_simulated);
+
+  if (s.status === 'HAZARD_ALERT' || (s.hazard_level && (s.hazard_level === 'CRITICAL' || s.hazard_level === 'ELEVATED'))) {
+    // ACTIVE HAZARD ALERT (SURGE)
+    if (badge) {
+      badge.style.background = 'rgba(255, 23, 68, 0.2)';
+      badge.style.borderColor = 'rgba(255, 23, 68, 0.6)';
+      badge.style.color = '#FF5252';
+    }
+    if (dot) {
+      dot.style.background = '#FF5252';
+      dot.style.boxShadow = '0 0 14px #FF5252';
+    }
+    if (text) text.textContent = isSim 
+      ? (isAz ? '[TEST DEMO] QAZ SIÇRAYIŞI!' : '[DEMO TEST] GAS SURGE ALERT!')
+      : (isAz ? 'FİZİKİ TƏHLÜKƏ SİQNALI (Canlı)' : 'PHYSICAL HAZARD SURGE (Live)');
+
+    if (radarBox) {
+      radarBox.style.background = 'radial-gradient(circle, rgba(255,23,68,0.25) 0%, rgba(2,4,9,0.9) 75%)';
+      radarBox.style.border = '1px solid rgba(255,23,68,0.6)';
+    }
+    if (radarCircle) {
+      radarCircle.style.borderColor = '#FF5252';
+      radarCircle.style.boxShadow = '0 0 18px #FF5252';
+    }
+    if (radarCore) radarCore.style.background = '#FF5252';
+    if (radarText) {
+      radarText.style.color = '#FF5252';
+      radarText.textContent = isAz ? 'TÜSTÜ / QAZ SIÇRAYIŞI!' : 'SMOKE / GAS SURGE!';
+    }
+
+    if (hazardTag) {
+      hazardTag.style.background = 'rgba(255, 23, 68, 0.25)';
+      hazardTag.style.borderColor = 'rgba(255, 23, 68, 0.6)';
+      hazardTag.style.color = '#FF5252';
+      hazardTag.textContent = isAz ? (s.hazard_level_az || 'KRİTİK TƏHLÜKƏ') : 'CRITICAL HAZARD';
+    }
+    if (advisoryBox) {
+      advisoryBox.style.background = 'rgba(255, 23, 68, 0.14)';
+      advisoryBox.style.borderColor = 'rgba(255, 23, 68, 0.5)';
+    }
+    if (advisoryTitle) advisoryTitle.style.color = '#FF5252';
+    if (advisory) {
+      advisory.textContent = isAz
+        ? (s.advisory_az || 'TƏCİLİ HƏYƏCAN SİQNALI: Alışqan qaz və tüstü konsentrasiyası kritik həddi keçdi! Avtomatik CO₂/N₂ boğma sistemi tövsiyə edilir!')
+        : (s.advisory_en || 'CRITICAL EMERGENCY: Smoke & gas density exceeding threshold! Automatic CO₂/N₂ fire suppression recommended!');
+    }
+  } else {
+    // NOMINAL ONLINE CONNECTED
+    if (badge) {
+      if (isSim) {
+        badge.style.background = 'rgba(155, 89, 182, 0.2)';
+        badge.style.borderColor = 'rgba(155, 89, 182, 0.5)';
+        badge.style.color = '#D291FF';
+      } else {
+        badge.style.background = 'rgba(0, 230, 118, 0.15)';
+        badge.style.borderColor = 'rgba(0, 230, 118, 0.4)';
+        badge.style.color = '#00E676';
+      }
+    }
+    if (dot) {
+      dot.style.background = isSim ? '#D291FF' : '#00E676';
+      dot.style.boxShadow = isSim ? '0 0 10px #D291FF' : '0 0 10px #00E676';
+    }
+    if (text) {
+      text.textContent = isSim
+        ? (isAz ? '[TEST DEMO] Simulyasiya Aktivdir' : '[DEMO TEST] Simulation Active')
+        : (isAz ? 'Fiziki ESP32 Qoşuldu (Canlı)' : 'Physical ESP32 Online (Live)');
+    }
+
+    if (radarBox) {
+      radarBox.style.background = isSim
+        ? 'radial-gradient(circle, rgba(155,89,182,0.15) 0%, rgba(2,4,9,0.85) 75%)'
+        : 'radial-gradient(circle, rgba(0,230,118,0.15) 0%, rgba(2,4,9,0.85) 75%)';
+      radarBox.style.border = isSim ? '1px solid rgba(155,89,182,0.4)' : '1px solid rgba(0,230,118,0.4)';
+    }
+    if (radarCircle) {
+      radarCircle.style.borderColor = isSim ? '#D291FF' : '#00E676';
+      radarCircle.style.boxShadow = isSim ? '0 0 14px #D291FF' : '0 0 14px #00E676';
+    }
+    if (radarCore) radarCore.style.background = isSim ? '#D291FF' : '#00E676';
+    if (radarText) {
+      radarText.style.color = isSim ? '#D291FF' : '#00E676';
+      radarText.textContent = isSim
+        ? (isAz ? 'Demo Data Axını Aktivdir' : 'Demo Data Stream Active')
+        : (isAz ? 'ESP32 Qoşuldu · Canlı Axın' : 'ESP32 Streaming Live');
+    }
+
+    if (hazardTag) {
+      hazardTag.style.background = 'rgba(0, 230, 118, 0.15)';
+      hazardTag.style.borderColor = 'rgba(0, 230, 118, 0.4)';
+      hazardTag.style.color = '#00E676';
+      hazardTag.textContent = isAz ? (s.hazard_level_az || 'NOMİNAL KOSMİK REJİM') : 'NOMINAL SAFE';
+    }
+    if (advisoryBox) {
+      advisoryBox.style.background = 'rgba(0, 230, 118, 0.08)';
+      advisoryBox.style.borderColor = 'rgba(0, 230, 118, 0.3)';
+    }
+    if (advisoryTitle) advisoryTitle.style.color = '#00E676';
+    if (advisory) {
+      advisory.textContent = isAz
+        ? (s.advisory_az || 'Təbii kosmik stansiya fonu. Bütün qaz və tüstü parametrləri təhlükəsizlik hədləri daxilindədir.')
+        : (s.advisory_en || 'Standard spacecraft baseline. All gas and smoke parameters are within nominal safety limits.');
+    }
+  }
+
+  renderTelemetryChart(s.history || []);
+}
+
+async function triggerHardwareDemo(action) {
+  const buttons = document.querySelectorAll('.btn-demo');
+  buttons.forEach(b => b.disabled = true);
+  try {
+    const res = await fetch(`/api/sensor-simulate?action=${encodeURIComponent(action)}`, {
+      method: 'POST'
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (json.data) {
+      renderHardwareState(json.data);
+    }
+  } catch (err) {
+    console.error('Demo trigger error:', err);
+    const advisory = document.getElementById('hw-advisory-text');
+    if (advisory) advisory.textContent = getLang() === 'az'
+      ? 'Serverlə əlaqə alınmadı. Backend işləyirmi? (uvicorn backend.main:app)'
+      : 'Could not reach the server. Is the backend running? (uvicorn backend.main:app)';
+  } finally {
+    buttons.forEach(b => b.disabled = false);
+  }
+}
+
+// ── Complete Static page text: AZ (source) → EN ──
+const HW_EN = {
+  'NASA SPACE APPS CHALLENGE // FİZİKİ MÜHƏNDİSLİK & IOT TELEMETRİYA': 'NASA SPACE APPS CHALLENGE // PHYSICAL ENGINEERING & IOT TELEMETRY',
+  'Fiziki IoT Avadanlıq &': 'Physical IoT Hardware &',
+  'Sensor Stansiyası': 'Sensor Station',
+  'FIRE-X layihəsinin fiziki donanım laboratoriyası. Komandamız tərəfindən quraşdırılmış ESP32 mikrokontrolleri və MQ-2 qaz/tüstü sensoru vasitəsilə masada canlı mühit göstəricilərini oxuyur, Wi-Fi ilə backend-ə ötürür və NASA elmi düsturuna əsasən yanğın təhlükəsi riskini (FHI) ani qiymətləndiririk.': 'The physical hardware laboratory of the FIRE-X platform. Using our benchtop ESP32 microcontroller and MQ-2 gas/smoke sensor, we sample live ambient telemetry, stream it over Wi-Fi to the FastAPI backend, and compute the real-time Fire Hazard Index (FHI) via NASA combustion equations.',
+  'Mikrokontroller Platforması': 'Microcontroller Platform',
+  'İnteqrasiya Edilmiş Sensor': 'Integrated Sensor',
+  'LPG, Butan, Metan, Tüstü, CO': 'LPG, Butane, Methane, Smoke, CO',
+  'Məlumat Körpüsü': 'Data Bridge',
+  'Fiziki Hazırlıq Vəziyyəti': 'Physical Readiness',
+  'İşlək Prototip': 'Working Prototype',
+  'Lehimləməsiz 3-pin montaj': 'Solderless 3-pin assembly',
+  'Canlı Cihaz Telemetriyası və Sınaq Masası': 'Live Device Telemetry & Test Bench',
+  'Cihaz axtarılır...': 'Searching for device...',
+  'Port dinlənilir:': 'Listening on:',
+  '· Hər 1.5 saniyədən bir sinxronizasiya': '· Syncing every 1.5 seconds',
+  'Demo: Cihazı Qoş': 'Demo: Connect Device',
+  '🔥 Demo: Qaz Testi': '🔥 Demo: Gas Surge Test',
+  'Demo: Təmiz Hava': 'Demo: Clean Air Reset',
+  'Söndür (Axtarış Rejimi)': 'Turn Off (Standby Mode)',
+  'CİHAZ ŞƏBƏKƏ STATUSU': 'DEVICE NETWORK STATUS',
+  'Sensor: MQ-2 Qalay Oksid (SnO₂)': 'Sensor: MQ-2 Tin Oxide (SnO₂)',
+  'ESP32 Gözlənilir...': 'Awaiting ESP32...',
+  'Qəbul Edilən Paketlər:': 'Packets Received:',
+  'Son Telemetriya Zamanı:': 'Last Telemetry:',
+  'CANLI FİZİKİ SENSOR ÖLÇÜMLƏRİ': 'LIVE PHYSICAL SENSOR READINGS',
+  'NOMİNAL KOSMİK REJİM': 'NOMINAL SPACECRAFT MODE',
+  'Qaz Qatılığı (PPM)': 'Gas Concentration (PPM)',
+  'MQ-2 elektrokimyəvi': 'MQ-2 electrochemical',
+  'Tüstü Sıxlığı (%)': 'Smoke Density (%)',
+  'Hissəcik optikası': 'Particle optics',
+  '12-bit ADC (GPIO 34)': '12-bit ADC (GPIO 34)',
+  'Xam qiymət: 0 - 4095': 'Raw value: 0 - 4095',
+  'FIRE-X Yanğın Təhlükə İndeksi (FHI):': 'FIRE-X Fire Hazard Index (FHI):',
+  'CANLI TƏHLÜKƏ MƏSLƏHƏTİ (LIVE ADVISORY):': 'LIVE HAZARD ADVISORY:',
+  'Fiziki ESP32 mikrokontrolleri şəbəkədə axtarılır. Cihazınızı Wi-Fi şəbəkəsinə qoşun.': 'Searching for physical ESP32 on network. Power on your device or use the Demo buttons above.',
+  'FİZİKİ NAQİL BAĞLANTILARI': 'PHYSICAL WIRING',
+  'MQ-2 VCC (Qırmızı)': 'MQ-2 VCC (Red)',
+  'MQ-2 GND (Qara)': 'MQ-2 GND (Black)',
+  'MQ-2 AO (Mavi)': 'MQ-2 AO (Blue)',
+  'Mühəndis qeydi:': 'Engineering note:',
+  'GPIO 34 pini ESP32-nin ADC1 blokuna aiddir. Wi-Fi aktiv olduqda belə analoq ölçmə qabiliyyətini itirmir.': 'GPIO 34 belongs to the ESP32 ADC1 block, so analog readings stay accurate even while Wi-Fi is active.',
+  'Şemaya Bax ↓': 'View Schematic ↓',
+  'Arduino Kodu ↓': 'Arduino Code ↓',
+  'Canlı Telemetriya Tarixçəsi (son 30 paket)': 'Live Telemetry History (last 30 packets)',
+  'Qaz PPM': 'Gas PPM',
+  'Tüstü % ×5': 'Smoke % ×5',
+  'Nə etmişik? Sistem necə işləyir?': 'What did we build? How does it work?',
+  'Biz sadəcə brauzerdə işləyən veb-sayt yox, masamızdakı fiziki sensoru kosmik yanğın alqoritminə bağlayan canlı bir IoT platforması qurduq:': 'Not just a website — we built a live IoT platform that connects a physical sensor on our desk to a spacecraft fire-hazard algorithm:',
+  '01 // SENSOR SƏVİYYƏSİ': '01 // SENSOR LAYER',
+  'Fiziki Qaz və Tüstü Ölçümü': 'Physical Gas & Smoke Sensing',
+  'MQ-2 sensoru daxili qızdırıcısı və SnO₂ təbəqəsi ilə ətrafdakı tüstü hissəciklərini və alışqan qazları (LPG, metan, butan) hiss edərək müqavimətini dəyişir və analoq gərginlik (0 - 3.3V) hasil edir.': 'The MQ-2 heated SnO₂ layer changes resistance in the presence of smoke and combustible gases (LPG, methane, butane), producing an analog voltage (0 – 3.3V).',
+  '02 // MİKROKONTROLLER': '02 // MICROCONTROLLER',
+  'ESP32 Firmware Emalı': 'ESP32 Firmware Processing',
+  'ESP32-yə yüklədiyimiz C++ proqramı GPIO 34 pinindən 12-bit dəqiqliklə analoq siqnalı oxuyur, qaz qatılığına (PPM) çevirir və Wi-Fi üzərindən JSON paketi halına salır.': 'Our C++ firmware reads GPIO 34 at 12-bit resolution, converts it to gas concentration (PPM) and sends it as a JSON packet over Wi-Fi.',
+  '03 // SERVER ŞLÜZÜ': '03 // SERVER GATEWAY',
+  'FastAPI & Elmi FHI Hesabı': 'FastAPI & Scientific FHI Calculation',
+  'Backend-dəki': 'The backend',
+  'endpoint-i sensor datasını qəbul edərək elmi düsturumuz (FHI = 5.1 × OEF × PF × Mf) ilə birləşdirir və alovlanma təhlükəsini dərhal yenidən hesablayır.': 'endpoint ingests live sensor telemetry, combines it with our scientific formula (FHI = 5.1 × OEF × PF × Mf), and recalculates ignition hazard in real time.',
+  '04 // AVTOMATLAŞDIRMA': '04 // AUTOMATION',
+  'Canlı Həyəcan & AI Reaksiyası': 'Live Alerts & AI Response',
+  'Qaz və ya tüstü konsentrasiyası kritik həddi keçdikdə dashboard dərhal qırmızı xəbərdarlıq rejiminə keçir və heyət üçün avtomatik boğucu qaz tövsiyəsi çıxarır.': 'When gas or smoke concentration crosses the critical threshold, the dashboard switches to red alert and issues an automatic suppressant recommendation for the crew.',
+  'Nələr var? (Mövcud Avadanlıq və Komponentlər)': 'What we have (Hardware & Components)',
+  'Masamızda fiziki olaraq quraşdırdığımız və proqram təminatı ilə tam inteqrasiya olunmuş komponentlərin siyahısı:': 'Components physically assembled on our bench and fully integrated with the software:',
+  'BÜTÜN 6 KOMPONENT İŞLƏK VƏZİYYƏTDƏDİR': 'ALL 6 COMPONENTS OPERATIONAL',
+  'MÖVCUDDUR ✓': 'AVAILABLE ✓',
+  'ESP32 NodeMCU V3 Plata': 'ESP32 NodeMCU V3 Board',
+  'Xtensa Dual-Core 32-bit LX6 mikroprosessor (240 MHz). Daxili 802.11 b/g/n Wi-Fi modulu ilə yerli şəbəkəyə qoşulur və REST API ilə məlumat ötürür.': 'Xtensa Dual-Core 32-bit LX6 microprocessor (240 MHz). Connects to the local network via built-in 802.11 b/g/n Wi-Fi and streams telemetry over REST API.',
+  'MQ-2 Qaz & Tüstü Sensoru': 'MQ-2 Gas & Smoke Sensor',
+  'SnO₂ elektrokimyəvi sensor təbəqəsi ilə təchiz edilib. LPG, i-butan, propan, metan, spirt və tüstü hissəciklərinə qarşı yüksək həssaslığa malikdir.': 'Equipped with an SnO₂ chemiresistive sensing layer. High sensitivity to LPG, i-butane, propane, methane, alcohol, and smoke aerosols.',
+  'USB Güc və UART Şlüzü': 'USB Power & UART Bridge',
+  'Platanı 5V stabil cərəyanla təmin edir və eyni zamanda 115200 baud sürətində serial monitor diaqnostika konsolu ilə əlaqələndirir.': 'Supplies regulated 5V DC power to the board and provides a 115200-baud UART serial diagnostic link.',
+  'Dupont Naqillər (Female-to-Female)': 'Dupont Jumper Wires (Female-to-Female)',
+  'Lehimləmə tələb etmədən VCC, GND və AOUT pinlərini birbaşa ESP32-nin VIN, GND və GPIO 34 pinlərinə bərkidən etibarlı montaj naqilləri.': 'Solderless female-to-female jumper leads connecting MQ-2 VCC, GND, and AOUT directly to ESP32 VIN, GND, and GPIO 34.',
+  'C++ Arduino Firmware': 'C++ Arduino Firmware',
+  '— Wi-Fi itəndə avtomatik yenidən qoşulan, non-blocking göndəriş dövrəsi və LED diaqnostikası olan kod bazası.': '— Non-blocking telemetry loop with automatic Wi-Fi reconnection and onboard LED status diagnostics.',
+  'FastAPI Real-Time Telemetriya API': 'FastAPI Real-Time Telemetry API',
+  'Gələn paketləri saniyənin onda birində emal edən': 'Processes incoming packets in milliseconds via',
+  'və brauzerə ötürən': 'and streams live state to the browser via',
+  'endpointləri.': 'endpoints.',
+  'Nələr yoxdur? (Real Çatışmazlıqlar və Gələcək Təkmilləşdirmələr)': 'What is missing? (Honest Gaps & Roadmap)',
+  'Münsiflərə dürüst mühəndislik yanaşması: Hal-hazırda nələri proqramla emulyasiya edirik və növbəti fazada fiziki olaraq nə çatışmır:': 'An honest engineering view for the judges: what we currently emulate in software and what hardware comes next:',
+  'NÖVBƏTİ MƏRHƏLƏ / YOL XƏRİTƏSİ': 'NEXT PHASE / ROADMAP',
+  'AVADANLIQ GƏLƏCƏKDƏ': 'FUTURE HARDWARE',
+  'PROQRAMLA EMULYASİYA EDİLİR': 'SOFTWARE-EMULATED',
+  'MONİTORDA ƏKS OLUNUR': 'SHOWN ON MONITOR',
+  'KORPUS GƏLƏCƏKDƏ': 'FUTURE ENCLOSURE',
+  'AÇIQ ŞƏKİLDƏDİR': 'CURRENTLY OPEN',
+  'İCRAEDİCİ MEXANİZM': 'ACTUATOR',
+  'MƏSLƏHƏT MƏRHƏLƏSİ': 'ADVISORY ONLY',
+  'Çatışmayan cəhət:': 'Gap:',
+  'Fiziki Barometrik Sensor (BME680 / BMP280)': 'Physical Barometric Sensor (BME680 / BMP280)',
+  'Masamızda fiziki atmosfer təzyiq sensoru yoxdur. Hazırda kabin təzyiqi (BKS: 101.3 kPa, Artemis: 56.5 kPa) simulyator tərəfindən hesablanır. Növbəti mərhələdə I2C şininə fiziki BME680 lehimlənəcək.': 'We do not yet have a physical barometric pressure sensor on the bench. Cabin pressure (ISS: 101.3 kPa, Artemis: 56.5 kPa) is currently modeled in software. Next phase adds an I2C BME680 sensor.',
+  'Müstəqil Mini OLED Ekran (0.96" I2C)': 'Standalone Mini OLED Display (0.96" I2C)',
+  'Sensorun ölçdüyü FHI indeksini görmək üçün hələlik noutbuk/veb-ekrana ehtiyac var. Cihazın öz üzərində kiçik OLED ekran olsa, o kosmonavtın əlində müstəqil portativ qaz detektoru kimi işləyə bilər.': 'Viewing the FHI index currently requires the web dashboard. Adding a 0.96" I2C OLED screen on the unit will allow it to operate as a handheld crew gas sniffer.',
+  '3D Çap Odadavamlı Qoruyucu Qutu': '3D-Printed Flame-Retardant Enclosure',
+  'Hazırda platamız masada açıq dövrə şəklindədir. Kosmik vibrasiya və təsadüfi qısaqapanmalara dözümlü olması üçün UL-94 V0 standartlı PETG/Polikarbonat materialdan 3D korpus çap edilməlidir.': 'The circuit is currently an open benchtop prototype. To withstand launch vibration and prevent short circuits, a UL-94 V0 flame-retardant polycarbonate enclosure will be 3D-printed.',
+  'Avtomatik CO₂ / N₂ Söndürmə Klapanı': 'Automatic CO₂ / N₂ Suppression Valve',
+  'Hazırkı sistem yanğın riski FHI > 8.5 olduqda yalnız AI xəbərdarlığı çıxarır. Rele ilə idarə olunan fiziki CO₂ solenoid klapanı bağlandıqda avtomatik söndürmə tətiklənəcək.': 'Currently, when FHI > 8.5 the system triggers visual and AI alerts only. Connecting a relay-driven CO₂ solenoid valve will enable closed-loop physical fire suppression.',
+  'Fiziki Bağlantı Şeması və Pin Xəritəsi': 'Wiring Schematic & Pin Map',
+  'Aşağıda hazırladığımız yüksək dəqiqlikli dövrə xəritəsi göstərilib. Sistem cəmi 3 Dupont naqili ilə lehimləməsiz quraşdırılır:': 'Below is our circuit map. The system is assembled solderless with just 3 Dupont wires:',
+  'Şəkil 1.1: ESP32 NodeMCU və MQ-2 Modulunun Naqil Arxitekturası': 'Figure 1.1: ESP32 NodeMCU & MQ-2 Module Wiring Architecture',
+  'Dövrə Spesifikasiyası və Təhlükəsizlik': 'Circuit Specification & Safety',
+  'MQ-2 sensorunun daxili qızdırıcısı təxminən 5V gərginlik tələb edir, buna görə sensorun VCC xətti ESP32-nin': 'The MQ-2 internal heater requires ~5V DC, so the sensor VCC line is wired to the ESP32',
+  'pininə (USB 5V xətti) qoşulub. Analoq çıxış isə 0–3.3V diapazonunda təhlükəsiz siqnal ötürür.': 'pin (USB 5V rail), while the analog output delivers a safe 0–3.3V signal.',
+  'MQ-2 PİNİ': 'MQ-2 PIN',
+  'ESP32 PİNİ': 'ESP32 PIN',
+  'FUNKSİYA & GƏRGİNLİK': 'FUNCTION & VOLTAGE',
+  '+5V DC Sensor Qızdırıcı Qidalanması': '+5V DC Sensor Heater Supply',
+  'Ümumi Torpaqlama Referansı': 'Common Ground Reference',
+  'ADC1 Channel 6 (12-bit Analoq Giriş)': 'ADC1 Channel 6 (12-bit Analog Input)',
+  'Vacib mühəndislik arqumenti:': 'Key engineering rationale:',
+  'Niyə məhz': 'Why',
+  '? ESP32-də Wi-Fi modulu işləyərkən ADC2 pinləri (GPIO 0, 2, 4, 12, 13, 14, 15, 25, 26, 27) Wi-Fi drayveri tərəfindən məşğul edilir və analoq oxunuş xəta verir. GPIO 34 isə ADC1 blokuna aiddir və Wi-Fi zamanı fasiləsiz dəqiq analoq ölçmə aparır.': '? On the ESP32, ADC2 pins (GPIO 0, 2, 4, 12, 13, 14, 15, 25, 26, 27) conflict with the Wi-Fi driver and fail during active radio transmission. GPIO 34 is wired to ADC1, guaranteeing uninterrupted 12-bit analog sampling while Wi-Fi is active.',
+  'ESP32 Mikrokontroller Kodu (C++ / Arduino)': 'ESP32 Firmware (C++ / Arduino)',
+  'Plataya yüklənən proqram təminatı (firmware). Kod layihə repozitoriyasında': 'Firmware flashed to the board. Stored in the project repository at',
+  'ünvanında saxlanılır:': ':',
+  'Faylı Yüklə (.ino)': 'Download File (.ino)',
+  'Mikroyerçəkim Yanma Məlumatlarından Süni İntellektlə Yanğın Təhlükəsizliyi İntellekti. NASA Space Apps Challenge 2026.': 'AI-Powered Fire Safety Intelligence from Microgravity Combustion Data. NASA Space Apps Challenge 2026.',
+  'Platforma': 'Platform',
+  'Məlumat & Elm': 'Data & Science',
+  'NASA-STD-6001B Standartı': 'NASA-STD-6001B Standard',
+  'ESP32 + MQ-2 Arxitekturası': 'ESP32 + MQ-2 Architecture',
+  'Sənədləşmə': 'Documentation',
+  '© 2026 NASA FIRE-X · NASA Space Apps Challenge üçün hazırlanıb': '© 2026 NASA FIRE-X · Built for NASA Space Apps Challenge',
+};
+
+function translateStaticPage() {
+  if (getLang() !== 'en') return;
+  document.documentElement.lang = 'en';
+  document.title = 'Physical IoT Hardware & Telemetry Station // NASA FIRE-X';
+  const norm = t => t.replace(/\s+/g, ' ').trim();
+  const roots = [document.querySelector('header.hw-hero'), document.querySelector('main'), document.querySelector('footer')];
+  roots.forEach(root => {
+    if (!root) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: n => n.parentElement && n.parentElement.closest('pre, script, style')
+        ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(n => {
+      const key = norm(n.nodeValue);
+      if (key && HW_EN[key]) {
+        const lead = /^\s/.test(n.nodeValue) ? ' ' : '';
+        const trail = /\s$/.test(n.nodeValue) ? ' ' : '';
+        n.nodeValue = lead + HW_EN[key] + trail;
+      }
+    });
+  });
+}
+
+function startPolling() {
+  if (hwPollInterval) return;
+  pollHardwareTelemetry();
+  hwPollInterval = setInterval(pollHardwareTelemetry, 1500);
+}
+function stopPolling() {
+  clearInterval(hwPollInterval);
+  hwPollInterval = null;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  translateStaticPage();
+  renderTelemetryChart([]);
+  startPolling();
+  document.addEventListener('visibilitychange', () => document.hidden ? stopPolling() : startPolling());
+  window.addEventListener('resize', () => pollHardwareTelemetry());
+});
+</script>
+</body>
+</html>

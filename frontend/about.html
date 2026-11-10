@@ -13,19 +13,16 @@
 .page-header{padding:120px 0 64px;background:linear-gradient(180deg,rgba(0,245,255,0.04) 0%,transparent 100%);border-bottom:1px solid rgba(0,245,255,0.06);text-align:center}
 .about-section{padding:80px 0}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:28px}
 .info-card{background:var(--bg-surface-2);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px;margin-bottom:20px;transition:all .3s}
 .info-card:hover{border-color:rgba(0,245,255,0.2);background:rgba(12,21,37,0.9)}
 .info-card h3{font-family:"Space Grotesk",sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:10px;color:#fff}
-.info-card p{font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.7}
-.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;margin-top:48px}
-.team-card{background:var(--bg-surface-2);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:28px;text-align:center;transition:all .3s}
-.team-card:hover{border-color:rgba(0,245,255,.2);transform:translateY(-4px)}
-.team-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#00F5FF,#2979FF);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:"Space Grotesk",sans-serif;font-size:1.4rem;font-weight:800;color:#020409}
-.sources-table{width:100%;border-collapse:collapse;margin-top:24px;font-size:.85rem}
-.sources-table th{padding:12px 16px;text-align:left;font-size:.72rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;font-family:"JetBrains Mono",monospace;border-bottom:1px solid rgba(255,255,255,.06)}
-.sources-table td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.7)}
+.info-card p{font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.7}
+.sources-table{width:100%;border-collapse:collapse;margin-top:24px;font-size:.83rem}
+.sources-table th{padding:12px 16px;text-align:left;font-size:.72rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;font-family:"JetBrains Mono",monospace;border-bottom:1px solid rgba(255,255,255,.08)}
+.sources-table td{padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.75);vertical-align:top}
 .sources-table tr:hover td{background:rgba(0,245,255,.03)}
-@media(max-width:768px){.two-col{grid-template-columns:1fr}}
+@media(max-width:960px){.two-col,.three-col{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -41,6 +38,7 @@
       <li><a href="/analytics" class="nav-link">Analytics</a></li>
       <li><a href="/explorer" class="nav-link">Data Explorer</a></li>
       <li><a href="/simulator" class="nav-link">Simulator</a></li>
+      <li><a href="/hardware" class="nav-link">Hardware</a></li>
       <li><a href="/ai" class="nav-link">AI Assistant</a></li>
       <li><a href="/about" class="nav-link">About</a></li>
     </ul>
@@ -53,9 +51,9 @@
 
 <div class="page-header">
   <div class="container">
-    <div class="section-eyebrow" style="justify-content:center">Documentation &amp; Credits</div>
+    <div class="section-eyebrow" style="justify-content:center">Documentation &amp; Scientific Architecture</div>
     <h1 class="section-title-xl" style="margin-bottom:16px">About <span class="text-gradient">FIRE-X</span></h1>
-    <p class="section-desc" style="margin:0 auto;text-align:center">NASA Space Apps Challenge 2026 — Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data</p>
+    <p class="section-desc" style="margin:0 auto;text-align:center">NASA Space Apps Challenge 2026 — Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data</p>
   </div>
 </div>
 
@@ -66,20 +64,20 @@
         <div class="section-eyebrow">Project Overview</div>
         <h2 class="section-title-xl" style="font-size:2rem;margin-bottom:24px">The Science Behind <span class="text-gradient">FIRE-X</span></h2>
         <div class="info-card">
-          <h3>Why Microgravity?</h3>
-          <p>In microgravity, buoyancy-driven convection is absent. Flames become spherical. Cool flames persist. Standard fire safety models fail. FIRE-X analyzes NASA's most comprehensive microgravity combustion database to develop new safety models for space habitats.</p>
+          <h3>Why Microgravity &amp; Partial Gravity?</h3>
+          <p>In microgravity (~0g), buoyancy-driven convection is absent: flames become spherical, low-temperature cool flames (600–800 K) persist after visible quenching, and low ventilation flows (5–15 cm/s) make thin materials MORE flammable than on Earth. Because there is currently no raw partial-gravity flight data in NASA PSI (pending future <strong>LUCI</strong> and <strong>FM2</strong> lunar investigations), FIRE-X bounds Lunar (0.16g) and Martian (0.38g) hazards between <strong>0g ISS forced-flow data</strong> and <strong>1.0g NASA-STD-6001 Test 1 upward screening</strong>, supplemented by <strong>ACME E-FIELD</strong> electric-body-force partial-gravity mimicry.</p>
         </div>
         <div class="info-card">
-          <h3>The Dataset</h3>
-          <p>879 canonical experiments across 24 NASA flight & research families: FLEX-1/2 (droplet combustion), BASS-I/II (solid materials), SAFFIRE I-VI (large-scale spacecraft burns), ACME/CIR, SOFIE, SLICE, and NASA-STD-6001 material testing — all from NASA's Physical Science Informatics (PSI) repository.</p>
+          <h3>The 892-Test Canonical Dataset</h3>
+          <p>892 canonical experiments across 29 NASA PSI &amp; WSTF investigations: <strong>FLEX-1/2</strong> (spherical droplets + CO₂ up to 70% &amp; He up to 45% diluent suppression), <strong>BASS-I/II</strong>, <strong>SPICE</strong>, and <strong>SLICE</strong> (in ISS MSG flow duct), <strong>SAFFIRE I–VI</strong> (large-scale Cygnus spacecraft burns), <strong>ACME Suite</strong> (BRE, CFI, <strong>CFI-G up to 85% O₂ inside-out flames</strong>, CLD, E-FIELD in ISS CIR), <strong>SOFIE</strong>, <strong>SAME / SAME-R</strong>, <strong>DAFT / DAFT-2</strong> (lunar/Martian dust vs smoke discrimination), and <strong>NASA-STD-6001</strong> (1.0g WSTF upper bound).</p>
         </div>
         <div class="info-card">
-          <h3>AI Integration</h3>
-          <p>The platform uses OpenAI GPT-6-luna via the Responses API with a specialized NASA combustion system prompt. All AI calls are server-side only — the API key is never exposed to the browser. A deterministic SQL+RAG fallback ensures answers are always grounded in real experimental data.</p>
+          <h3>Live SQLite SQL-RAG + OpenAI GPT-4o-mini</h3>
+          <p>The platform pairs <strong>OpenAI GPT-4o-mini</strong> with a live <strong>SQLite SQL-RAG Retrieval Engine</strong> querying <code>fire_safety.db</code> on every prompt. All AI calls are server-side only — the API key is never exposed to the browser, and every answer cites live SQL telemetry rows and investigation rankings.</p>
         </div>
         <div class="info-card">
-          <h3>Mission Simulator</h3>
-          <p>The Fire Hazard Index (FHI) formula is derived from NASA-STD-6001 oxygen partial pressure and mole fraction sensitivity curves: FHI = 1 + (O₂/21) × 3.5 + (pO₂/21.3) × 1.8. Validated against ISS Standard (FHI≈5.1), Artemis Exploration Atmosphere (FHI≈8.3), and Hypoxic Haven (FHI≈2.1) profiles.</p>
+          <h3>Mission Simulator &amp; Scope Exclusion</h3>
+          <p>The Fire Hazard Index formula <code>FHI = min(10, 5.1 × (X_O2/0.21)^1.5 × (P/101.3)^0.4 × M_f)</code> models Spacecraft, Space Station (ISS), Lunar Base (0.16g), Martian Base (0.38g), Pressurized Rover (≥30% O₂, ≤10.2 psi), and EVA Spacesuit (85–100% O₂, 4.3 psi). <em>Scope Note:</em> Rocket engine propellants (LOX/LH₂, hypergolics) are intentionally excluded because high-pressure turbulent atomization (&gt;50 bar, Fr &gg; 1000) is buoyancy-independent, unlike low-velocity spacecraft cabin fires.</p>
         </div>
       </div>
       <div>
@@ -87,16 +85,18 @@
         <h2 class="section-title-xl" style="font-size:2rem;margin-bottom:24px">NASA <span class="text-gradient">Data Provenance</span></h2>
         <div style="background:var(--bg-surface-2);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden">
           <table class="sources-table">
-            <thead><tr><th>Dataset</th><th>PSI ID</th><th>Records</th></tr></thead>
+            <thead><tr><th>Investigation Suite</th><th>Facility / PSI ID</th><th>Tests</th></tr></thead>
             <tbody>
-              <tr><td>FLEX-1 Droplet Extinction</td><td style="font-family:'JetBrains Mono',monospace;color:#00F5FF">PSI-69</td><td>48</td></tr>
-              <tr><td>FLEX-2 Cool Flame</td><td style="font-family:'JetBrains Mono',monospace;color:#00F5FF">PSI-70</td><td>48</td></tr>
-              <tr><td>BASS-II Solid Combustion</td><td style="font-family:'JetBrains Mono',monospace;color:#00F5FF">PSI-25</td><td>44</td></tr>
-              <tr><td>SAFFIRE I-VI</td><td style="font-family:'JetBrains Mono',monospace;color:#FF6B35">PSI-98</td><td>72</td></tr>
-              <tr><td>SOFIE Solid Ignition</td><td style="font-family:'JetBrains Mono',monospace;color:#9B59B6">PSI-84</td><td>84</td></tr>
-              <tr><td>ACME/CIR Flame Structure</td><td style="font-family:'JetBrains Mono',monospace;color:#2979FF">PSI-112</td><td>58</td></tr>
-              <tr><td>SLICE Jet Diffusion</td><td style="font-family:'JetBrains Mono',monospace;color:#00E676">PSI-63</td><td>63</td></tr>
-              <tr><td>NASA-STD-6001 Materials</td><td style="font-family:'JetBrains Mono',monospace;color:#FFF">STD-6001</td><td>67</td></tr>
+              <tr><td>FLEX-1 &amp; FLEX-2 Droplets (CO₂/He &amp; Cool Flames)</td><td style="font-family:'JetBrains Mono',monospace;color:#00F5FF">ISS CIR (MDCA) · PSI-69/70</td><td>284</td></tr>
+              <tr><td>BASS-I &amp; BASS-II Solid Fuel Forced Flow</td><td style="font-family:'JetBrains Mono',monospace;color:#00F5FF">ISS MSG (SPICE Duct) · PSI-25</td><td>137</td></tr>
+              <tr><td>NASA GRC 2.2s &amp; 5.18s Zero-G Drop Tower</td><td style="font-family:'JetBrains Mono',monospace;color:#2979FF">GRC Drop Tower · 10⁻⁵g</td><td>95</td></tr>
+              <tr><td>ACME Suite (BRE, CFI, CFI-G 85% O₂, CLD, E-FIELD)</td><td style="font-family:'JetBrains Mono',monospace;color:#2979FF">ISS CIR (ACME Insert)</td><td>72</td></tr>
+              <tr><td>MGM Porous Polymer Smoldering</td><td style="font-family:'JetBrains Mono',monospace;color:#FF6B35">STS-69/77/80 &amp; ISS</td><td>65</td></tr>
+              <tr><td>NASA-STD-6001 Test 1 (1.0g Normal-Gravity Bound)</td><td style="font-family:'JetBrains Mono',monospace;color:#00E676">NASA WSTF 1.0g Chamber</td><td>59</td></tr>
+              <tr><td>SAME I/II, SAME-R &amp; DAFT / DAFT-2 (Smoke &amp; Dust)</td><td style="font-family:'JetBrains Mono',monospace;color:#9B59B6">ISS MSG (Aerosol Chamber)</td><td>54</td></tr>
+              <tr><td>FLARE (0g Kibo) + 0g–1g Partial-g Bounded Model</td><td style="font-family:'JetBrains Mono',monospace;color:#FF6B35">ISS Kibo + GRC Bound (Pre-LUCI/FM2)</td><td>82</td></tr>
+              <tr><td>SAFFIRE I–VI Large-Scale Spacecraft Burns</td><td style="font-family:'JetBrains Mono',monospace;color:#FF5252">Cygnus Autonomous Vehicle · PSI-98</td><td>19</td></tr>
+              <tr><td>SOFIE (CIR/MIST), SLICE &amp; SPICE (MSG Co-flow)</td><td style="font-family:'JetBrains Mono',monospace;color:#00E676">ISS CIR (MIST) &amp; ISS MSG</td><td>25</td></tr>
             </tbody>
           </table>
         </div>
@@ -104,17 +104,101 @@
           <div style="font-size:.72rem;color:rgba(0,245,255,.7);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Technology Stack</div>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
             <span class="badge badge-cyan">FastAPI 0.115</span>
-            <span class="badge badge-cyan">OpenAI GPT-6-luna</span>
-            <span class="badge badge-info">SQLite 3</span>
+            <span class="badge badge-cyan">OpenAI GPT-4o-mini + SQL-RAG</span>
+            <span class="badge badge-info">SQLite 3 (892 Records)</span>
             <span class="badge badge-info">Chart.js 4</span>
             <span class="badge badge-info">Three.js r134</span>
-            <span class="badge badge-nominal">Python 3.12</span>
-            <span class="badge badge-nominal">Python-dotenv</span>
+            <span class="badge badge-nominal">ESP32 + MQ-2 Telemetry</span>
           </div>
         </div>
-        <div style="margin-top:24px;background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.15);border-radius:12px;padding:20px">
-          <div style="font-size:.72rem;color:rgba(255,107,53,.8);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">NASA Challenge</div>
-          <p style="font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.6">"Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data" — NASA International Space Apps Challenge 2026. Category: Spacecraft Fire Safety &amp; AI Analytics.</p>
+      </div>
+    </div>
+
+    <!-- ═══ MODULE 2 & 3: CROSS-INVESTIGATION FACILITY & DIAGNOSTIC SENSOR MATRIX ═══ -->
+    <div style="margin-top:64px;">
+      <div class="section-eyebrow">Cross-Investigation Comparison</div>
+      <h2 class="section-title-xl" style="font-size:2rem;margin-bottom:12px">Facility Hardware (<span class="text-gradient">CIR vs MSG vs Cygnus</span>) &amp; Diagnostic Sensor Matrix</h2>
+      <p style="font-size:0.95rem;color:rgba(255,255,255,0.6);max-width:900px;margin-bottom:20px;">
+        Comparison of how NASA microgravity combustion investigations share orbital rack hardware, vary fuel geometries and ambient diluents, and deploy specialized optical, radiometric, and aerosol diagnostics.
+      </p>
+      <div style="background:var(--bg-surface-2);border:1px solid rgba(0,245,255,.15);border-radius:16px;overflow-x:auto;">
+        <table class="sources-table" style="margin-top:0;">
+          <thead>
+            <tr>
+              <th>Orbital Facility &amp; Insert</th>
+              <th>Investigations</th>
+              <th>Fuel Geometry &amp; Phase</th>
+              <th>Controlled vs Varied Parameters</th>
+              <th>Diagnostic Sensors &amp; Instruments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:#00F5FF;">ISS CIR + ACME Insert</strong><br><span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">Combustion Integrated Rack</span></td>
+              <td><strong>BRE, CFI, CFI-G, CLD, E-FIELD, s-Flame</strong></td>
+              <td>Gaseous fuels (CH₄, C₂H₄, C₃H₈, n-C₄H₁₀) on flat porous plug (BRE), <strong>6.4 mm spherical porous burner (CFI/CFI-G)</strong>, or coflow nozzle</td>
+              <td>O₂ from 15% up to <strong>85% O₂ (CFI-G inside-out flame)</strong>; CO₂/N₂/He dilution; electric field up to <strong>+5 kV (E-FIELD partial-g mimic)</strong></td>
+              <td>Intensified CCD cameras, OH*/CH* chemiluminescence, IR/UV radiometers, planar laser-induced fluorescence, thermophoretic soot probes</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#2979FF;">ISS CIR + MDCA / MIST</strong><br><span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">Multi-user Droplet / Solid Insert</span></td>
+              <td><strong>FLEX, FLEX-2, CFI (Droplets), SOFIE</strong></td>
+              <td>Isolated spherical liquid droplets (1.5–5.0 mm: n-Heptane, Decane, Alcohols) &amp; solid PMMA rods/spheres/slabs (SOFIE)</td>
+              <td>O₂ (14–40%), Pressure (50–150 kPa), <strong>CO₂ (0–70% mole fraction) &amp; He (0–45% mole fraction)</strong> inert suppressants</td>
+              <td>Backlit strobe microscopy (droplet d(t) regression), narrow/wide-band IR radiometers, LLUV low-light cameras, gas mixing manifold</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#FF6B35;">ISS MSG + SPICE Flow Duct</strong><br><span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">Microgravity Science Glovebox</span></td>
+              <td><strong>SPICE, SLICE, BASS-I, BASS-II</strong></td>
+              <td>Laminar co-flow gas jets (SPICE/SLICE) &amp; solid polymer slabs, rods, and SIBAL cotton-fiberglass strips (BASS-I/II)</td>
+              <td>Forced convective fan velocity (<strong>0–55 cm/s</strong>), O₂ concentration (15–30%), sample thickness &amp; nozzle diameter</td>
+              <td>Hot-wire anemometer (flow velocity), color still &amp; high-speed video cameras, radiometers, thermocouple rakes</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#9B59B6;">ISS MSG + Aerosol Chamber</strong><br><span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">Microgravity Science Glovebox</span></td>
+              <td><strong>SAME, SAME-R, DAFT, DAFT-2</strong></td>
+              <td>Overheated wire insulation pyrolysis (Kapton, Teflon, Silicone, Cellulose) + <strong>Lunar/Martian regolith dust simulants (DAFT/DAFT-2)</strong></td>
+              <td>Pyrolysis heating power, aerosol aging/coagulation residence time, dust vs sub-micron smoke particle size distribution</td>
+              <td>3-channel PAMS laser aerosol monitor (M0/M1/M2 moments), ISS photoelectric &amp; ionization smoke detectors, thermal precipitator TEM</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#FF5252;">Cygnus Autonomous Vehicle</strong><br><span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">Post-ISS Undocking Orbital Flight</span></td>
+              <td><strong>SAFFIRE I–VI</strong></td>
+              <td>Full-scale <strong>1.0 m long</strong> SIBAL cotton-fiberglass cloth &amp; ribbed PMMA sheets</td>
+              <td>ISS 21% O₂ (101.3 kPa) vs <strong>Artemis Exploration 34% O₂ (56.5 kPa / 8.2 psi)</strong>; forced flow 3–30 cm/s in finite vehicle volume</td>
+              <td>Thermocouple arrays, radiometers, cabin O₂/CO₂/CO gas sensors, cabin pressure transducers, dual-view video</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#00E676;">NASA WSTF 1.0g Chamber</strong><br><span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">White Sands Test Facility</span></td>
+              <td><strong>NASA-STD-6001 Test 1 (1g Bound)</strong></td>
+              <td>30 cm vertical upward material strips (Nomex, Kevlar, Beta Cloth, PEEK, Velcro, Kapton)</td>
+              <td>Normal gravity (<strong>1.0g upper-bound buoyant plume</strong>) across 21%–40% O₂ and 56.5–101.3 kPa</td>
+              <td>Upward burn length &amp; propagation velocity timers, drip ignition pads, limiting oxygen index (LOI) analyzers</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ MODULE 4: 3-TIER FIRE SAFETY EQUIPMENT IMPACT & EARTH SPIN-OFFS ═══ -->
+    <div style="margin-top:64px;">
+      <div class="section-eyebrow">Spaceflight &amp; Terrestrial Impact</div>
+      <h2 class="section-title-xl" style="font-size:2rem;margin-bottom:12px">3-Tier Fire Safety Equipment Impact &amp; <span class="text-gradient">Earth Spin-Offs</span></h2>
+      <div class="three-col">
+        <div class="info-card" style="margin-bottom:0;border-color:rgba(0,245,255,0.2);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--neon-cyan);margin-bottom:8px;">TIER 1 // FIRE PREVENTION</div>
+          <h3>Material Screening &amp; Airflow Control</h3>
+          <p><strong>In Space:</strong> <code>BASS-II</code>, <code>SOFIE</code>, and <code>SAFFIRE</code> revealed that thin materials self-extinguish in 0g stagnant air when ventilation fans are shut off, yet burn at lower O₂ limits under 5–15 cm/s forced flow (and 0.16g Lunar buoyancy) than at 1.0g. This reshaped material certification for Artemis Lunar Bases, Pressurized Rovers, and EVA Spacesuits.<br><br><strong>On Earth:</strong> Drives ultra-high-LOI PBI/Nomex/Kevlar firefighter turnout gear, aircraft cabin fire barriers, and lightweight composite SCBA breathing cylinders.</p>
+        </div>
+        <div class="info-card" style="margin-bottom:0;border-color:rgba(155,89,182,0.3);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#9B59B6;margin-bottom:8px;">TIER 2 // FIRE DETECTION</div>
+          <h3>Smoke Aging &amp; Lunar Dust Immunity</h3>
+          <p><strong>In Space:</strong> <code>SAME</code> and <code>SAME-R</code> proved microgravity smoke particles grow into larger chain-like aggregates due to longer flame residence time. <code>DAFT</code> and <code>DAFT-2</code> used SAME hardware in ISS MSG to calibrate multi-moment optical scattering ratios so Lunar/Martian habitat and Rover smoke detectors distinguish coarse regolith dust (&gt;1 µm) from sub-micron pyrolysis smoke (&lt;0.5 µm).<br><br><strong>On Earth:</strong> Powers false-alarm-immune dual-wavelength residential, hospital, and industrial mine smoke detectors.</p>
+        </div>
+        <div class="info-card" style="margin-bottom:0;border-color:rgba(0,230,118,0.25);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#00E676;margin-bottom:8px;">TIER 3 // FIRE SUPPRESSION</div>
+          <h3>He / CO₂ Diluents &amp; Fine Water Mist</h3>
+          <p><strong>In Space:</strong> <code>FLEX</code> (<code>PSI-69</code>) quantified droplet quenching across 123 <strong>CO₂ (up to 70%)</strong> and 50 <strong>Helium (He, up to 45%)</strong> tests — proving Helium's 6× higher thermal diffusivity rapidly quenches both hot and 600–800 K cool flames while NASA's Portable Fine Water Mist (PFWM) extinguishers avoid cabin CO₂ toxicity.<br><br><strong>On Earth:</strong> Clean fine-water-mist and inert-gas suppression systems protecting server farms, museums, telecommunications hubs, and submarines.</p>
         </div>
       </div>
     </div>
@@ -131,11 +215,11 @@
         </div>
     </div>
     <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-<span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:rgba(255,255,255,0.3);">© 2026 NASA FIRE-X · NASA Space Apps Challenge 2026 · Data: NASA PSI · 879 Canonical Tests</span>
+<span style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:rgba(255,255,255,0.3);">© 2026 NASA FIRE-X · NASA Space Apps Challenge 2026 · Data: NASA PSI · 892 Canonical Tests</span>
     </div>
   </div>
 </footer>
 
-<script src="/static/js/nav.js?v=5.4"></script>
+<script src="/static/js/nav.js?v=6.0"></script>
 </body>
 </html>

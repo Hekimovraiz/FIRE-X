@@ -2,12 +2,12 @@ services:
   - type: web
     name: fire-x
     runtime: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && python scripts/pipeline.py
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
       - key: OPENAI_MODEL
-        value: gpt-6-luna
+        value: gpt-4o-mini
       - key: OPENAI_API_KEY
         sync: false

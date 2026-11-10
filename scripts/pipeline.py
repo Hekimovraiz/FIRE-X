@@ -62,6 +62,12 @@ def parse_flex():
         fuel = str(row.get("Fuel", "Unknown")).strip()
         o2_mole = clean_num(row.get("O initial ambient composition; mole fraction"))
         o2_pct = round(o2_mole * 100, 2) if o2_mole is not None else None
+        n2_mole = clean_num(row.get("N initial ambient composition; mole fraction"))
+        n2_pct = round(n2_mole * 100, 2) if n2_mole is not None else 0.0
+        co2_mole = clean_num(row.get("CO initial ambient composition; mole fraction"))
+        co2_pct = round(co2_mole * 100, 2) if co2_mole is not None else 0.0
+        he_mole = clean_num(row.get("He initial ambient composition; mole fraction"))
+        he_pct = round(he_mole * 100, 2) if he_mole is not None else 0.0
         pressure = clean_num(row.get("Ambient pressure; mmHg"))
         pressure_kpa = round(pressure * 0.133322, 2) if pressure else None
         burn_time = clean_num(row.get("Burn time; s"))
@@ -76,6 +82,15 @@ def parse_flex():
         elif ext_diam and ext_diam > 0:
             outcome = "Radiative Extinction"
 
+        diluent_parts = []
+        if co2_pct and co2_pct > 0:
+            diluent_parts.append(f"CO2={co2_pct}%")
+        if he_pct and he_pct > 0:
+            diluent_parts.append(f"He={he_pct}%")
+        if n2_pct and n2_pct > 0:
+            diluent_parts.append(f"N2={n2_pct}%")
+        diluent_str = f" [Ambient Diluents: {', '.join(diluent_parts)}]" if diluent_parts else ""
+
         rec = {
             "experiment_id": f"FLEX-{int(float(test_id_str)):03d}" if test_id_str.replace('.', '', 1).isdigit() else f"FLEX-{test_id_str}",
             "dataset_family": "FLEX",
@@ -83,7 +98,7 @@ def parse_flex():
             "original_test_id": test_id_str,
             "fuel_material": fuel,
             "material_category": "Liquid Droplet",
-            "sample_description": f"Droplet initial diameter: {init_diam} mm" if init_diam else "Spherical droplet",
+            "sample_description": (f"Droplet initial diameter: {init_diam} mm" if init_diam else "Spherical droplet") + diluent_str,
             "oxygen_pct": o2_pct,
             "pressure_mmhg": pressure,
             "pressure_kpa": pressure_kpa,
@@ -97,12 +112,13 @@ def parse_flex():
             "gravity_condition": "Microgravity (~0g)",
             "ignition_power_w": None,
             "ignition_time_s": None,
-            "co2_pct": None,
+            "co2_pct": co2_pct,
+            "he_pct": he_pct,
             "co_ppm": None,
             "test_date": str(row.get("Test Date", "")).strip(),
             "source_name": "NASA Physical Sciences Informatics (PSI)",
             "source_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69",
-            "notes": f"FLEX ID: {row.get('FLEX Identifier', '')}. Extinction diameter: {ext_diam} mm. Burning rate: {burn_rate} mm/s."
+            "notes": f"FLEX ID: {row.get('FLEX Identifier', '')}. Extinction diameter: {ext_diam} mm. Burning rate: {burn_rate} mm/s.{diluent_str}"
         }
         records.append(rec)
     return records
@@ -499,7 +515,7 @@ def parse_std6001():
             "burning_rate_mms": clean_num(row.get("burning_rate_mms")),
             "airflow_velocity_cms": clean_num(row.get("airflow_velocity_cms")),
             "flame_temp_k": clean_num(row.get("flame_temp_k")),
-            "gravity_condition": "Microgravity (~0g)",
+            "gravity_condition": "Normal Gravity (1.0g — WSTF Upward Screening Bound)",
             "ignition_power_w": clean_num(row.get("ignition_power_w")),
             "ignition_time_s": clean_num(row.get("ignition_time_s")),
             "co2_pct": clean_num(row.get("co2_pct")),
@@ -546,9 +562,9 @@ def parse_slice():
             "co2_pct": clean_num(row.get("co2_pct")),
             "co_ppm": clean_num(row.get("co_ppm")),
             "test_date": str(row.get("test_date")),
-            "source_name": str(row.get("source_name")),
+            "source_name": "NASA PSI / ISS MSG SLICE (Microgravity Science Glovebox)",
             "source_url": str(row.get("source_url")),
-            "notes": str(row.get("notes"))
+            "notes": str(row.get("notes")) + " [Facility: ISS MSG + SPICE Fan-Driven Flow Duct]"
         }
         records.append(rec)
     return records
@@ -631,6 +647,7 @@ def parse_standard_csv(filename):
             "ignition_power_w": clean_num(row.get("ignition_power_w")),
             "ignition_time_s": clean_num(row.get("ignition_time_s")),
             "co2_pct": clean_num(row.get("co2_pct")),
+            "he_pct": clean_num(row.get("he_pct", 0.0)),
             "co_ppm": clean_num(row.get("co_ppm")),
             "test_date": str(row.get("test_date", "2020-01-01")),
             "source_name": str(row.get("source_name", "NASA PSI / NTRS")),
@@ -641,9 +658,37 @@ def parse_standard_csv(filename):
     return records
 
 
+def infer_facility_hardware(fam: str, inv: str) -> str:
+    f = (fam or "").upper()
+    i = (inv or "").upper()
+    if "FLEX" in f:
+        return "ISS CIR (MDCA Droplet Chamber)"
+    if "ACME" in f or "BRE" in i or "CFI" in i or "CLD" in i or "E-FIELD" in i:
+        return "ISS CIR (ACME Gas Burner Insert)"
+    if "SOFIE" in f:
+        return "ISS CIR (MIST Solid Fuel Insert)"
+    if any(k in f for k in ["BASS", "SLICE", "SPICE"]):
+        return "ISS MSG (Microgravity Science Glovebox — SPICE Flow Duct)"
+    if any(k in f for k in ["SAME", "DAFT"]):
+        return "ISS MSG (Microgravity Science Glovebox — Aerosol Chamber)"
+    if "SAFFIRE" in f:
+        return "Cygnus Autonomous Spacecraft (Large-Scale Flow Duct)"
+    if "STD-6001" in f:
+        return "NASA WSTF 1.0g Upward Flammability Chamber (1g Upper Bound)"
+    if "DROP" in f or "ZERO-G" in f:
+        return "NASA GRC 2.2s / 5.18s Zero-Gravity Drop Tower"
+    if "PARTIAL-G" in f or "LUCI" in f or "FM2" in f:
+        return "NASA GRC Partial-g Bounding Model (0g PSI + 1g WSTF + E-FIELD)"
+    if "FLARE" in f:
+        return "ISS Kibo MSPR (SCEM Solid Combustion Module)"
+    if "MGM" in f:
+        return "Space Shuttle (STS-69/77/80) & ISS Smoldering Chamber"
+    return "ISS / Orbital Microgravity Combustion Facility"
+
+
 def main():
     print("=" * 60)
-    print("FIRE-X EXPANDED CANONICAL INGESTION PIPELINE (800+ TESTS)")
+    print("FIRE-X EXPANDED CANONICAL INGESTION PIPELINE (NASA PSI COMPLIANT)")
     print("=" * 60)
 
     all_records = []
@@ -668,7 +713,7 @@ def main():
     all_records.extend(parse_standard_csv("ACME_Extended_Research_Data.csv"))
     all_records.extend(parse_standard_csv("NASA_STD_6001_Extended_Materials.csv"))
 
-    # Auto-scan any newly added custom CSVs
+    # Auto-scan any newly added custom CSVs (including NASA_PSI_Complete_Suite_CFIG_SPICE_DAFT.csv)
     known_csvs = {
         "PSI-69_Experimental table_FLEX.csv", "FLEX2_Cool_Flame_Droplet_Data.csv",
         "PSI-25_Experimental table_BASS-II.csv", "BASS1_Initial_ISS_Data.csv",
@@ -681,10 +726,16 @@ def main():
     }
 
     if os.path.exists(DATA_DIR):
-        for fname in os.listdir(DATA_DIR):
+        for fname in sorted(os.listdir(DATA_DIR)):
             if fname.endswith(".csv") and fname not in known_csvs:
                 print(f"[+] Discovered new custom CSV: {fname}")
                 all_records.extend(parse_standard_csv(fname))
+
+    for r in all_records:
+        if r.get("he_pct") is None:
+            r["he_pct"] = 0.0
+        if not r.get("facility_hardware"):
+            r["facility_hardware"] = infer_facility_hardware(r.get("dataset_family", ""), r.get("investigation_id", ""))
 
     print(f"\n[+] Total Unified Records Ingested: {len(all_records)}")
 
@@ -715,10 +766,9 @@ def main():
         conn.close()
         print(f"[+] Database updated: {db_path} ({len(df)} rows)")
 
-    print("\n[SUCCESS] 800+ Pipeline completed successfully!")
+    print("\n[SUCCESS] Pipeline completed successfully!")
 
 
 if __name__ == "__main__":
     main()
 
-    main()
