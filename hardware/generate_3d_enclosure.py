@@ -331,9 +331,9 @@ if __name__ == "__main__":
     tm_bot.export(os.path.join(proto_dir, "firex-bottom-base.stl"))
     tm_asm.export(os.path.join(proto_dir, "firex-assembled.stl"))
 
-    tm_top.export(os.path.join(desk_dir, "FIREX_1_Ust_Govde_Korpus.stl"))
-    tm_bot.export(os.path.join(desk_dir, "FIREX_2_Alt_Baza_ESP32_Yuvasi.stl"))
-    tm_asm.export(os.path.join(desk_dir, "FIREX_Tam_Yigilmish_Korpus.stl"))
+    tm_top.export(os.path.join(proto_dir, "FIREX_1_Ust_Govde_Korpus.stl"))
+    tm_bot.export(os.path.join(proto_dir, "FIREX_2_Alt_Baza_ESP32_Yuvasi.stl"))
+    tm_asm.export(os.path.join(proto_dir, "FIREX_Tam_Yigilmish_Korpus.stl"))
 
     tm_top.export(os.path.join(hw_dir, "FIREX_1_Ust_Govde_Korpus.stl"))
     tm_bot.export(os.path.join(hw_dir, "FIREX_2_Alt_Baza_ESP32_Yuvasi.stl"))
