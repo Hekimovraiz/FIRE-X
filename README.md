@@ -20,7 +20,36 @@
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/>
 </p>
 
+### 👥 Team SpaceAz (NASA Space Apps Ganja 2026)
+| Member | Role | Engineering Focus |
+|:---|:---|:---|
+| **Murad Fatullazada** | **Team Leader & Hardware Lead** | Physical Testbed Edge Node, ESP-32 firmware, 3D CAD parametric enclosure |
+| **Sabir Məmmədzadə** | **Backend & Systems Architect** | FastAPI multi-page backend, NASA combustion physics engine, REST endpoints |
+| **Raiz Həkimov** | **Frontend & 3D WebGL Lead** | Three.js WebGL visualization, cybernetic UI/UX design system, bilingual engine |
+| **Şahvələd Vəlizadə** | **Cybersecurity & Safety Architect** | Anti-hallucination guardrails, citation verification pipeline, API rate limiting |
+| **Hüseyn Alırzayev** | **Data Scientist & Modeling Lead** | NASA PSI data ingestion, empirical flame spread models, Streamlit analytics panel |
+
 </div>
+
+---
+
+> ### ⚠️ OFFICIAL SYSTEM SAFETY DIRECTIVE (NASA-STD-3001)
+> **FIRE-X Decision Support System — Empirical Analytics & Reference Tool (Non-Autonomic).**  
+> Every prediction and AI recommendation is strictly citation-locked to peer-reviewed NASA PSI flight tests (`PSI-69 FLEX`, `PSI-25 BASS-II`, `PSI-98 SAFFIRE`). Real-time flight safety maneuvers must be confirmed via NASA Flight Operations Manuals (FOM) and Mission Control Center Houston (MCC-H).
+
+---
+
+## 🏆 Hackathon Scope & Fresh Deliverables (Nov 14–15)
+
+To address judging guidelines regarding hackathon development scope, here is our transparent architectural demarcation:
+
+| Layer | Pre-Hackathon Baseline | **Built Live During Hackathon (Nov 14–15)** |
+|:---|:---|:---|
+| **Microgravity Physics** | Basic gas sensor reading | **`backend/nasa_combustion_engine.py`**: Direct numerical modeling of $d^2$-law droplet burning, radiative extinction $d_e$, and low-flow solid flame spread ($S_f$ peak) from raw NASA PSI logs. |
+| **Combustion Analytics** | Static telemetry table | **`analytics_dashboard_v2.py`**: Dedicated Streamlit microgravity combustion analytics dashboard with interactive Plotly curve solvers. |
+| **Hardware Integration** | Standalone gas sniffer | **Physical Testbed Telemetry Bridge**: Hardware explicitly re-architected as an environmental boundary node feeding live pyrolysis/off-gas inputs into the microgravity engine. |
+| **AI Reliability** | General LLM assistant | **`backend/citation_rag_engine.py`**: Strict citation-locking enforcing direct NASA PSI run citations; ungrounded queries trigger immediate safety fallbacks. |
+| **3D Parametric CAD** | Concept sketches | Custom watertight 3D CAD enclosure with airflow baffles, acoustic ports, and interactive Three.js turntable controls. |
 
 ---
 
@@ -41,7 +70,12 @@ git clone https://github.com/Hekimovraiz/FIRE-X.git
 cd FIRE-X
 uv venv .venv -p 3.12 && source .venv/bin/activate
 uv pip install -r requirements.txt
+
+# Option 1: Launch FastAPI Multi-Page Web Platform
 uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+
+# Option 2: Launch Streamlit Microgravity Combustion Analytics Panel
+streamlit run analytics_dashboard_v2.py
 ```
 
 ---

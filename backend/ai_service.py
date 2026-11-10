@@ -12,6 +12,7 @@ from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
 
 from backend.data_service import get_db_connection, get_investigation_rankings
+from backend.citation_rag_engine import format_citation_locked_response, MANDATORY_SAFETY_DISCLAIMER
 
 # Load environment variables safely
 load_dotenv()
@@ -591,10 +592,11 @@ def query_ai_assistant(
                 temperature=0.1
             )
             response_text = response.choices[0].message.content
+            cited_text = format_citation_locked_response(response_text, latest_user_message, language=language)
             return {
                 "success": True,
-                "response": response_text,
-                "provider": f"OpenAI ({OPENAI_MODEL}) + SQLite RAG",
+                "response": cited_text,
+                "provider": f"OpenAI ({OPENAI_MODEL}) + Citation-Locked SQL-RAG",
                 "model": OPENAI_MODEL,
                 "sql_rag_matches": rag_context["summary"]["cnt"] if rag_context else 0
             }
@@ -608,11 +610,12 @@ def query_ai_assistant(
         stats_summary=stats_summary,
         rag_context=rag_context
     )
+    cited_fallback = format_citation_locked_response(fallback_response, latest_user_message, language=language)
 
     return {
         "success": True,
-        "response": fallback_response,
-        "provider": "FIRE-X Live SQLite RAG Engine",
+        "response": cited_fallback,
+        "provider": "FIRE-X Citation-Locked SQLite RAG Engine",
         "model": "NASA-PSI-SQL-RAG-v2.2",
         "sql_rag_matches": rag_context["summary"]["cnt"] if rag_context else 0
     }

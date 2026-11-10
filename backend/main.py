@@ -17,6 +17,7 @@ from backend.data_service import (
     compare_experiments, calculate_mission_scenario, get_investigation_rankings
 )
 from backend.ai_service import query_ai_assistant
+from backend.nasa_combustion_engine import combustion_engine, MATERIAL_PROPERTIES
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('firex_api')
@@ -65,11 +66,93 @@ class SensorDataPayload(BaseModel):
     estimated_o2_pct: Optional[float] = 20.9
     simulated: Optional[bool] = False
 
+class SolidSpreadRequest(BaseModel):
+    material: str = "PMMA (Cast Acrylic)"
+    flow_velocity_cms: float = 8.0
+    oxygen_pct: float = 21.0
+    pressure_kpa: float = 101.3
+
+class DropletExtinctionRequest(BaseModel):
+    fuel: str = "n-Heptane Droplet"
+    d0_mm: float = 2.5
+    oxygen_pct: float = 21.0
+    pressure_kpa: float = 101.3
+    co2_pct: float = 0.0
+    he_pct: float = 0.0
+
+class TelemetryNodeBridgeRequest(BaseModel):
+    gas_ppm: float = 45.0
+    smoke_density_pct: float = 2.5
+    raw_adc: int = 180
+    nominal_o2_pct: float = 21.0
+    nominal_pressure_kpa: float = 101.3
+    target_material: str = "PMMA (Cast Acrylic)"
+
 
 # API Routes
 @app.get('/api/health')
 def health_check():
-    return {'status': 'healthy', 'service': 'FIRE-X Space Science API', 'version': '2.2.0', 'canonical_records': 892}
+    return {
+        'status': 'healthy',
+        'service': 'FIRE-X Space Science API',
+        'version': '2.2.0',
+        'canonical_records': 892,
+        'disclaimer': 'FIRE-X Decision Support System — Empirical Analytics & Reference Tool (Non-Autonomic)'
+    }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# NASA MICROGRAVITY COMBUSTION ENGINE API (PSI-69, PSI-25, PSI-98)
+# ─────────────────────────────────────────────────────────────────────────────
+@app.get('/api/combustion/summary')
+def get_combustion_engine_summary():
+    try:
+        return {'success': True, 'data': combustion_engine.get_dataset_summary()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post('/api/combustion/predict-solid-flame-spread')
+def predict_solid_flame_spread_api(req: SolidSpreadRequest):
+    try:
+        result = combustion_engine.predict_solid_flame_spread(
+            material=req.material,
+            flow_velocity_cms=req.flow_velocity_cms,
+            oxygen_pct=req.oxygen_pct,
+            pressure_kpa=req.pressure_kpa
+        )
+        return {'success': True, 'data': result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post('/api/combustion/predict-droplet-extinction')
+def predict_droplet_extinction_api(req: DropletExtinctionRequest):
+    try:
+        result = combustion_engine.predict_droplet_combustion(
+            fuel=req.fuel,
+            d0_mm=req.d0_mm,
+            oxygen_pct=req.oxygen_pct,
+            pressure_kpa=req.pressure_kpa,
+            co2_pct=req.co2_pct,
+            he_pct=req.he_pct
+        )
+        return {'success': True, 'data': result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post('/api/combustion/telemetry-node-bridge')
+def telemetry_node_bridge_api(req: TelemetryNodeBridgeRequest):
+    try:
+        result = combustion_engine.process_physical_telemetry_node(
+            gas_ppm=req.gas_ppm,
+            smoke_density_pct=req.smoke_density_pct,
+            raw_adc=req.raw_adc,
+            nominal_o2_pct=req.nominal_o2_pct,
+            nominal_pressure_kpa=req.nominal_pressure_kpa,
+            target_material=req.target_material
+        )
+        return {'success': True, 'data': result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get('/api/stats')
 def get_platform_stats():
@@ -163,7 +246,9 @@ LATEST_SENSOR_STATE = {
     "connected": False,
     "last_seen_epoch": 0,
     "device_id": "ESP32-FIREX-01",
-    "device_name": "ESP32 NodeMCU + MQ-2 Combustion Sniffer",
+    "device_name": "FIRE-X Ground Physical Testbed — Atmospheric Boundary Telemetry Node (ESP-32 + SnO₂ Electrochemical Bridge)",
+    "hardware_role": "Local Physical Testbed Environment Telemetry Node",
+    "microgravity_engine_link": "NASA PSI-25 / PSI-69 / PSI-98 Active Telemetry Ingestion Bridge",
     "status": "SEARCHING", # "SEARCHING", "CONNECTING", "ONLINE", "STANDBY", "HAZARD_ALERT"
     "status_az": "Cihaz axtarılır... (ESP32 gözlənilir)",
     "status_en": "Searching for IoT Device... (Awaiting ESP32)",
@@ -275,6 +360,16 @@ def receive_iot_sensor_data(payload: SensorDataPayload):
     LATEST_SENSOR_STATE["advisory_en"] = adv_en
     LATEST_SENSOR_STATE["telemetry_packets_received"] += 1
 
+    # Map physical testbed telemetry into NASA microgravity combustion physics
+    micro_bridge = combustion_engine.process_physical_telemetry_node(
+        gas_ppm=payload.gas_ppm,
+        smoke_density_pct=payload.smoke_density_pct,
+        raw_adc=payload.raw_smoke_adc,
+        nominal_o2_pct=payload.estimated_o2_pct or 21.0,
+        nominal_pressure_kpa=101.3
+    )
+    LATEST_SENSOR_STATE["microgravity_combustion_bridge"] = micro_bridge
+
     # Keep rolling 30 data points
     history = LATEST_SENSOR_STATE.get("history", [])
     history.append({
@@ -291,9 +386,11 @@ def receive_iot_sensor_data(payload: SensorDataPayload):
         "success": True,
         "message": "Telemetry processed successfully",
         "device_id": payload.device_id,
+        "hardware_role": "Local Physical Testbed Atmospheric Telemetry Node",
         "fire_hazard_index": fhi,
         "hazard_level": lvl,
         "is_simulated": is_sim,
+        "microgravity_physics": micro_bridge,
         "data": LATEST_SENSOR_STATE
     }
 
