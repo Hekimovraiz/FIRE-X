@@ -187,11 +187,19 @@ def build_enclosure_parts():
 
     outer = make_outer_body(L, W, H)
 
-    # Main inner hollow cavity (from Z = 2.8 mm floor up to Z = 43.2 mm ceiling)
-    cavity = make_chamfered_octagon_prism(
-        L - 2 * wall, W - 2 * wall, H - 2 * wall,
+    # Main inner hollow cavity (from Z = 2.8 mm floor up to Z = 43.2 mm ceiling):
+    # Lower/mid chamber (Z = 2.8 mm to 39.0 mm): 122.4 × 52.4 mm
+    # Upper chamber chamfers inward matching the outer roof chamfer (Z = 39.0 to 43.2 mm)
+    # to guarantee uniform >= 2.8 mm wall thickness without any thin slits or gap breakthrough!
+    cav_mid = make_chamfered_octagon_prism(
+        L - 2 * wall, W - 2 * wall, 39.0 - wall,
         corner_x=13.5, corner_y=11.5, z0=wall
     )
+    cav_top = make_chamfered_octagon_prism(
+        L - 10.0 - 2 * wall, W - 10.0 - 2 * wall, 1.0,
+        corner_x=10.0, corner_y=8.0, z0=H - wall - 1.0
+    )
+    cavity = (cav_mid + cav_top).hull()
 
     shell = outer - cavity
 
