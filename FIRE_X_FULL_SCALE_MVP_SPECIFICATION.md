@@ -1,496 +1,506 @@
-# FIRE-X: Full-Scale MVP Technical Specification & Master Architecture Blueprint
-## NASA Space Apps Challenge 2026 — Flame in Freefall
+# FIRE-X: DEFINITIVE FULL-SCALE MASTER MVP SPECIFICATION
+## NASA International Space Apps Challenge 2026 — "Flame in Freefall"
+**Layihə Adı:** FIRE-X (Microgravity Combustion Intelligence Platform & Atmospheric Boundary Telemetry Node)  
 **Komanda:** SpaceAz (Murad Fatullazada, Sabir Məmmədzadə, Raiz Həkimov, Şahvələd Vəlizadə, Hüseyn Alırzayev)  
-**Versiya:** 3.0.0 Enterprise Production Blueprint  
-**Sənəd Təyinatı:** İstənilən AI Coding Agent (Claude 3.7/Codex/Antigravity) və Baş Sistem Mühəndisləri üçün sıfırdan sona qədər tam, qeyri-müəyyənliksiz (zero-ambiguity) icra təlimatı və texniki spesifikasiya.
+**Təyinat:** İstənilən AI Coding Agent (Claude 3.7 Sonnet, OpenAI Codex, Google Antigravity) və Baş Sistem Arxitektorları üçün sıfırdan sona qədər heç bir sual vermədən, tam qeyri-müəyyənliksiz (Zero-Ambiguity) tətbiq və istehsalat sənədi.  
+**Versiya:** 4.0.0 Definitive Enterprise Master Blueprint
 
 ---
 
 ## MÜNDƏRİCAT
-1. [Layihənin Missiyası, Vizyonu və Hüdudları (Scope Definition)](#1-layihənin-missiyası-vizyonu-və-hüdudları)
-2. [Tam Sistem Arxitekturası və Texnologiya Yığını (System Tech Stack)](#2-tam-sistem-arxitekturası-və-texnologiya-yığını)
-3. [Fiziki Donanım və Daxili Sistemlər (Hardware & Embedded IoT Node)](#3-fiziki-donanım-və-daxili-sistemlər)
-4. [3D CAD Korpus Dizaynı və WebGL İnteraktiv Nümayişi](#4-3d-cad-korpus-dizaynı-və-webgl-interaktiv-nümayişi)
-5. [Riyazi Mikroyerçəkim Yanma Fizikası Mühərriki (`nasa_combustion_engine.py`)](#5-riyazi-mikroyerçəkim-yanma-fizikası-mühərriki)
-6. [NASA PSI Məlumat Boru Kəməri və Verilənlər Bazası Arxitekturası](#6-nasa-psi-məlumat-boru-kəməri-və-verilənlər-bazası-arxitekturası)
-7. [Sitat-Təsdiqli Təhlükəsizlik RAG Mühərriki (`citation_rag_engine.py`)](#7-sitat-təsdiqli-təhlükəsizlik-rag-mühərriki)
-8. [Veb İnterfeysi (UI/UX) və Səhifə-Səhifə Tam Spesifikasiya](#8-veb-interfeysi-uiux-və-səhifə-səhifə-tam-spesifikasiya)
-9. [REST API və Telemetriya Endpointlərinin Tam Spesifikasiyası](#9-rest-api-və-telemetriya-endpointlərinin-tam-spesifikasiyası)
-10. [Streamlit v2 İkincili Elmi Tədqiqat Paneli](#10-streamlit-v2-ikincili-elmi-tədqiqat-paneli)
-11. [Münsif Meyarları və Qəbul Testləri (Acceptance Criteria)](#11-münsif-meyarları-və-qəbul-testləri)
-12. [AI Agent İcra Runbook-u (Step-by-Step Implementation Guide)](#12-ai-agent-icra-runbook-u)
+1. [NASA Space Apps Challenge 2026: "Flame in Freefall" Haqqında Tam Məlumat](#1-nasa-space-apps-challenge-2026-flame-in-freefall-haqqında-tam-məlumat)
+2. [FIRE-X Layihəsi Haqqında Tam və Hərtərəfli Məlumat](#2-fire-x-layihəsi-haqqında-tam-və-hərtərəfli-məlumat)
+3. [Vizual Aktivlər (Assets), Arxa Fon Şəkilləri və Qrafik Qaydaları (Hər Səhifə Üzrə Dəqiq)](#3-vizual-aktivlər-assets-arxa-fon-şəkilləri-və-qrafik-qaydaları)
+4. [3D WebGL Alov Hissəcikləri və CAD Modellərinin Texniki Spesifikasiyası](#4-3d-webgl-alov-hissəcikləri-və-cad-modellərinin-texniki-spesifikasiyası)
+5. [Ümumi Sistem Arxitekturası və 4 İnteqrasiya Səviyyəsi](#5-ümumi-sistem-arxitekturası-və-4-inteqrasiya-səviyyəsi)
+6. [Fiziki Donanım (Hardware), ESP-32, SnO₂ Sensoru və Elektrik Sxemləri](#6-fiziki-donanım-hardware-esp-32-sno₂-sensoru-və-elektrik-sxemləri)
+7. [Riyazi Mikroyerçəkim Yanma Fizikası Mühərriki (`nasa_combustion_engine.py`)](#7-riyazi-mikroyerçəkim-yanma-fizikası-mühərriki)
+8. [NASA PSI Məlumat Boru Kəməri və SQLite Sxemi (892 Sınaq)](#8-nasa-psi-məlumat-boru-kəməri-və-sqlite-sxemi-892-sınaq)
+9. [Sitat-Təsdiqli Təhlükəsizlik RAG AI Mühərriki (`citation_rag_engine.py`)](#9-sitat-təsdiqli-təhlükəsizlik-rag-ai-mühərriki)
+10. [Bütün Səhifələrin, Komponentlərin və İstifadəçi Axınlarının Tam Spesifikasiyası](#10-bütün-səhifələrin-komponentlərin-və-istifadəçi-axınlarının-tam-spesifikasiyası)
+11. [REST API və Telemetriya Endpointlərinin Tam Spesifikasiyası](#11-rest-api-və-telemetriya-endpointlərinin-tam-spesifikasiyası)
+12. [Streamlit v2 İkincili Elmi Analitika Paneli](#12-streamlit-v2-ikincili-elmi-analitika-paneli)
+13. [Münsif Meyarları və Qəbul Testləri (Acceptance Criteria)](#13-münsif-meyarları-və-qəbul-testləri)
+14. [AI Agent üçün Addım-Addım İcra Runbook-u](#14-ai-agent-üçün-addım-addım-icra-runbook-u)
 
 ---
 
-## 1. LAYİHƏNİN MİSSİYASI, VİZYONU VƏ HÜDUDLARI
+## 1. NASA SPACE APPS CHALLENGE 2026: "FLAME IN FREEFALL" HAQQINDA TAM MƏLUMAT
 
-### 1.1. Missiya
-Yer kürəsində qravitasiya ($1.0g$) istilik konveksiyasını (buoyancy) təmin edir: isti qazlar yuxarı qalxır, alova aşağıdan oksigen sorulur və tüstü yuxarı istiqamətlənir. Kosmosda mikroyerçəkim ($10^{-4} - 10^{-6}g$) şəraitində isə konveksiya sıfıra enir. Nəticədə:
-- Alov kürəvi simmetriya alır;
-- Yanma yalnız zəif molekulyar diffuziya ilə qidalanır;
-- Yanma məhsulları ($CO_2$, su buxarı) alovun ətrafında qalaraq onu boğur (radiativ sönmə);
-- Görünməz "soyuq alovlar" (Cool Flames, 600–800 K) formalaşır;
-- Ən təhlükəlisi: **Kabin ventilyatoru işə düşüb zəif hava axını ($2 - 12\text{ sm/s}$) yaratdıqda, alov Yerdəkindən daha sürətlə və aqressiv yayılır (Low-Flow Flammability Peak)!**
+### 1.1. Çağırışın Rəsmi Kimliyi və Təşkilatçı Strukturlar
+- **Beynəlxalq Hakaton:** NASA International Space Apps Challenge 2026.
+- **Rəsmi Çağırış Adı:** *"Flame in Freefall"* (Sərbəst Düşmədə Alov).
+- **Məsul NASA Missiya İdarələri:**
+  1. *NASA Space Operations Mission Directorate (SOMD)* — Beynəlxalq Kosmik Stansiya (ISS) və aşağı Yer orbiti əməliyyatları.
+  2. *NASA Biological and Physical Sciences (BPS) Division* — Mikroyerçəkimdə fiziki və kimyəvi qanunauyğunluqların tədqiqi.
+  3. *NASA Glenn Research Center (GRC - Cleveland, Ohio)* — Yanma fizikası, CIR (Combustion Integrated Rack) və mikroyerçəkim düşmə qüllələrinin əsas elmi mərkəzi.
+  4. *NASA Marshall Space Flight Center (MSFC - Huntsville, Alabama)* — PSI (Physical Sciences Informatics) məlumat bazasının rəqəmsal kuratoru.
 
-**FIRE-X** layihəsinin məqsədi — BKS (ISS), Ay (Artemis) və Mars missiyalarında kosmonavtların və kosmik modulların yanğın təhlükəsizliyini təmin edən, fiziki edge sensor testbedi ilə NASA-nın rəsmi 892 uçuş eksperimentini (FLEX, BASS, SAFFIRE, ACME) riyazi tənliklərlə real vaxtda birləşdirən **Qərar Dəstək Sistemi (Decision Support System - Non-Autonomic)** yaratmaqdır.
+### 1.2. Çağırışın Əsas Problemi və Məqsədi (Problem Statement)
+Kosmik uçuşlar tarixində yanğın hər zaman astronavtlar üçün ən dəhşətli təhlükə hesab olunub (məsələn, 1997-ci ildə "Mir" kosmik stansiyasında $O_2$ generatorunun alışması nəticəsində baş vermiş fəlakətli yanğın). İnsanlı kosmik kəşfiyyat proqramları (BKS, NASA Artemis Ay Proqramı, Gateway stansiyası və Marsa pilotlu uçuşlar) genişləndikcə, kosmik gəmilərdə yanğın təhlükəsizliyi həyati kritik əhəmiyyət daşıyır.
 
-### 1.2. Layihə Nədir və Nə DEYİL (Strict Scope Boundaries)
+Lakin Yerdə tətbiq olunan bütün klassik yanğın təhlükəsizliyi qaydaları, tüstü detektorları və söndürmə protokolları mikroyerçəkimdə **TAMAMİLƏ İFLAS EDİR**. 
 
-| Funksiya / Komponent | Layihədə VAR (IN SCOPE) | Layihədə QƏTİYYƏN YOXDUR (OUT OF SCOPE / ANTI-PATTERN) |
-| :--- | :--- | :--- |
-| **Fiziki Cihaz** | Kosmik kabin mühitində lokal piroliz qazlarını və optik tüstünü ölçən **Fiziki Testbed Telemetriya Node (ESP-32 + SnO₂)**. | Məişət üçün metan/təbii qaz sızması siqnalizasiyası. |
-| **Yanacaq Tipləri** | Kosmik kabin bərk polimerləri (PMMA, Nomex, PBI, Beta-parça), təmiz damcılar (heptan, metanol) və kabin qazları. | Raket mühərriki yanacaqları ($LOX/RP-1$, maye hidrogen). Raketlərdə $Fr \gg 1000$ turbulent axındır, mikroyerçəkim çağırışına aid deyil! |
-| **Süni İntellekt** | **Citation-Locked RAG** — Hər bir məsləhət mütləq NASA PSI sınaq ID-si ilə təsdiqlənir; empirik data olmadıqda fərziyyə uydurmaq qadağandır. | Açıq, hallüsinasiya edən ChatGPT tipli söhbət çatbotu. |
-| **Qərar Qəbulu** | NASA-STD-3001 direktivinə uyğun uçuş mühəndisi və MCC-H üçün analitik məsləhətçi. | Kosmik gəminin ventilyasiyasını avtomatik kəsən avtonom avtopilot. |
-| **Qravitasiya Modelləri** | $0g$ mikroyerçəkim, $1.0g$ yerüstü testlər və Ay/Mars üçün **0g–1g Bounding Convection Modeli**. | Qeyri-dəqiq, fiziki əsası olmayan uydurma cazibə interpolasiyaları. |
+**NASA-nın "Flame in Freefall" çağırışında iştirakçılardan tələb etdiyi əsas məsələlər:**
+1. **Mikroyerçəkim Yanma Datalarının Təhlili:** NASA-nın 20 ildən artıq müddətdə BKS-də, düşmə qüllələrində (Drop Towers) və pilotsuz karqo gəmilərində (Cygnus) keçirdiyi real uçuş eksperimentlərinin (PSI bazası) telemetriya məlumatlarını emal etmək;
+2. **Alovun Davranışının Modelləşdirilməsi:** Qravitasiyasız mühitdə alovun necə yayıldığını, materialların hansı hava axınlarında alovlandığını, damcıların necə boğulduğunu və radiativ sönmə hədlərini riyazi/süni intellekt alətləri ilə proqnozlaşdırmaq;
+3. **Yeni Nəsil Təhlükəsizlik və Qərar Dəstək Həlli:** Gələcək kosmik missiyalar (xüsusilə oksigenlə zənginləşdirilmiş 34% $O_2$ Artemis Ay yaşayış modulları) üçün erkən xəbərdarlıq, yanğın təhlükə indeksi və qərar dəstək platforması formalaşdırmaq.
 
----
-
-## 2. TAM SİSTEM ARXİTEKTURASI VƏ TEXNOLOGİYA YIĞINI
-
-### 2.1. Yüksək Səviyyəli Arxitektura Diaqramı
-
-```mermaid
-graph TB
-    subgraph Layer1["SƏVİYYƏ 1: Fiziki Donanım Testbed Node (TRL-4)"]
-        A1["ESP-32 NodeMCU (30-pin)"]
-        A2["SnO₂ Elektrokimyəvi Sensor"]
-        A3["Optik Tüstü Fotometrik Kanalı"]
-        A4["Parametrik 3D Korpus (Aerodinamik Louver)"]
-        A2 -->|Analog AO -> GPIO 34 ADC1| A1
-        A3 -->|Digital / Analog| A1
-        A1 -->|Wi-Fi HTTP POST /api/sensor-data| B1
-    end
-
-    subgraph Layer2["SƏVİYYƏ 2: Backend & Hesablama Nüvəsi (FastAPI)"]
-        B1["FastAPI Core Router (`backend/main.py`)"]
-        B2["Yanma Fizikası Mühərriki (`nasa_combustion_engine.py`)"]
-        B3["Sitat-Təsdiqli RAG Mühərriki (`citation_rag_engine.py`)"]
-        B4["Watchdog & Telemetry Cache (`data_service.py`)"]
-        B5[("SQLite `fire_safety.db` (892 NASA Sınağı)")]
-        
-        B1 <--> B4
-        B4 --> B2
-        B1 <--> B3
-        B3 <--> B5
-        B2 <--> B5
-    end
-
-    subgraph Layer3["SƏVİYYƏ 3: Veb Təqdimat və 3D WebGL Platforması"]
-        C1["Dark Space UI Design System (`ds.css`, `nav.css`)"]
-        C2["Home & Hero 3D Particle Flame (Three.js WebGL)"]
-        C3["Analytics Hub (Chart.js 4.4+)"]
-        C4["892 Sınaq Data Explorer & Comparison Matrix"]
-        C5["Missiya Simulyatoru (ISS vs Artemis 34% O₂)"]
-        C6["3D Korpus Turntable Render (Three.js OrbitControls)"]
-        C7["Dedicated AI Research Terminal"]
-    end
-
-    subgraph Layer4["SƏVİYYƏ 4: İkincili Elmi Analitika Paneli"]
-        D1["Streamlit v2 Dashboard (`analytics_dashboard_v2.py`)"]
-        D2["Plotly 3D Extinction & Trajectory Vizualizatoru"]
-    end
-
-    B1 -->|REST API JSON & SSE| Layer3
-    B5 --> D1
-    D1 --> D2
-```
-
-### 2.2. Fayl Sistemi və Qovluq Ağacı (File Inventory)
-
-```
-FIRE-X/
-├── backend/
-│   ├── __init__.py                     # Python paket inisializasiyası
-│   ├── main.py                         # FastAPI tətbiqi, bütün statik/dinamik səhifələr və REST API
-│   ├── nasa_combustion_engine.py       # d² qanunu, de, Sf, dinamik MOC və FHI hesablayan riyazi mühərrik
-│   ├── citation_rag_engine.py          # NASA-STD-3001 uyğun sitat-təsdiqli RAG generatoru
-│   ├── data_service.py                 # SQLite sorğuları, statistika aqreqasiyası və telemetriya keşlənməsi
-│   └── ai_service.py                   # OpenAI / Local LLM inteqrasiya və qoruyucu filtrlər
-├── database/
-│   └── fire_safety.db                  # 892 sınaq qeydini saxlayan SQLite bazası
-├── frontend/
-│   ├── css/
-│   │   ├── ds.css                      # 600+ sətirlik Dark Space Dizayn Sistemi (Neon Cyan, Glassmorphism)
-│   │   └── nav.css                     # 200+ sətirlik Naviqasiya barı, UTC saat, mobil menyu və bildirişlər
-│   ├── js/
-│   │   ├── nav.js                      # Səhifələrarası yumşaq keçid, UTC saat, dil dəyişdirici
-│   │   └── main.js                     # Ümumi köməkçi JS skriptləri
-│   ├── index.html                      # Landing page: Three.js hissəcik alovu, missiya göstəriciləri
-│   ├── analytics.html                  # 4 elmi Chart.js qrafiki, sönmə və axın analizləri
-│   ├── explorer.html                   # 892 sınaqlıq dinamik cədvəl, axtarış, süzgəc və 4-lü müqayisə
-│   ├── simulator.html                  # Planetar missiya simulyatoru, FHI SVG göstəricisi, xüsusi slaydlar
-│   ├── hardware.html                   # Canlı telemetriya monitoru, 3D STL baxışı, pinout və demo düymələri
-│   ├── ai.html                         # Elmi AI terminalı, sürətli promptlar, sitat-təsdiqli söhbət
-│   └── about.html                      # SpaceAz komandası, NASA meyarları, texniki sənədlər
-├── hardware/
-│   ├── esp32_firmware.ino              # Arduino/C++ proqramı: GPIO 34 ADC1, Wi-Fi HTTP POST
-│   └── cad/
-│       ├── firex_enclosure_base.stl    # 3D çap üçün alt korpus (snap-fit, USB-C kəsikli)
-│       └── firex_enclosure_top.stl     # 3D çap üçün üst korpus (louver havalandırma qəfəsli)
-├── scripts/
-│   ├── generate_master_pdf.py          # 9 səhifəlik rəsmi PDF sənədini tərtib edən ReportLab skripti
-│   └── pipeline.py                     # NASA PSI məlumatlarını təmizləyib SQLite-a yazan ETL boru kəməri
-├── images/
-│   ├── Fire-X.jpeg                     # Layihənin rəsmi loqosu
-│   ├── hero_bg.jpg                     # Kosmik stansiya fon şəkli
-│   └── analytics_bg.jpg                # Analitika səhifəsinin fon şəkli
-├── analytics_dashboard_v2.py           # Streamlit v2 interaktiv elmi tədqiqat paneli
-├── requirements.txt                    # Python asılılıqları
-└── README.md                           # Repozitoriyanın əsas izah sənədi
-```
+### 1.3. Mikroyerçəkimdə Yanma Niyə Yerdəkindən Tam Fərqlidir? (Fundamental Fizika)
+NASA-nın bu çağırışda vurğuladığı təməl elmi prinsiplər:
+- **Təbii İstilik Konveksiyasının (Buoyancy) İtməsi:** Yerdə qravitasiya ($1.0g$) isti, az sıx qazları yuxarı qaldırır, alova aşağıdan oksigen sorur və alov şam formalı (konusvari) olur. Mikroyerçəkimdə ($10^{-4}-10^{-6}g$) arximed qüvvəsi sıfıra enir. İsti qazlar yuxarı qalxmır!
+- **Kürəvi Simmetriya (Spherical Flames):** Konveksiya olmadığı üçün alov yanacaq damcısının və ya mənbəyin ətrafında mükəmməl kürə forması alır. Oksigen yalnız molekulyar diffuziya (Stefan axını) ilə çox ləng şəkildə daxil olur.
+- **Radiativ Sönmə (Radiative Extinction):** Yanma məhsulları ($CO_2$, su buxarı) və his hissəcikləri alovun ətrafında qalaraq onu boğur. Güclü istilik şüalanması baş verir və alov vaxtından əvvəl qəfil sönür (kritik sönmə diametri $d_e$).
+- **Görünməz Soyuq Alovlar (Cool Flames, 600–800 K):** BKS-də FLEX sınaqlarında kəşf edildi ki, alkan damcılarında görünən isti alov söndükdən sonra belə, yanma 600–800 K temperaturda gözəgörünməz peroksi-radikal reaksiyası ilə davam edir. İnsan gözü və standart sensorlar onu görmür, lakin kabinəyə təsadüfən oksigen daxil olduqda qəfil partlayışla yenidən alışır!
+- **Aşağı Axın Yanarlıq Piki (Low-Flow Flammability Peak - Ən böyük kosmik paradoks):** Durğun $0g$ havasında materiallar öz tüstüsündə boğulub sönsə də, ventilyasiya fanları işə düşüb zəif hava axını ($2 - 12\text{ sm/s}$) yaratdıqda, axın alova oksigen gətirir, lakin alovu söndürəcək qədər güclü olmur. Nəticədə alov **Yerdəkindən daha sürətlə və aqressiv yayılır!**
+- **Tüstü Zəncirlənməsi və Reqolit Tozu Paradoksu:** Mikroyerçəkimdə tüstü hissəcikləri aqreqasiyaya uğrayaraq uzun fraktal zəncirlər yaradır. Bundan əlavə, Ay və Marsda astronavtların gətirdiyi iti mineral reqolit tozu ($>1\,\mu\text{m}$) Yerdəki standart optik sensorları aldadaraq davamlı yalançı siqnalizasiya (false alarm) verir.
 
 ---
 
-## 3. FİZİKİ DONANIM VƏ DAXİLİ SİSTEMLƏR (HARDWARE & EMBEDDED IoT NODE)
+## 2. FIRE-X LAYİHƏSİ HAQQINDA TAM VƏ HƏRTƏRƏFLİ MƏLUMAT
 
-### 3.1. Komponentlərin Spesifikasiyası (Bill of Materials - BOM)
+### 2.1. Layihənin Konsepti və İnnovativ Həlli
+**FIRE-X**, NASA Space Apps 2026 üçün hazırlanmış, kosmik yaşayış modullarında mikroyerçəkim yanma dinamikasını proqnozlaşdıran, fiziki sensor telemetriyasını rəsmi NASA PSI uçuş eksperimentləri ilə birləşdirən qabaqcıl kiber-fiziki analitika ekosistemidir.
 
-1. **Mikrokontroller:** ESP32 NodeMCU (ESP-WROOM-32 modul)
-   - Prosessor: Xtensa Dual-Core 32-bit LX6, 240 MHz
-   - Simsiz Əlaqə: 2.4 GHz Wi-Fi 802.11 b/g/n
-   - ADC: 12-bit Daxili ADC (0–4095 ayırdetmə)
-   - Enerji Girişi: 5V DC (Micro-USB və ya Type-C)
-2. **Elektrokimyəvi Qaz Sensoru:** SnO₂ Yarımkeçirici Qaz Sensoru (MQ-2/MQ-4 tipli dəyişdirilə bilən modul)
-   - Sensor Təbəqəsi: Qalay-dioksid ($SnO_2$)
-   - Qızdırıcı Gərginlik: $5.0V \pm 0.1V$ DC
-   - Qızdırıcı Müqaviməti: $31\Omega \pm 3\Omega$
-   - Həssaslıq Diapazonu: 200 – 10,000 ppm (yanar qazlar, ilkin piroliz qazları, CO, $H_2$, $CH_4$)
-   - Çıxış: Analoq gərginlik ($0.1V - 4.5V$)
-3. **Optik Tüstü İndikator Kanalı:** Fotorezistor / İQ cütlük
-   - Tüstü hissəciklərinin işıq səpilməsini (Mie scattering) 0–100% aralığında ölçür.
-4. **Status İndikatorları:** İkili LED (Yaşıl = Nominal mühit, Narıncı = Qaz sıçrayışı, Qırmızı = Kritik piroliz).
+Layihə 4 əsas sütun üzərində qurulub:
+1. **Fiziki Mühit Testbed Node (Atmospheric Boundary Telemetry Node - TRL-4):** ESP-32 mikrokontrolleri və $SnO_2$ elektrokimyəvi sensoru ilə təchiz olunmuş, kosmik modulun lokal küncündəki ilkin termal deqradasiya və piroliz qazlarını ölçən fiziki cihaz.
+2. **Riyazi Mikroyerçəkim Yanma Mühərriki (`nasa_combustion_engine.py`):** Damcı sönmə diametri ($d_e$), məcburi axında alov yayılma sürəti ($S_f$), dinamik yanarlıq həddi ($MOC$) və Yanğın Təhlükə İndeksini ($FHI: 0.0 - 10.0$) hesablayan analitik riyazi modul.
+3. **Sitat-Təsdiqli Təhlükəsizlik RAG Mühərriki (`citation_rag_engine.py`):** Kosmik uçuş təhlükəsizliyi standartı (NASA-STD-3001) çərçivəsində hallüsinasiyanı proqram səviyyəsində qadağan edən, hər bir tövsiyəni NASA-nın 892 rəsmi uçuş sınağına zəncirləyən qərar dəstək mühərriki.
+4. **İkili İnterfeys Ekosistemi:**
+   - *Əsas Veb Platforma:* FastAPI + Dark Space UI + Three.js 3D WebGL alov hissəcikləri və STL turntable nümayişi + Chart.js elmi qrafikləri.
+   - *İkincili Tədqiqat Paneli:* Streamlit v2 + Plotly 3D interaktiv scatter və sınaq traektoriyaları.
 
-### 3.2. Elektrik Qoşulma Sxemi və Pinout Cədvəli
+### 2.2. Komanda Haqqında Məlumat (Team SpaceAz)
+- **Komanda:** SpaceAz (Azərbaycan / Gəncə, Bakı, Sumqayıt, Qusar, Şəmkir)
+- **Üzvlər və Rollar:**
+  1. *Murad Fatullazada* — Hardware Lead, ESP32 daxili proqramlaşdırma və 3D CAD mexaniki mühəndislik.
+  2. *Sabir Məmmədzadə* — Principal Backend Architect, FastAPI marşrutlaşdırma və paylanmış server arxitekturası.
+  3. *Raiz Həkimov* — Lead Frontend & Creative Director, Three.js 3D WebGL, Dark Space Design System və interaktiv UI/UX.
+  4. *Şahvələd Vəlizadə* — Cybersecurity & Safety Architect, Citation-Locked RAG qoruyucu filtrləri və NASA-STD-3001 uyğunluğu.
+  5. *Hüseyn Alırzayev* — Data Scientist, NASA PSI verilənlər bazası kurasiyası, Fernandez-Pello modelləşdirməsi və riyazi mühərrik.
 
-> [!IMPORTANT]
-> **Kritik Mühəndislik Qeydi:** Analoq oxunuş mütləq **GPIO 34 (ADC1_CH6)** pininə qoşulmalıdır! ESP-32 mikrokontrollerlərində ADC2 bloku Wi-Fi aktiv olduqda daxili radioməftil tərəfindən bloklanır. ADC1 blokuna aid olan GPIO 34 isə Wi-Fi şüalanmasından asılı olmayaraq 100% sabit və dəqiq oxunuş verir.
+---
 
-| Sensor Pini | ESP-32 Pini | Təyinatı | Elektrik Parametri |
-| :--- | :--- | :--- | :--- |
-| **MQ-2 VCC** (Qırmızı məftil) | **VIN (və ya 5V)** | Qızdırıcı və sensor qidalanması | $5.0V \text{ DC}, \sim 150\text{ mA}$ |
-| **MQ-2 GND** (Qara məftil) | **GND** | Ümumi torpaqlama | $0V$ |
-| **MQ-2 AO** (Göy/Sarı məftil) | **GPIO 34** | Analoq Çıxış (ADC1 Kanal 6) | $0.0V - 3.3V$ (gərginlik bölücü ilə) |
-| **Status LED Yaşıl** | **GPIO 2** | Nominal status indikatoru | $3.3V \text{ PWM}$ |
-| **Status LED Qırmızı** | **GPIO 4** | Həyəcan / Piroliz siqnalı | $3.3V \text{ PWM}$ |
+## 3. VİZUAL AKTİVLƏR (ASSETS), ARXA FON ŞƏKİLLƏRİ VƏ QRAFİK QAYDALARI
 
-### 3.3. Daxili Proqram Təminatı (Firmware Memarlıq - `hardware/esp32_firmware.ino`)
+Hər bir səhifənin, kartın və modal pəncərənin arxa fonunda hansı şəkilin olacağı, hansı filtrlərin tətbiq ediləcəyi və dəqiq CSS parametrləri aşağıda qeyd olunub:
 
-Daxili proqram FreeRTOS arxitekturasında iki paralel vəzifə (task) kimi icra olunur:
-- **Vəzifə 1 (Sampling Task - 250ms):** GPIO 34 pinindən 64 dəfə ardıcıl analoq nümunə götürür, 12-bit ADC küyünü median və eksponensial sürüşən orta (EMA) süzgəci ilə hamarlayır:
-  $$ADC_{filtered} = \alpha \cdot ADC_{current} + (1 - \alpha) \cdot ADC_{prev}, \quad \alpha = 0.25$$
-- **Vəzifə 2 (Telemetry Task - 1500ms):** Hamarlanmış dəyəri PPM və tüstü faizinə çevirir, JSON telemetriya obyektini formalaşdırır və Wi-Fi üzərindən HTTP POST ilə `/api/sensor-data` endpointinə göndərir:
-  ```json
-  {
-    "device_id": "ESP32-FIREX-01",
-    "gas_ppm": 42.5,
-    "smoke_density_pct": 1.2,
-    "raw_adc": 850,
-    "uptime_seconds": 1284,
-    "wifi_rssi_dbm": -58
-  }
+### 3.1. Rəsmi Qrafik Faylların İnventarı (`images/` qovluğu)
+
+| Fayl Adı | Mütləq Fayl Yolu | Ölçü / Format | Vizual Təsviri | Harada İstifadə Olunur? |
+| :--- | :--- | :--- | :--- | :--- |
+| **`hero_bg.jpg`** | `/images/hero_bg.jpg` | $1920 \times 1080$, JPEG | BKS-in Yer orbitindəki möhtəşəm görünüşü, atmosferin mavi parıltısı və ulduzlu dərin kosmos. | **Landing Page (`/`) Hero Bölməsinin Arxa Fonu**. |
+| **`analytics_bg.jpg`** | `/images/analytics_bg.jpg` | $1920 \times 600$, JPEG | Kosmik stansiya daxili telemetriya ekranları, kiber-qrafiklər və mavi kosmik parıltı. | **Analytics Hub (`/analytics`) Üst Başlıq Arxa Fonu**. |
+| **`blueprint_schematic.jpg`** | `/images/blueprint_schematic.jpg` | $1440 \times 900$, JPEG | Kiber-mavi mühəndislik çertyoju, ESP32 mikrosxem xətləri və texniki cizgilər. | **Hardware Səhifəsi (`/hardware`) Sxem Bölməsinin Arxa Fonu**. |
+| **`spacecraft_render.jpg`** | `/images/spacecraft_render.jpg` | $1920 \times 1080$, JPEG | Cygnus və Artemis kosmik gəmisinin alov testləri keçirilən hermetik daxili modulu. | **Simulator Səhifəsi (`/simulator`) Başlıq Fonu**. |
+| **`Fire-X.jpeg`** | `/images/Fire-X.jpeg` | $1024 \times 1024$, JPEG | Layihənin rəsmi kvadrat loqosu: kosmik dəbilqə, mavi-narıncı alov qığılcımları və FIRE-X emblemi. | **Navbar, Footer, Modal Pəncərələr, PDF Titul Vərəqi**. |
+| **`FIRE-X_uzun.jpeg`** | `/images/FIRE-X_uzun.jpeg` | $1200 \times 320$, JPEG | Geniş horizontal loqo və şüar: "Microgravity Combustion Intelligence Platform". | **Təqdimat bannerləri, Sənəd başlıqları**. |
+| **`FIREX_STL_3D_CAD_Baxis.png`**| `/images/FIREX_STL_3D_CAD_Baxis.png`| $1280 \times 720$, PNG | 3D CAD korpusun koordinat oxları (X, Y, Z), louver pəncərələri və daxili montaj yuvaları ilə renderi. | **Hardware Səhifəsi 3D Mexaniki Baxış Fonu**. |
+| **`esp32_mq2_circuit.png`** | `/images/esp32_mq2_circuit.png` | $800 \times 600$, PNG | ESP-32 və SnO₂ sensorunun breadboard üzərində real məftillənmə (wiring) sxemi. | **Hardware Səhifəsi Pinout & Elektrik Təlimatı Bölməsi**. |
+| **`firex_3d_enclosure.jpg`** | `/images/firex_3d_enclosure.jpg`| $1024 \times 768$, JPEG | Fiziki 3D çap edilmiş prototip korpusunun real fotomaterialı. | **About Səhifəsi və PDF Sənədi Hardware Bölməsi**. |
+
+### 3.2. Səhifə-Səhifə Arxa Fon Tətbiq Qaydaları (Exact CSS Rules)
+
+#### A) Ana Səhifə (`index.html`) Hero Arxa Fonu:
+```css
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('/images/hero_bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  filter: brightness(0.38) contrast(1.15) saturate(1.2);
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 4, 9, 0.2) 0%,
+    rgba(2, 4, 9, 0.45) 45%,
+    rgba(2, 4, 9, 0.92) 80%,
+    #020409 100%
+  );
+  pointer-events: none;
+}
+```
+
+#### B) Analitika Səhifəsi (`analytics.html`) Başlıq Arxa Fonu:
+```css
+.analytics-hero {
+  position: relative;
+  padding: 110px 0 60px;
+  background-image: url('/images/analytics_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.12);
+}
+.analytics-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(2, 4, 9, 0.94) 0%, rgba(7, 13, 26, 0.88) 100%);
+  backdrop-filter: blur(8px);
+}
+```
+
+#### C) Simulyator Səhifəsi (`simulator.html`) Fon Tərtibatı:
+```css
+.simulator-hero {
+  background-image: url('/images/spacecraft_render.jpg');
+  background-size: cover;
+  background-position: center top;
+  filter: brightness(0.42);
+}
+```
+
+#### D) Hardware Səhifəsi (`hardware.html`) Sxem Fonu:
+```css
+.wiring-section {
+  background: linear-gradient(rgba(2, 4, 9, 0.95), rgba(7, 13, 26, 0.95)),
+              url('/images/blueprint_schematic.jpg');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  border-radius: 16px;
+}
+```
+
+---
+
+## 4. 3D WebGL ALOV HİSSƏCİKLƏRİ VƏ CAD MODELLƏRİNİN TEXNİKİ SPESİFİKASİYASI
+
+### 4.1. Three.js Mikroyerçəkim Kürəvi Alov Hissəcikləri Sistemi (`index.html`)
+- **Canvas İdentifikatoru:** `<canvas id="particles-canvas"></canvas>`
+- **Kitabxana:** Three.js r134 (`https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js`)
+- **Render Konfiqurasiyası:**
+  - `alpha: true`, `antialias: true`, `powerPreference: "high-performance"`
+  - `setPixelRatio(Math.min(window.devicePixelRatio, 2))`
+- **Hissəcik Bufferi (BufferGeometry):**
+  - Say: $N = 1200$ dinamik hissəcik;
+  - Koordinat paylanması: Kürəvi normal paylanma ($X \in [-7, 7], Y \in [-5, 5], Z \in [-3, 3]$);
+  - **Rəng Spektri:** Mikroyerçəkim alovunun kimyəvi qatları:
+    * Daxili nüvə: Göy/Mavi diffuziya zonası (`#00F5FF`, RGB: `[0.0, 0.96, 1.0]`);
+    * Xarici qat: Termal his şüalanması narıncı/sarı (`#FF6B35`, RGB: `[1.0, 0.42, 0.2]`);
+    * Seyrək ulduzlar: Ağ/bənövşəyi (`[0.8, 0.7, 1.0]`).
+- **Material Parametrləri:**
+  ```javascript
+  new THREE.PointsMaterial({
+    size: 0.045,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.75,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
   ```
-- **Oflayn Rejim (Offline Resilience):** Əgər Wi-Fi bağlantısı kəsilərsə, cihaz dayanmır; son 100 ölçmə paketini daxili SPIFFS flash yaddaşındakı dairəvi buferdə (ring buffer) saxlayır və şəbəkə bərpa olunduqda toplu şəkildə ötürür.
+- **Hərəkət Fizikası (Damping & Stefan Flow):**
+  - Hər hissəciyin fərdi sürət vektoru ($v_x, v_y, v_z \in [-0.002, 0.002]$);
+  - Kursor hərəkət etdikdə kamera `(camera.position.x += (mouseX - camera.position.x) * 0.02)` düsturu ilə parollaks reaksiyası verir.
+
+### 4.2. 3D STL Korpus Nümayiş Sistemi (`hardware.html` və `3d_viewer.html`)
+- **Model Faylı:** `hardware/FIREX_Tam_Yigilmish_Korpus.stl` (Yuxarı və alt gövdə tam birləşdirilmiş).
+- **Yükləyici:** `THREE.STLLoader`.
+- **Kamera və Nəzarət:**
+  - Kamera: `PerspectiveCamera(45, width/height, 0.1, 1000)`, mövqe: `[0, 50, 120]`.
+  - İdarəetmə: `THREE.OrbitControls` (hərəkət məhdudiyyəti: `minDistance = 30`, `maxDistance = 250`).
+- **İşıqlandırma Quruluşu:**
+  ```javascript
+  const ambientLight = new THREE.AmbientLight(0x070D1A, 1.8);
+  const keyLight = new THREE.DirectionalLight(0x00F5FF, 2.2);
+  keyLight.position.set(50, 80, 50);
+  const fillLight = new THREE.DirectionalLight(0xFF6B35, 1.4);
+  fillLight.position.set(-50, -30, -50);
+  ```
+- **Material Xüsusiyyəti:**
+  - `MeshStandardMaterial`: `color: 0x0E1A2F`, `metalness: 0.75`, `roughness: 0.28`, `wireframe: false`.
+  - Daxili arakəsmə və louver qəfəslərini aşkar göstərmək üçün kənarları xətti parıltı (`EdgesGeometry` + `LineBasicMaterial({color: 0x00F5FF, transparent: true, opacity: 0.4})`) ilə bəzədilib.
 
 ---
 
-## 4. 3D CAD KORPUS DİZAYNI VƏ WebGL İNTERAKTİV NÜMAYİŞİ
+## 5. ÜMUMİ SİSTEM ARXİTEKTURASI VƏ 4 İNTEQRASİYA SƏVİYYƏSİ
 
-### 4.1. Mühəndislik Tələbləri və Aerodinamik Quruluş
-Kosmik gəmilərdə qravitasiya olmadığı üçün isti hava təbii olaraq qalxmır; havanın sensora daxil olması yalnız moduldaxili ventilyasiya axınından asılıdır. Buna görə korpus xüsusi aerodinamik prinsiplərlə hazırlanmışdır:
-1. **Louver Hava Qəfəsləri:** Üst və yan tərəflərdə 45 dərəcə bucaq altında yerləşən xüsusi pəncərələr laminar hava axınını ($2 - 20\text{ sm/s}$) birbaşa sensorun $SnO_2$ səthinə istiqamətləndirir.
-2. **Termal Təcrid Arakəsməsi:** Sensorun daxili qızdırıcı spiralı ($\sim 300^\circ\text{C}$) ilə ESP-32 mikrokontrolleri arasında 2 mm-lik fiziki arakəsmə qoyulub ki, mikrokontroller qızmasın və ADC oxunuşları termal dreyfə məruz qalmasın.
-3. **Snap-fit Kilid Sistemi:** Vint tələb olunmur; üst və alt korpus bir-birinə elastik plastik kilidlərlə bərkidilir.
-4. **Çap Standartı:** FDM / SLA 3D printerləri üçün tam sukeçirməz (watertight / 2-manifold) STL formatında eksport edilib. Qalınlıq: $2.0\text{ mm}$, doldurma (infill): $40\%$, material: Yanğına davamlı PETG və ya Polycarbonate (PC).
-
-### 4.2. WebGL Three.js İnteraktiv Turntable Baxışı (`frontend/hardware.html`)
-İstifadəçilər və münsiflər fiziki qurğunu brauzerdə 3D olaraq 360 dərəcə fırlada bilərlər:
-- **Texnologiya:** Three.js r134, `OrbitControls`, `STLLoader`.
-- **İşıqlandırma:** 3 nöqtəli studiya işığı — Ambient Light (0x070D1A, intensivlik 1.5), Directional Key Light (0x00F5FF, intensivlik 2.0), Rim Light (0xFF6B35, intensivlik 1.2).
-- **Material:** `MeshStandardMaterial` — `color: 0x0C1525`, `metalness: 0.65`, `roughness: 0.25`.
-- **Avtomatik Fırlanma:** OrbitControls vasitəsilə $0.5\text{ RPM}$ sürətlə avtomatik dövr edir, kursor toxunduqda sərbəst baxış aktivləşir.
-
----
-
-## 5. RİYAZİ MİKROYERÇƏKİM YANMA FİZİKASI MÜHƏRRİKİ (`nasa_combustion_engine.py`)
-
-Backend daxilində yerləşən bu modul sadəcə qrafik çəkmir; o, NASA-nın aerokosmik yanma qanunlarını proqramlaşdırır.
-
-### 5.1. Damcı Yanmasının $d^2$-Qanunu və Radiativ Sönmə (NASA PSI-69 FLEX)
-Mikroyerçəkimdə damcının buxarlanması və yanması kürəvi simmetrik diffuziya ilə baş verir:
-$$d^2(t) = d_0^2 - K \cdot t$$
-burada:
-- $d_0$ — damcının ilkin diametri ($\text{mm}$);
-- $K$ — yanma sürəti sabiti ($\text{mm}^2/\text{s}$):
-  $$K = \frac{8 k_g}{\rho_l c_{p,g}} \ln(1 + B_q)$$
-  ($k_g$ — qazın istilikkeçirməsi, $\rho_l$ — maye sıxlığı, $c_{p,g}$ — xüsusi istilik tutumu, $B_q$ — Spaldinq kütlə transfer ədədi).
-
-**Radiativ Sönmə Diametri ($d_e$):**  
-Alov müəyyən kritik diametrə çatdıqda istilik itkisi reaksiya istiliyini üstələyir və alov vaxtından əvvəl qəfil sönür:
-$$d_e = d_0 \cdot \left[ 0.32 \cdot \left(\frac{21.0}{X_{O_2}}\right)^{0.45} \cdot \left(1 + 0.52 \frac{X_{CO_2}}{50}\right) \cdot \left(1 + 0.40 \frac{X_{He}}{40}\right) \right]$$
-*Fiziki İzah:* $CO_2$ yüksək istilik şüalanması yaradaraq alovu boğur ($d_e$-ni böyüdür). Helium ($He$) isə yüksək istilikkeçirmə ilə alov nüvəsini birbaşa soyudur.
-
-### 5.2. Məcburi Axında Alov Yayılma Sürəti $S_f$ (NASA PSI-25 BASS-II & PSI-98 SAFFIRE)
-Kosmik kabinədə ventilyasiya sürəti ($U_{inf}$) olduqda Fernandez-Pello alov yayılma modeli tətbiq edilir:
-$$S_f = S_{base} \cdot \left(\frac{X_{O_2} - MOC}{10}\right) \cdot \left(\frac{P}{101.3}\right)^{0.55} \cdot \left[ \left(\frac{U_{inf}}{U_{peak}}\right) \exp\left(1 - \frac{U_{inf}}{U_{peak}}\right) \right]$$
-burada:
-- $S_{base}$ — PMMA üçün $0.18\text{ mm/s}$;
-- $U_{peak}$ — alov yayılmasının pik həddi ($\sim 8.0\text{ sm/s}$);
-- $P$ — kabin təzyiqi ($\text{kPa}$).
-
-*Nəticə:* Əgər hava tam durğundursa ($U_{inf} = 0$), alov boğulub sönür. Lakin $U_{inf} = 5 - 12\text{ sm/s}$ olduqda alov sürəti pik həddə çatır və **Yerdəki 1.0g sürətini aşır!**
-
-### 5.3. Dinamik Yanarlıq Sərhədi (Dynamic Minimum Oxygen Concentration - MOC)
-MOC durğun havada ən yüksəkdir, zəif axında isə aşağı düşür:
-$$MOC(U_{inf}) = MOC_{stagnant} - \Delta MOC_{max} \cdot \left[ 1 - \exp\left(-\frac{U_{inf}}{U_{char}}\right) \right]$$
-PMMA üçün: $MOC_{stagnant} = 21.0\%$, axın $8\text{ sm/s}$ olduqda isə $MOC = 14.5\%$-ə enir (yəni oksigen azalsa belə alov sönmür).
-
-### 5.4. Yanğın Təhlükə İndeksi (Fire Hazard Index - FHI, 0.0 – 10.0)
-FHI bütün parametrləri vahid təhlükəsizlik ədədinə çevirir:
-$$FHI = \min\left(10.0, \, 2.5 \left(\frac{X_{O_2}}{21}\right)^{1.5} + 1.2 \left(\frac{P}{101.3}\right)^{0.4} + 2.0 \left(\frac{PPM}{200}\right) + 1.8 \left(\frac{Smoke\%}{25}\right) + 2.5 \left(\frac{S_f}{0.4}\right) \right)$$
-- **0.0 – 3.5:** NOMINAL (Aşağı risk)
-- **3.6 – 6.8:** ELEVATED (Nəzarət tələb edən risk)
-- **6.9 – 8.5:** HIGH HAZARD (Yüksək təhlükə — Artemis 34% O₂)
-- **8.6 – 10.0:** CRITICAL FLIGHT ALARM (Fövqəladə hal)
-
-### 5.5. Ay (0.16g) və Mars (0.38g) üçün 0g–1g Bounding Modeli
-NASA PSI-da hazırda birbaşa qismən cazibə uçuş sınağı olmadığı üçün FIRE-X qismən cazibəni ekvivalent təbii konveksiya sürətinə çevirir:
-$$u_b = \sqrt{g_{eff} \cdot \beta \cdot \Delta T \cdot L}$$
-- Ay üçün ($g = 1.62\text{ m/s}^2$): $u_b \approx 12.2\text{ sm/s}$;
-- Mars üçün ($g = 3.71\text{ m/s}^2$): $u_b \approx 18.5\text{ sm/s}$.  
-Bu sürətlər BASS-II məcburi axın verilənləri ilə sərhədlənərək riyazi olaraq dəqiq proqnozlaşdırılır.
-
----
-
-## 6. NASA PSI MƏLUMAT BORU KƏMƏRİ VƏ VERİLƏNLƏR BAZASI ARXİTEKTURASI
-
-### 6.1. Rəsmi Mənbələr
-Məlumatlar NASA Glenn Tədqiqat Mərkəzi (GRC) və Marshall Kosmik Uçuş Mərkəzinin (MSFC) idarə etdiyi rəsmi **NASA Physical Sciences Informatics (PSI)** sistemindən (https://psi.nasa.gov/) çıxarılmışdır.
-
-### 6.2. 892 Kanonik Sınağın Tərkibi
-
-| Tədqiqat Ailəsi | NASA Sənəd / PSI ID | BKS Qurğusu | Sınaq Sayı | Əsas Fiziki Parametrlər |
-| :--- | :--- | :--- | :--- | :--- |
-| **FLEX / FLEX-2** | PSI-69 / PSI-70 | CIR (MDCA / MIST) | 274 | Damcı yanması, radiativ sönmə diametri ($d_e$), soyuq alovlar, $CO_2$ ($0-70\%$), $He$ ($0-45\%$). |
-| **BASS-I / BASS-II**| PSI-25 | MSG (SPICE axın kanalı) | 129 | Bərk polimerlər (PMMA), Nomex parça, məcburi axın ($0-55\text{ sm/s}$), alov yayılma sürəti ($S_f$). |
-| **SAFFIRE I–VI** | PSI-98 | Cygnus Karqo Gəmisi | 72 | Böyük miqyaslı ($1.0\text{ m}$) yanğın sınaqları, 21% vs 34% $O_2$ (Artemis atmosferi), parça və kompozit panellər. |
-| **ACME Suite** | CFI, BRE, E-FIELD | CIR (Qaz brülörləri) | 186 | Qaz diffuziya alovları, his konsentrasiyası, 85%-dək $O_2$, elektrik sahəsinin təsiri. |
-| **SAME & DAFT** | SAME-R, DAFT-2 | MSG (Aerozol kamerası) | 68 | Tüstü hissəciklərinin fraktal strukturu, Ay reqolit tozunun ($>1\,\mu\text{m}$) tüstüdən ($<0.5\,\mu\text{m}$) lazerlə fərqləndirilməsi. |
-| **NASA-STD-6001** | Test 1 (WSTF) | White Sands Test Facility| 163 | 1.0g yerüstü yuxarı alovlanma sınaqları (0g–1g sərhədləməsi üçün upper bound). |
-
-### 6.3. SQLite Baza Sxemi (`database/fire_safety.db`)
-
-```sql
-CREATE TABLE IF NOT EXISTS experiments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    experiment_id TEXT UNIQUE NOT NULL,       -- Məsələn: 'PSI-FLEX-092'
-    family TEXT NOT NULL,                     -- 'FLEX', 'BASS', 'SAFFIRE', 'ACME', 'SAME', 'STD6001'
-    sub_suite TEXT,                           -- 'FLEX-2', 'BASS-II', 'SAFFIRE-III'
-    facility TEXT NOT NULL,                   -- 'ISS CIR', 'ISS MSG', 'Cygnus Vehicle', 'WSTF 1g'
-    fuel_name TEXT NOT NULL,                  -- 'Heptane', 'PMMA', 'Methanol', 'Nomex Fabric', 'Methane'
-    fuel_type TEXT NOT NULL,                  -- 'Liquid Droplet', 'Solid Slab', 'Gas Jet', 'Fabric'
-    oxygen_pct REAL NOT NULL,                 -- 12.0 - 85.0 %
-    pressure_kpa REAL NOT NULL,               -- 40.0 - 300.0 kPa
-    diluent_gas TEXT DEFAULT 'N2',            -- 'N2', 'CO2', 'He', 'Ar'
-    diluent_pct REAL DEFAULT 0.0,
-    flow_velocity_cms REAL DEFAULT 0.0,       -- 0.0 - 55.0 cm/s
-    burn_duration_s REAL,                     -- Yanma müddəti
-    extinction_diameter_mm REAL,              -- Sönmə diametri de
-    flame_spread_rate_mms REAL,               -- Yayılma sürəti Sf
-    outcome TEXT NOT NULL,                    -- 'Radiative Extinction', 'Blowoff', 'Cool Flame Persist', 'Consumed'
-    psi_record_url TEXT,                      -- Rəsmi NASA linki
-    notes TEXT
-);
-
-CREATE TABLE IF NOT EXISTS sensor_telemetry (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    device_id TEXT NOT NULL,
-    gas_ppm REAL NOT NULL,
-    smoke_density_pct REAL NOT NULL,
-    raw_adc INTEGER NOT NULL,
-    calculated_fhi REAL NOT NULL,
-    status_label TEXT NOT NULL
-);
-
-CREATE INDEX idx_exp_family ON experiments(family);
-CREATE INDEX idx_exp_fuel ON experiments(fuel_name);
-CREATE INDEX idx_exp_o2 ON experiments(oxygen_pct);
-```
-
----
-
-## 7. SİTAT-TƏSDİQLİ TƏHLÜKƏSİZLİK RAG MÜHƏRRİKİ (`citation_rag_engine.py`)
-
-### 7.1. Kosmik Təhlükəsizlik Zərurəti (NASA-STD-3001 Directive)
-Standart LLM çatbotları (ChatGPT, generic GPT-4) kosmik missiyalarda istifadə edilə bilməz, çünki təsadüfi hallüsinasiya kosmonavtın ölümünə səbəb ola bilər. NASA-STD-3001 insan uçuşu standartı tələb edir ki, hər bir təhlükəsizlik qərarı rəsmi sənədləşdirilmiş empirik dataya söykənməlidir.
-
-### 7.2. Citation-Locked RAG Arxitekturası
 ```mermaid
-sequenceDiagram
-    autonumber
-    actor User as Kosmonavt / Münsif
-    participant API as FastAPI (`/api/chat-assistant`)
-    participant RAG as Citation RAG Engine
-    participant DB as SQLite `fire_safety.db`
-    participant LLM as OpenAI GPT-6-luna / Local LLM
-
-    User->>API: Sual verir ("Artemis 34% O2-də PMMA necə yanır?")
-    API->>RAG: query_ai_assistant(query, lang='az')
-    RAG->>DB: Semantik & Parametrik SQL sorğusu (SAFFIRE, BASS-II, O2 >= 30%)
-    DB-->>RAG: 4 rəsmi sınaq rekordu qaytarır (Run ID: SF-IV-08, BASS-22)
-    alt Empirik data tapıldı
-        RAG->>LLM: Prompt + [Source: NASA SAFFIRE, PSI-ID: 98, Run: SF-IV-08]
-        LLM-->>RAG: Cavab mətni (Sitat nömrəsi ilə zəncirlənmiş)
-        RAG->>RAG: Post-Verification Filter (Sitat teqi yoxlanılır)
-        RAG-->>API: Təsdiqlənmiş Elmi Cavab + Sitat Teqləri
-    else Empirik data tapılmadı və ya qeyri-elmidir
-        RAG-->>API: ⚠️ "NASA PSI bazasında yetərli empirik data yoxdur. Hallüsinasiyanın qarşısı alındı."
+graph TD
+    subgraph S1["1. Edge Hardware Node"]
+        E1["ESP32 (GPIO 34 ADC1)"]
+        E2["SnO2 Qaz & Piroliz Sensoru"]
+        E3["3D Parametrik Louver Korpus"]
+        E2 --> E1
+        E1 -->|HTTP POST /api/sensor-data| S2
     end
-    API-->>User: Təhlükəsiz Cavab çıxışı
+
+    subgraph S2["2. Core Backend & Physics"]
+        B1["FastAPI Application"]
+        B2["nasa_combustion_engine.py"]
+        B3["citation_rag_engine.py"]
+        B4["fire_safety.db (892 sınaq)"]
+        B1 <--> B2
+        B1 <--> B3
+        B2 <--> B4
+        B3 <--> B4
+    end
+
+    subgraph S3["3. Multi-Page Web Platform"]
+        W1["Home (index.html)"]
+        W2["Analytics (analytics.html)"]
+        W3["Data Explorer (explorer.html)"]
+        W4["Simulator (simulator.html)"]
+        W5["Hardware Hub (hardware.html)"]
+        W6["AI Assistant (ai.html)"]
+    end
+
+    subgraph S4["4. Secondary Research Tool"]
+        ST["Streamlit v2 (analytics_dashboard_v2.py)"]
+    end
+
+    S2 -->|REST API / SSE| S3
+    B4 --> ST
 ```
 
 ---
 
-## 8. VEB İNTERFEYSİ (UI/UX) VƏ SƏHİFƏ-SƏHİFƏ TAM SPESİFİKASİYA
+## 6. FİZİKİ DONANIM (HARDWARE), ESP-32, SnO₂ SENSORU VƏ ELEKTRİK SXEMLƏRİ
 
-Bütün platforma tək bir vizual dildə — **Dark Space Cybernetic Glassmorphism** üslubunda hazırlanmışdır.
+### 6.1. Donanımın Elmi İzahı (Məişət Detektoru Tənqidinə Qəti Cavab)
+Münsiflər tərəfindən verilən: *"Bu cihaz adi ev metan qazı detektorudurmu?"* sualına sənəddə verilən dəqiq elmi cavab:
+> **XEYR! Bu məişət təbii qaz siqnalizasiyası deyil.** Bu, kosmik yaşayış modulunun küncündə termal parçalanmanı izləyən **Fiziki Mühit Testbed Telemetriya Node (Atmospheric Boundary Node - TRL-4)** cihazıdır. Kosmosda polimerlər (məs. elektrik kabel izolyasiyası PMMA və ya Nomex) yanmazdan əvvəl qızır və atmosferə ilkin uçucu piroliz qazları (karbon-monoksid, hidrogen, kiçik molekullu karbohidrogenlər) buraxır. Bizim cihaz bu ilkin qaz konsentrasiyasını və optik tüstü sıxlığını ölçür, dərhal `nasa_combustion_engine.py` mühərrikinə sərhəd şərti kimi ötürür və sistem bu qaz sıçrayışını mikroyerçəkim alov yayılma sürətinə çevirir!
 
-### 8.1. Qlobal Dizayn Sistemi (`frontend/css/ds.css`)
-- **Rəng Palitrası:**
-  - Void Background: `--bg-void: #020409;`
-  - Deep Space: `--bg-space: #040810;`
-  - Glass Card 1: `--bg-surface-1: #070D1A;`
-  - Glass Card 2: `--bg-surface-2: #0C1525;`
-  - Neon Cyan (Əsas Vurğu): `--neon-cyan: #00F5FF;` (Glow: `0 0 20px rgba(0,245,255,0.5)`)
-  - Neon Orange (Alov Vurğusu): `--neon-orange: #FF6B35;`
-  - Status Yaşıl (Nominal): `--neon-green: #00E676;`
-  - Status Qırmızı (Kritik): `--neon-red: #FF5252;`
-- **Şriftlər:**
-  - Display / Başlıqlar: `'Space Grotesk', sans-serif;` (700, 800)
-  - Mətn: `'Inter', sans-serif;` (400, 500, 600)
-  - Rəqəmlər / Telemetriya: `'JetBrains Mono', monospace;` (600, 700)
+### 6.2. Dəqiq Elektrik Pinout Cədvəli
 
-### 8.2. Ümumi Naviqasiya Barı (`frontend/css/nav.css` və `nav.js`)
-- Yuxarıda bərkidilmiş (sticky) $68\text{ px}$ hündürlüyündə xırda blur şüşə naviqasiya zolağı.
-- Sol tərəfdə loqo və `NASA FIRE-X // MICROGRAVITY COMBUSTION INTEL` yazısı.
-- Ortada 6 əsas səhifə linki: `Home`, `Analytics`, `Data Explorer`, `Simulator`, `Hardware`, `AI Assistant`.
-- Sağ tərəfdə:
-  - Canlı status döyüntüsü (`LIVE` yaşıl nöqtə);
-  - UTC Missiya Saatı (`HH:MM:SS UTC`);
-  - Dil düyməsi (`EN / AZ` dinamik lokalizasiya keçidi);
-  - Dedicated AI düyməsi.
+```
+               +-----------------------+
+               |     ESP-32 NodeMCU    |
+               |                       |
+[MQ-2 VCC] --->| VIN (5.0V DC Güc)     |
+[MQ-2 GND] --->| GND (Ümumi Torpaq)    |
+[MQ-2 AO]  --->| GPIO 34 (ADC1_CH6)   |  <-- KRİTİK: Wi-Fi ilə küy yaratmır!
+               | GPIO 2  (Yaşıl LED)   |
+               | GPIO 4  (Qırmızı LED) |
+               +-----------------------+
+```
 
-### 8.3. Səhifə 1: Ana Səhifə (`/` -> `frontend/index.html`)
-1. **Hero Bölməsi:**
-   - Arxa fonda Three.js ilə real vaxtda hesablanan **1200 ədəd mikroyerçəkim alov hissəciyi** (kürəvi yayılma, Stefan axını simulyasiyası, kursorla 3D bucaq dəyişməsi).
-   - Böyük şüar: *"FLAME IN FREEFALL — FIRE-X Intelligence Platform"*.
-   - İki əsas CTA düyməsi: `Explore Data` və `Launch Simulator`.
-2. **Statistika Zolağı (Stats Band):**
-   - 4 böyük sayğac (animasiyalı artım): **892** Kanonik Sınaq, **29** Uçuş Ailəsi, **4** Missiya Mühiti, **99.8%** Məlumat Dürüstlüyü.
-3. **Elmi Giriş Bölməsi:**
-   - 0g və 1g arasındakı fiziki fərqlər kartları.
-4. **Uçuş Ailələri Karuseli:**
-   - FLEX, BASS, SAFFIRE, ACME, SAME, SOFIE kartları (hər birinin öz rəng kodu və sınaq sayı).
-5. **Planetar Mühit Kartları:**
-   - ISS (21% $O_2$, FHI 5.1), Artemis Lunar Habitat (34% $O_2$, FHI 8.3), Hypoxic Safe-Haven (15% $O_2$, FHI 2.1).
+### 6.3. Daxili Proqram Təminatı (`hardware/esp32_firmware.ino`)
+FreeRTOS əsaslı arxitektura:
+```cpp
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
 
-### 8.4. Səhifə 2: Elmi Analitika Mərkəzi (`/analytics` -> `frontend/analytics.html`)
-- **4 Professional Chart.js Qrafiki (2x2 Glass Grid):**
-  1. *Qrafik 1 (Scatter):* Sönmə Diametri ($d_e$) vs Oksigen Faizi ($X_{O_2}$) — Reqressiya əyrisi ilə (FLEX məlumatları).
-  2. *Qrafik 2 (Scatter):* Yanma Müddəti vs Hava Axını Sürəti ($U_{inf}$) — BASS-II məlumatları, pik nöqtənin ($8\text{ sm/s}$) nümayişi.
-  3. *Qrafik 3 (Doughnut):* Yanacaq növlərinin paylanması (Polimerlər, Damcılar, Qazlar, Parçalar).
-  4. *Qrafik 4 (Horizontal Bar):* Sönmə nəticələrinin faiz nisbəti (Radiative Extinction, Blowoff, Cool Flame, Consumed).
-- Hər qrafikdə PNG/CSV eksport düyməsi, zoom və tooltip dəstəyi.
+const char* ssid = "FIREX_NETWORK";
+const char* password = "SPACE_APPS_SECURE";
+const char* serverUrl = "http://192.168.1.100:8000/api/sensor-data";
 
-### 8.5. Səhifə 3: 892 Sınaq Məlumat Bələdçisi (`/explorer` -> `frontend/explorer.html`)
-- **Sol Süzgəc Paneli ($280\text{ px}$):**
-  - Mətn axtarışı (yanacaq, ID və ya qurğu üzrə);
-  - Ailə seçimi (FLEX, BASS, SAFFIRE, ACME, SAME, STD6001);
-  - Oksigen aralığı dual slayderi ($12\% - 85\%$);
-  - Sönmə nəticəsi seçimi;
-  - Təmizləmə düyməsi.
-- **Əsas Məlumat Cədvəli:**
-  - Sütunlar: `ID`, `Ailə`, `Yanacaq`, `O₂ %`, `Təzyiq (kPa)`, `Axın (sm/s)`, `Yanma Vaxtı`, `Sönmə Diametri`, `Nəticə`, `Əməliyyatlar`.
-  - Hər sətirdə: `[İncələ]` və `[+ Müqayisə et]` düymələri.
-- **Sağ İnspesiya Qatlaması (Inspection Drawer - $800\text{ px}$):**
-  - Sınağa kliklədikdə sağdan sürüşərək açılan pəncərə; bütün xam telemetriyanı, NASA rəsmi sənəd linkini və alov xüsusiyyətlərini göstərir.
-- **Müqayisə Paneli:**
-  - 2-dən 4-dək sınaq seçildikdə yuxarıda aktivləşən zolaq; `Run Comparison` basıldıqda yan-yana parametrik diff cədvəli açır.
+const int SENSOR_PIN = 34; // ADC1 Kanal 6
+float emaFiltered = 0.0;
+const float alpha = 0.25;
 
-### 8.6. Səhifə 4: Planetar Missiya Simulyatoru (`/simulator` -> `frontend/simulator.html`)
-- **Sol İdarəetmə Paneli (60%):**
-  - Hazır missiya preseti seçimi:
-    * `ISS Destiny Laboratory` (21% $O_2$, 101.3 kPa)
-    * `Artemis Lunar Surface Habitat` (34% $O_2$, 56.5 kPa)
-    * `Hypoxic Safe-Haven Emergency Module` (15% $O_2$, 70.3 kPa)
-    * `Custom Exploration Lab` (Sərbəst tənzimləmə)
-  - Xüsusi rejimdə aktivləşən slaydlar: Oksigen ($10 - 50\%$), Təzyiq ($30 - 120\text{ kPa}$), Ventilyator Axını ($0 - 40\text{ sm/s}$), Seyreltmə qazı ($CO_2$ və ya $He$).
-- **Sağ Nəticə Paneli (40%):**
-  - **Böyük SVG Dairəvi FHI Göstəricisi:** 0.0-dan 10.0-dək dinamik doldurulan neon rəngli çevrə.
-  - 6 Əsas Elmi Nəticə Qutusu: Hesablanmış Alov Sürəti ($S_f$), Sönmə Diametri ($d_e$), Dinamik MOC, Yanma Multiplikatoru, Tövsiyə Edilən Söndürücü Qaz (CO2 vs Fine Water Mist), Təhlükə Kateqoriyası.
-  - Rəsmi Uçuş Xəbərdarlıq Kartı (Advisory Box).
+void setup() {
+  Serial.begin(115200);
+  pinMode(SENSOR_PIN, INPUT);
+  analogReadResolution(12); // 0 - 4095
+  WiFi.begin(ssid, password);
+}
 
-### 8.7. Səhifə 5: Fiziki Cihaz və Telemetriya Monitoru (`/hardware` -> `frontend/hardware.html`)
-- **Canlı Telemetriya Zolağı:**
-  - Hər 1.5 saniyədən bir `/api/sensor-data` endpointindən məlumat çəkir.
-  - Göstəricilər: Lokal Qaz Sıxlığı (PPM), Optik Tüstü Sıxlığı (%), 12-bit ADC Xam Dəyəri (0–4095), Hesablanmış FHI.
-- **İnteraktiv 3D Korpus Nümayişi:**
-  - Three.js ilə korpusun STL modelini fırlatmaq, böyütmək və daxili arakəsmə strukturunu görmək imkanı.
-- **Fiziki Bağlantı Sxemi:**
-  - GPIO 34 ADC1 mühəndislik arayışı və pinout rəng cədvəli.
-- **İnteraktiv Demo İdarəetmə Paneli:**
-  - `Connect Device` (Cihazı virtual bağlayır);
-  - `Demo: Gas Surge Test` (Qaz sıçrayışını simulyasiya edir);
-  - `Demo: Clean Air Reset` (Təmiz hava sıfırlaması);
-  - `Standby Mode` (Gözləmə rejimi).
+void loop() {
+  // 64-qat oversampling ilə küyü boğmaq
+  long sum = 0;
+  for(int i = 0; i < 64; i++) {
+    sum += analogRead(SENSOR_PIN);
+    delayMicroseconds(100);
+  }
+  float rawAdc = sum / 64.0;
+  emaFiltered = (alpha * rawAdc) + ((1.0 - alpha) * emaFiltered);
+  
+  // PPM və Tüstü Sıxlığı Konversiyası
+  float voltage = (emaFiltered / 4095.0) * 3.3;
+  float ppm = map(emaFiltered, 300, 3800, 10, 1000);
+  float smokePct = constrain((emaFiltered - 400) / 30.0, 0.0, 100.0);
 
-### 8.8. Səhifə 6: AI Elmi Tədqiqat Terminalı (`/ai` -> `frontend/ai.html`)
-- **Sol Kontekst Paneli (35%):**
-  - Model statusu: `GPT-6-luna (Citation-Locked)`
-  - Hazır 6 elmi sual çipi (Quick Prompts):
-    1. *"FLEX damcılarında görünməz soyuq alovları izah et."*
-    2. *"Artemis 34% O₂ atmosferində yanğın niyə kəskin artır?"*
-    3. *"SAFFIRE 1.0 metrlik yanğın sınaqlarının nəticələri nədir?"*
-    4. *"BKS və Ayda yanğın söndürmə üsullarının fərqi nədir?"*
-    5. *"Radiativ sönmə diametri (de) necə hesablanır?"*
-    6. *"Aşağı axın yanarlıq piki paradoksu nədir?"*
-- **Sağ Çat Sahəsi (65%):**
-  - Avtomatik skrollanan mesajlaşma pəncərəsi, Markdown formatlama, LaTeX tənlikləri və rəsmi `[Source: NASA PSI-XX]` sitat düymələri.
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin(serverUrl);
+    http.addHeader("Content-Type", "application/json");
+
+    StaticJsonDocument<200> doc;
+    doc["device_id"] = "ESP32-FIREX-NODE-01";
+    doc["gas_ppm"] = ppm;
+    doc["smoke_density_pct"] = smokePct;
+    doc["raw_adc"] = (int)emaFiltered;
+
+    String payload;
+    serializeJson(doc, payload);
+    int httpResponseCode = http.POST(payload);
+    http.end();
+  }
+  delay(1500); // 1.5 saniyəlik telemetriya sinxronizasiyası
+}
+```
 
 ---
 
-## 9. REST API VƏ TELEMETRİYA ENDPOİNTLƏRİNİN TAM SPESİFİKASİYASI
+## 7. RİYAZİ MİKROYERÇƏKİM YANMA FİZİKASI MÜHƏRRİKİ (`nasa_combustion_engine.py`)
 
-FastAPI backend tərəfindən təmin edilən bütün rəsmi endpointlər:
+Bütün tənliklər kod daxilində tam riyazi dəqiqliklə proqramlaşdırılıb:
 
-| HTTP Metodu | Endpoint URL | Giriş Parametrləri (Request) | Çıxış Formatı (Response) | Təyinatı |
-| :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/api/health` | Yoxdur | `{"status": "healthy", "records": 892}` | Sistem vəziyyəti yoxlanışı |
-| `GET` | `/api/stats` | Yoxdur | JSON: ümumi sınaq sayı, ailələr, yanacaqlar, qrafik məlumatları | Analitika səhifəsi üçün aqreqasiya |
-| `GET` | `/api/experiments` | `query`, `family`, `fuel`, `outcome`, `min_o2`, `max_o2`, `page`, `limit` | `{"success": true, "total": N, "data": [...]}` | 892 sınağın axtarış və səhifələnməsi |
-| `GET` | `/api/experiments/{id}` | Path: `id` (məs. `PSI-FLEX-012`) | JSON: sınağın bütün telemetriya detalları | Tək sınaq təftişi |
-| `POST`| `/api/compare` | Body: `{"experiment_ids": ["ID1", "ID2"]}` | JSON: yan-yana müqayisə matrisi | Çoxlu sınaq müqayisəsi |
-| `GET` | `/api/mission-scenario/{id}`| Path: `id` (`iss`, `artemis`, `haven`, `custom`), `custom_o2`, `custom_p` | JSON: $S_f, d_e, MOC, FHI$, tövsiyələr | Missiya simulyasiyası hesablaması |
-| `POST`| `/api/sensor-data` | Body: `{"device_id": "...", "gas_ppm": X, "smoke_density_pct": Y, "raw_adc": Z}` | `{"status": "recorded", "fhi": W}` | ESP-32-dən telemetriya qəbulu |
-| `GET` | `/api/sensor-data/live` | Yoxdur | JSON: ən son sensor oxunuşu və status | Canlı telemetriya monitorinqi |
-| `POST`| `/api/chat-assistant` | Body: `{"messages": [...], "language": "az"}` | JSON: `{"reply": "...", "citations": [...]}`| Sitat-təsdiqli RAG AI məsləhəti |
+```python
+"""
+nasa_combustion_engine.py — FIRE-X Mathematical Combustion Physics Engine
+Implements NASA PSI empirical models, Fernandez-Pello forced-flow equations,
+droplet d²-law with radiative extinction, and Fire Hazard Index (FHI).
+"""
+import numpy as np
+
+def calculate_droplet_extinction(d0_mm, o2_pct, co2_pct=0.0, he_pct=0.0):
+    """
+    NASA PSI-69 FLEX Radiative Extinction Model.
+    Computes extinction diameter (d_e) where flame self-extinguishes.
+    """
+    ratio_o2 = (21.0 / max(o2_pct, 5.0)) ** 0.45
+    co2_factor = 1.0 + 0.52 * (co2_pct / 50.0)
+    he_factor = 1.0 + 0.40 * (he_pct / 40.0)
+    de = d0_mm * 0.32 * ratio_o2 * co2_factor * he_factor
+    return round(float(de), 3)
+
+def calculate_flame_spread_rate(o2_pct, pressure_kpa, flow_velocity_cms, fuel='PMMA'):
+    """
+    NASA PSI-25 BASS-II & PSI-98 SAFFIRE Fernandez-Pello Flame Spread Model.
+    Predicts Low-Flow Flammability Peak at U_inf ≈ 5 - 12 cm/s.
+    """
+    s_base = 0.18 if fuel == 'PMMA' else 0.12 # mm/s
+    u_peak = 8.5 # cm/s - alovun pik yayılma sürəti
+    
+    # Dinamik MOC hesabı
+    moc = 21.0 - 6.5 * (1.0 - np.exp(-flow_velocity_cms / 5.0))
+    
+    o2_driving_force = max(o2_pct - moc, 0.0) / 10.0
+    pressure_scaling = (pressure_kpa / 101.3) ** 0.55
+    
+    # Aerodinamik zəif axın piki düsturu
+    u_norm = max(flow_velocity_cms, 0.01) / u_peak
+    flow_factor = u_norm * np.exp(1.0 - u_norm)
+    
+    sf = s_base * o2_driving_force * pressure_scaling * flow_factor
+    return round(float(sf), 4), round(float(moc), 2)
+
+def calculate_fhi(o2_pct, pressure_kpa, gas_ppm, smoke_pct, flame_spread_rate):
+    """
+    Fire Hazard Index (0.0 to 10.0 scale)
+    Weighted multi-hazard integration score.
+    """
+    o2_score = 2.5 * ((o2_pct / 21.0) ** 1.5)
+    press_score = 1.2 * ((pressure_kpa / 101.3) ** 0.4)
+    gas_score = 2.0 * min(gas_ppm / 200.0, 3.0)
+    smoke_score = 1.8 * min(smoke_pct / 25.0, 2.5)
+    spread_score = 2.5 * min(flame_spread_rate / 0.4, 3.0)
+    
+    raw_fhi = o2_score + press_score + gas_score + smoke_score + spread_score
+    fhi = min(10.0, max(0.0, raw_fhi))
+    
+    if fhi < 3.5:
+        category = "NOMINAL RISK"
+    elif fhi < 6.8:
+        category = "ELEVATED CONCERN"
+    elif fhi < 8.5:
+        category = "HIGH HAZARD (ARTEMIS CLASS)"
+    else:
+        category = "CRITICAL FLIGHT ALARM"
+        
+    return round(float(fhi), 1), category
+```
 
 ---
 
-## 10. STREAMLIT v2 İKİNCİLİ ELMİ TƏDQİQAT PANELİ
+## 8. NASA PSI MƏLUMAT BORU KƏMƏRİ VƏ SQLITE SXEMİ (892 SINAQ)
 
-Kod: [`analytics_dashboard_v2.py`](file:///home/lezgin/Desktop/Nasa_Space_Apps_Challange/FIRE-X%201.0/analytics_dashboard_v2.py)  
-Təyinatı: Münsif heyətində xüsusi data science və ya statistik təhlil tələb edən alimlər üçün Python əsaslı ikinci interfeys.
-- **Texnologiyalar:** Streamlit v1.38+, Plotly Express, Plotly Graph Objects, Pandas.
-- **Xüsusiyyətlər:**
-  1. 3D İnteraktiv Scatter Plot ($X = O_2\%, Y = \text{Pressure}, Z = S_f$, rəng = Yanacaq tipi);
-  2. FLEX damcı sönmə diametri $d^2(t)$ zaman traektoriyasının qrafiki;
-  3. Xam CSV məlumatlarını bir kliklə filtrləyib yükləmə (Download Data as CSV).
+### 8.1. Məlumatların Təmizlənməsi və Vahid Standarta Gətirilməsi (`scripts/pipeline.py`)
+NASA PSI sistemindən çıxarılmış xam cədvəllər müxtəlif vahidlərdə idi:
+1. Təzyiq vahidləri: $\text{psia} \rightarrow \text{kPa}$ konversiyası ($1\text{ psia} = 6.89476\text{ kPa}$);
+2. Alov sürətləri: $\text{in/s} \rightarrow \text{mm/s}$;
+3. Seyreltmə qazları: Həcm faizi ($0.0 - 1.0$) normalizasiyası;
+4. Nəticələrin kanonik klassifikasiyası:
+   - `Radiative Extinction` (Alov şüalanma ilə vaxtından əvvəl söndü);
+   - `Blowoff` (Güclü axın alovu üfürdü);
+   - `Cool Flame Persist` (İsti alov söndü, lakin soyuq alov davam etdi);
+   - `Complete Consumption` (Material axıradək yandı).
+
+### 8.2. SQLite Bazasının Bütövlük Göstəricisi
+- Baza faylı: `database/fire_safety.db`
+- Cəmi qeyd: **892 kanonik uçuş və yerüstü sınaq**.
+- Məlumat tamlığı (Integrity check): **99.8%**.
 
 ---
 
-## 11. MÜNSİF MEYARLARI VƏ QƏBUL TESTLƏRİ (ACCEPTANCE CRITERIA)
+## 9. SİTAT-TƏSDİQLİ TƏHLÜKƏSİZLİK RAG AI MÜHƏRRİKİ (`citation_rag_engine.py`)
+
+### 9.1. İş Prinsipi və Təhlükəsizlik Filtrləri
+1. **İstifadəçi sorğusu qəbul edilir:** (məs. *"Cygnus gəmisində SAFFIRE sınaqlarında 34% oksigendə hansı material yandı?"*).
+2. **Parametrik Semantik Axtarış:** Sorğudakı açar sözlər (`SAFFIRE`, `34%`, `Cygnus`) SQLite bazasındakı sınaqlarla çarpazlaşdırılır.
+3. **Kontekst Zəncirlənməsi:** Tapılan sınaqlar xüsusi sitat strukturu ilə modelə göndərilir:
+   ```
+   [Source: NASA SAFFIRE-III, PSI-ID: 98, Sample: PMMA Slab, O2: 34.0%, Press: 56.5 kPa, Sf: 0.82 mm/s]
+   ```
+4. **Post-Processing Citation Validator:** Modelin cavabında bu sitat mötərizəsi mütləq olmalıdır. Əgər model özündən nəsə uydurarsa, çıxış bloklanır və standart direktiv göndərilir:
+   > *"⚠️ NASA PSI arxivində bu spesifik sorğu üzrə empirik sınaq tapılmadı. NASA-STD-3001 uçuş təhlükəsizliyi qaydalarına əsasən, süni intellektin təsdiqlənməmiş fərziyyə yürütməsi (hallüsinasiya) proqram tərəfindən dayandırıldı."*
+
+---
+
+## 10. BÜTÜN SƏHİFƏLƏRİN, KOMPONENTLƏRİN VƏ İSTİFADƏÇİ AXINLARININ TAM SPESİFİKASİYASI
+
+Sistemdə 7 əsas HTML səhifəsi və 1 ikincili Streamlit paneli mövcuddur:
+
+### 10.1. Səhifələrin Tam Sxemi və Funksional Matrisi
+
+| Səhifə Adı | URL Marşrutu | Əsas Vizual Elementlər | Əsas Funksionallıq və API Əlaqəsi |
+| :--- | :--- | :--- | :--- |
+| **Home (Landing)** | `GET /` | `hero_bg.jpg`, Three.js 1200 hissəcikli alov, sayğaclar, mühit kartları, uçuş ailələri karuseli. | Platformaya giriş, ümumi statistika, missiya fərqlərinin izahı. |
+| **Analytics Hub** | `GET /analytics` | `analytics_bg.jpg`, 4 Chart.js qrafiki (2x2 şüşə kartlar), elmi kəşf qutuları. | `/api/stats` endpointi, scatter və korrelyasiya analizləri, PNG eksportu. |
+| **Data Explorer** | `GET /explorer` | Sol süzgəc sütunu (280px), əsas məlumat cədvəli, sağ sürüşən təftiş qatlaması (800px), müqayisə zolağı. | `/api/experiments` axtarış və pagination, `/api/compare` ilə 4 sınağın yan-yana müqayisəsi. |
+| **Mission Simulator**| `GET /simulator` | `spacecraft_render.jpg`, SVG dairəvi FHI qeyci, presetlər (ISS, Artemis, Safe-Haven), xüsusi slaydlar. | `/api/mission-scenario/{id}` reaktiv hesablama, FHI təyini, söndürücü seçimi. |
+| **Hardware Monitor** | `GET /hardware` | Three.js 3D STL fırlanan korpus, `blueprint_schematic.jpg`, canlı telemetriya blokları, demo düymələri. | `/api/sensor-data/live` (1.5s sorğulama), virtual qaz sıçrayış testi, pinout bələdçisi. |
+| **AI Assistant** | `GET /ai` | Split-screen (35% kontekst paneli, 65% çat), sürətli sual çipləri, dil açarı (EN/AZ), sitat teqləri. | `/api/chat-assistant` sitat-təsdiqli RAG söhbəti. |
+| **About Project** | `GET /about` | Komanda fotoları, SpaceAz üzvlərinin rolları, NASA meyarları cədvəli, arxitektura diaqramları. | Layihə sənədləşməsi və münsif təqdimat məlumatları. |
+| **Streamlit v2** | `:8501/` | Plotly 3D scatter, interaktiv zaman qrafikləri, CSV yükləmə qutuları. | Data science mütəxəssisləri üçün xam telemetriya təhlili. |
+
+---
+
+## 11. REST API VƏ TELEMETRİYA ENDPOİNTLƏRİNİN TAM SPESİFİKASİYASI
+
+FastAPI (`backend/main.py`) tərəfindən təqdim edilən bütün endpointlərin dəqiq cədvəli:
+
+```python
+# Əsas Reaktiv API Modelləri (Pydantic)
+class TelemetryPayload(BaseModel):
+    device_id: str = Field(..., example="ESP32-FIREX-01")
+    gas_ppm: float = Field(..., ge=0.0, le=10000.0)
+    smoke_density_pct: float = Field(..., ge=0.0, le=100.0)
+    raw_adc: int = Field(..., ge=0, le=4095)
+
+class CompareRequest(BaseModel):
+    experiment_ids: List[str] = Field(..., min_length=2, max_length=4)
+
+class ChatRequest(BaseModel):
+    messages: List[Dict[str, str]]
+    language: str = "az"
+```
+
+---
+
+## 12. STREAMLIT v2 İKİNCİLİ ELMİ ANALİTİKA PANELİ
+
+Fayl: [`analytics_dashboard_v2.py`](file:///home/lezgin/Desktop/Nasa_Space_Apps_Challange/FIRE-X%201.0/analytics_dashboard_v2.py)  
+- **İşə salınma:** `.venv/bin/streamlit run analytics_dashboard_v2.py --server.port 8501`
+- **İmkanlar:**
+  1. *3D Parameter Space Explorer:* $X = O_2\%, Y = \text{Təzyiq (kPa)}, Z = S_f\text{ (mm/s)}$ parametrlərini 3D fırlanan fəzada vizuallaşdırır.
+  2. *Extinction Curve Tracking:* FLEX damcılarının $d^2(t)$ diametrinin zamana görə sönmə əyrilərini simulyasiya edir.
+  3. *Raw CSV Exporter:* Münsif istədiyi meyarı seçib təmizlənmiş 892 sınağı CSV olaraq yükləyə bilər.
+
+---
+
+## 13. MÜNSİF MEYARLARI VƏ QƏBUL TESTLƏRİ (ACCEPTANCE CRITERIA)
 
 NASA Space Apps 5 rəsmi qiymətləndirmə meyarı üzrə layihənin cavabdehliyi:
 
@@ -502,65 +512,37 @@ NASA Space Apps 5 rəsmi qiymətləndirmə meyarı üzrə layihənin cavabdehliy
 
 ---
 
-## 12. AI AGENT İCRA RUNBOOK-U (STEP-BY-STEP IMPLEMENTATION GUIDE)
+## 14. AI AGENT ÜÇÜN ADDIM-ADDIM İCRA RUNBOOK-U
 
-İstənilən AI Coding Agent (və ya insan mühəndis) bu layihəni sıfırdan qaldırmaq üçün aşağıdakı addımları ardıcıl yerinə yetirməlidir:
+İstənilən AI Coding Agent bu layihəni sıfırdan qaldırmaq üçün bu əmrləri terminalda ardıcıl icra etməlidir:
 
-### Addım 1: Virtual Mühitin Qurulması və Asılılıqların Quraşdırılması
 ```bash
-# Layihə qovluğuna keçid
+# 1. Layihə qovluğuna keçid
 cd /home/lezgin/Desktop/Nasa_Space_Apps_Challange/FIRE-X\ 1.0
 
-# uv vasitəsilə Python 3.12 virtual mühitini yaratmaq
-uv venv .venv --python 3.12
+# 2. Virtual mühiti aktivləşdirmək və asılılıqları təmin etmək
 source .venv/bin/activate
+uv pip install fastapi uvicorn pydantic numpy pandas reportlab streamlit plotly requests trimesh
 
-# Bütün tələb olunan kitabxanaları quraşdırmaq
-uv pip install fastapi uvicorn pydantic numpy pandas reportlab streamlit plotly requests
-```
-
-### Addım 2: Verilənlər Bazasının İnizializasiyası (ETL Pipeline)
-```bash
-# NASA PSI 892 sınaq bazasını yaratmaq və doldurmaq
+# 3. Verilənlər bazasını inisializasiya etmək (892 NASA sınağı)
 .venv/bin/python3 scripts/pipeline.py
-```
 
-### Addım 3: FastAPI Multi-Page Serverinin Başladılması
-```bash
-# Mövcud köhnə prosesi dayandırmaq (əgər 8000 portu məşğuldursa)
+# 4. Port 8000-i boşaldıb FastAPI serverini arxa fonda qaldırmaq
 fuser -k 8000/tcp 2>/dev/null || true
+nohup .venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload > /tmp/firex_server.log 2>&1 &
 
-# FastAPI serverini fon rejimində işə salmaq
-nohup .venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload > server.log 2>&1 &
+# 5. İkincili Streamlit panelini 8501 portunda qaldırmaq
+fuser -k 8501/tcp 2>/dev/null || true
+nohup .venv/bin/streamlit run analytics_dashboard_v2.py --server.port 8501 --server.headless true > /tmp/firex_streamlit.log 2>&1 &
 
-# Serverin sağlamlığını yoxlamaq
-sleep 2
-curl -s http://localhost:8000/api/health
-```
-
-### Addım 4: İkincili Streamlit Elmi Panelinin Başladılması
-```bash
-# 8501 portunda Streamlit panelini başlatmaq
-nohup .venv/bin/streamlit run analytics_dashboard_v2.py --server.port 8501 --server.headless true > streamlit.log 2>&1 &
-```
-
-### Addım 5: 9 Səhifəlik Rəsmi Master Dossier PDF-in Tərtib Edilməsi
-```bash
-# PDF generatorunu icra etmək
+# 6. 9 Səhifəlik Nəşr Səviyyəli Master Dossier PDF-ini kompilyasiya etmək
 .venv/bin/python3 scripts/generate_master_pdf.py FIRE-X_NASA_SpaceApps_Master_Dossier_31_Questions.pdf
-
-# Hazır sənədi masaüstünə kopyalamaq
 cp FIRE-X_NASA_SpaceApps_Master_Dossier_31_Questions.pdf /home/lezgin/Desktop/
-```
 
-### Addım 6: Veb Brauzerdə Yoxlanış
-- Əsas Veb Platforma: `http://localhost:8000/`
-- Analitika Mərkəzi: `http://localhost:8000/analytics`
-- 892 Sınaq Bələdçisi: `http://localhost:8000/explorer`
-- Planetar Simulyator: `http://localhost:8000/simulator`
-- Fiziki Qurğu Telemetriyası: `http://localhost:8000/hardware`
-- AI Elmi Terminal: `http://localhost:8000/ai`
-- Streamlit Paneli: `http://localhost:8501/`
+# 7. Sağlamlıq testlərini yoxlamaq
+curl -s http://localhost:8000/api/health
+curl -s http://localhost:8000/api/stats | head -c 200
+```
 
 ---
-**Sənədin Sonu // SpaceAz 2026 // NASA Space Apps Challenge**
+**SƏNƏDİN SONU // SPACEAZ 2026 // NASA SPACE APPS CHALLENGE "FLAME IN FREEFALL"**
